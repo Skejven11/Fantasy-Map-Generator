@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Praca Inżynierska</title>
+    <script type="text/javascript" src="scripts/cellauto.js"></script>
+    <script type="text/javascript" src="scripts/genIslands.js"></script>
+    <script type="text/javascript" src="scripts/cave.js"></script>
+
+    <link rel="stylesheet" href="style/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fondamento&display=swap" rel="stylesheet"> 
+
+<script>
+    function genMap() {
+        drawMyIslands();
+    }
+</script>
+</head>
+
+<body>
+    <div id="container">
+        <canvas id="myCanvas"></canvas>
+        <div id="column">
+            <div id="menu">
+                <h2>Fantasy Map Generator</h2>
+                <button class="btn" onclick="genMap()">Generate Map</button>
+            </div>
+            <img id="gear" src="images/gear.png" width="100" height="100">
+            <img id="tree" src="images/tree.png">
+        </div>
+    </div>
+</body>
+
+</html>
