@@ -44,8 +44,8 @@ function genIslands() {
 		},
 		process: function (neighbors) {
 			this.shallow = this.countSurroundingCellsWithValue(neighbors, "beach")>1;
-			this.mediumShallow = this.countSurroundingCellsWithValue(neighbors, "shallow")>0;
-		},
+			this.mediumShallow = !this.shallow && this.countSurroundingCellsWithValue(neighbors, "shallow")>0 || this.countSurroundingCellsWithValue(neighbors, 'terrain')>1;
+		}
 	}, function () {
 		this.water = true;
 	});
@@ -55,20 +55,25 @@ function genIslands() {
 		getColor: function()
 		{
 			if(this.beach) return 'rgb(255, 255, 153)';
-			else
-				var v = this.foliage;
-			var r = (Math.floor(109 - 55 * v)).toString();
-			var g = (Math.floor(180 + 55 * v)).toString();
-			var b = (Math.floor(84 + 55 * v)).toString();
-			return 'rgb('+r+', '+g+', '+b+', 1)';
+			else if (this.terrain) {
+				var v = Math.floor(Math.random()*25);
+				var g = (140+v).toString();
+				return 'rgb(34,'+g+',50)';
+			}
+			else if (this.mountain) return 'rgb(186,186,186)';
+			else if (this.cliff) return 'rgb(186,186,186)';
+
 		},
 		process: function(neighbors) {
-			this.beach = this.beach && this.countSurroundingCellsWithValue(neighbors, 'water') > 1 && this.countSurroundingCellsWithValue(neighbors, 'beach')>0;
-			this.floodedness = this.getSurroundingCellsAverageValue(neighbors, 'value');
+			this.beach = this.beach && this.countSurroundingCellsWithValue(neighbors, 'water') > 1 && this.countSurroundingCellsWithValue(neighbors, 'beach')>0 && this.countSurroundingCellsWithValue(neighbors, 'terrain')>1;
+			this.terrain = !this.beach&&!this.mountain&&!this.cliff;
+			this.mountain = this.countSurroundingCellsWithValue(neighbors, 'terrain')==8&&this.mountain;
+			this.cliff = this.countSurroundingCellsWithValue(neighbors, 'water')>1&&this.countSurroundingCellsWithValue(neighbors, 'beach')>1;
 		}
 	}, function () {
 		this.beach = Math.random() > 0.2;
-		this.foliage = -0.5 + Math.random();
+		this.terrain = Math.random() > 0.1;
+		this.mountain = Math.random() > 0.9;
 	});
 
 	world.initializeFromGrid([
@@ -88,7 +93,7 @@ function drawMyIslands() {
 
 	canvas.width  = world.width*world.cellSize;
 	canvas.height = world.height*world.cellSize;
-	for (i=0;i<3;i++) {
+	for (i=0;i<8;i++) {
 		setTimeout(draw(world, ctx),500);
 		world.step();
 	}
@@ -97,11 +102,10 @@ function drawMyIslands() {
 function draw(world, ctx) {
 	for (y=0;y<world.height;y++) {
 		for (x=0;x<world.width;x++) {
-			if (world.grid[y][x].foliage && !world.grid[y][x].beach) ctx.drawImage(tree, x*world.cellSize,y*world.cellSize);
-			else {
+
 			ctx.fillStyle = world.grid[y][x].getColor();
 			ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
-			}
+			
 		}
 	}
 }
