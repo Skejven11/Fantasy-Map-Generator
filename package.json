@@ -1,0 +1,23 @@
+{
+  "name": "FantasyMapGenerator",
+  "version": "1.0.0",
+  "description": "Procedural fantasy map generator using cellular automata (js library by Sanojian https://sanojian.github.io/cellauto/)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Skejven11/FantasyMapGenerator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Skejven11/FantasyMapGenerator/issues"
+  },
+  "homepage": "https://github.com/Skejven11/FantasyMapGenerator#readme",
+  "devDependencies": {
+    "sass": "^1.32.12"
+  }
+}
