@@ -43,18 +43,25 @@ body {
 .user-menu {
     width:300px;
     height:400px;
-    background-color: rgb(228, 222, 204);
+    background-color: transparent;
     position: absolute;
     top:0%;
     left:65%;
     z-index: 0;
     transition: all 0.5s;
     border-radius: 0 4px 4px 0;
+    * {
+        opacity:0;
+    }
 }
 
 .user-menu-active {
     left:100%;
-    @media only screen and (max-width:1000px) {
+    background-color: rgb(228, 222, 204);
+    * {
+        opacity:1;
+    }
+    @media only screen and (max-width:1400px) {
         z-index: 2;
         left:63%;
     }
@@ -68,32 +75,41 @@ body {
     left:92%;
     top:2%;
     transition: all 0.5s;
+    border: none;
+    background: url('../images/gear.png') no-repeat center;
+    background-size: 35px 35px;
 }
 
 .menu-button-active {
     transform: translateX(300px) rotate(360deg);
-    @media only screen and (max-width:1000px) {
+    @media only screen and (max-width:1400px) {
         transform:translateX(0);
         z-index: 3;
     }
 }
 
-.btn {
+.btn-generate {
     margin-top:2em;
     background-color: transparent;
-    color:rgb(49, 49, 49);;
+    color:rgb(49, 49, 49);
     width:150px;
     border-radius:7px;
     padding: 8px 20px;
     text-align: center;
     font-size: 1rem;
     font-family: 'Fondamento', cursive;
-    transition: all 0.4s;
-    border: 2px solid rgb(158, 101, 27);
+    transition: all 0.5s;
+    border: 2px solid rgb(49, 49, 49);
     &:hover {
         background-color: rgb(158, 101, 27);
         color:white;
         cursor:pointer;
+    }
+    &:disabled {
+        cursor: not-allowed;
+        background-color:grey;
+        border: 2px solid red;
+        color:red;
     }
   }
   

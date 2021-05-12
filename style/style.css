@@ -60,7 +60,7 @@ body {
 .user-menu {
   width: 300px;
   height: 400px;
-  background-color: #e4decc;
+  background-color: transparent;
   position: absolute;
   top: 0%;
   left: 65%;
@@ -70,11 +70,20 @@ body {
   border-radius: 0 4px 4px 0;
 }
 
-.user-menu-active {
-  left: 100%;
+.user-menu * {
+  opacity: 0;
 }
 
-@media only screen and (max-width: 1000px) {
+.user-menu-active {
+  left: 100%;
+  background-color: #e4decc;
+}
+
+.user-menu-active * {
+  opacity: 1;
+}
+
+@media only screen and (max-width: 1400px) {
   .user-menu-active {
     z-index: 2;
     left: 63%;
@@ -90,6 +99,9 @@ body {
   top: 2%;
   -webkit-transition: all 0.5s;
   transition: all 0.5s;
+  border: none;
+  background: url("../images/gear.png") no-repeat center;
+  background-size: 35px 35px;
 }
 
 .menu-button-active {
@@ -97,7 +109,7 @@ body {
           transform: translateX(300px) rotate(360deg);
 }
 
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 1400px) {
   .menu-button-active {
     -webkit-transform: translateX(0);
             transform: translateX(0);
@@ -105,7 +117,7 @@ body {
   }
 }
 
-.btn {
+.btn-generate {
   margin-top: 2em;
   background-color: transparent;
   color: #313131;
@@ -115,14 +127,21 @@ body {
   text-align: center;
   font-size: 1rem;
   font-family: 'Fondamento', cursive;
-  -webkit-transition: all 0.4s;
-  transition: all 0.4s;
-  border: 2px solid #9e651b;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+  border: 2px solid #313131;
 }
 
-.btn:hover {
+.btn-generate:hover {
   background-color: #9e651b;
   color: white;
   cursor: pointer;
+}
+
+.btn-generate:disabled {
+  cursor: not-allowed;
+  background-color: grey;
+  border: 2px solid red;
+  color: red;
 }
 /*# sourceMappingURL=style.css.map */

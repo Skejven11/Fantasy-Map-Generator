@@ -61,7 +61,7 @@ function genIslands() {
 				return 'rgb(34,'+g+',50)';
 			}
 			else if (this.mountain) return 'rgb(186,186,186)';
-			else if (this.cliff) return 'rgb(186,186,186)';
+			//else if (this.cliff) return 'rgb(186,186,186)';
 
 		},
 		process: function(neighbors) {
@@ -87,24 +87,26 @@ function genIslands() {
 function drawMyIslands() {
 	var canvas = document.getElementById("myCanvas");
 	var ctx = canvas.getContext('2d');
+	const btnGen = document.querySelector(".btn-generate");
 
 	var world = genIslands();
 
+	btnGen.disabled=true;
 	canvas.width  = world.width*world.cellSize;
 	canvas.height = world.height*world.cellSize;
 
-	for (let i=0;i<8;i++) {
+	for (let i=0;i<5;i++) {
 		setTimeout(function(){
 			draw(world, ctx);
 			world.step();
-		},i*100);
+			if (i==4) btnGen.disabled=false;
+		},i*150);
 	}
 }
 
 function draw(world, ctx) {
 	for (y=0;y<world.height;y++) {
 		for (x=0;x<world.width;x++) {
-
 			ctx.fillStyle = world.grid[y][x].getColor();
 			ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
 			
