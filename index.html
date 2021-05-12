@@ -11,6 +11,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Fondamento&display=swap" rel="stylesheet"> 
 
 <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        drawMyIslands();
+  });
     function genMap() {
         drawMyIslands();
     }
@@ -18,13 +21,11 @@
 </head>
 
 <body>
-    <div id="container">
-        <div id="menu">
-            <h2>Fantasy Map Generator</h2>
-           <button class="btn" onclick="genMap()">Generate Map</button>
-       </div>
-        <div class="canvasContainer">
+    <div class="main-container">
+        <div class="canvas-container">
+            <h1>Fantasy Map Generator</h1>
             <canvas id="myCanvas"></canvas>
+            <button class="btn" onclick="genMap()">Generate Map</button>
         </div>
     </div>
 </body>

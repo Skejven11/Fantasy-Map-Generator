@@ -22,7 +22,7 @@ function genIslands() {
 		{ name: 'wall', distribution: 100 }
 	]);
 
-	for (var i=0; i<10; i++) {
+	for (i=0; i<10; i++) {
 		world.step();
 	}
 
@@ -87,15 +87,17 @@ function genIslands() {
 function drawMyIslands() {
 	var canvas = document.getElementById("myCanvas");
 	var ctx = canvas.getContext('2d');
-	let tree = document.getElementById("tree");
 
 	var world = genIslands();
 
 	canvas.width  = world.width*world.cellSize;
 	canvas.height = world.height*world.cellSize;
-	for (i=0;i<8;i++) {
-		setTimeout(draw(world, ctx),500);
-		world.step();
+
+	for (let i=0;i<8;i++) {
+		setTimeout(function(){
+			draw(world, ctx);
+			world.step();
+		},i*100);
 	}
 }
 
