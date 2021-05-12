@@ -10,25 +10,27 @@ body {
 }
 
 .main-container {
-    margin-top: 10px;
     @include flex-center();
 }
 
 .canvas-container {
+    position: relative;
     width:900px;
     height:980px;
     background-color: rgb(228, 222, 204);
     @include flex-center();
     justify-content: initial;
     flex-direction: column;
+    margin-top: 10px;
+    z-index: 1;
     h1 {
         color:rgb(49, 49, 49);
         text-shadow: 4px 4px 0.25em rgb(255, 255, 255);
         font-family: 'Fondamento', cursive;
     }
-    @media only screen and (max-width: 1000px) {
-        width:808px;
-    }
+    * {
+        z-index: inherit;
+    }    
 }
 
 #myCanvas {
@@ -36,6 +38,44 @@ body {
     height:800px;
     border: 4px solid black;
     border-radius: 0.5em;
+}
+
+.user-menu {
+    width:300px;
+    height:400px;
+    background-color: rgb(228, 222, 204);
+    position: absolute;
+    top:0%;
+    left:65%;
+    z-index: 0;
+    transition: all 0.5s;
+    border-radius: 0 4px 4px 0;
+}
+
+.user-menu-active {
+    left:100%;
+    @media only screen and (max-width:1000px) {
+        z-index: 2;
+        left:63%;
+    }
+}
+
+.menu-button {
+    width:50px;
+    height:50px;
+    cursor: pointer;
+    position:absolute;
+    left:92%;
+    top:2%;
+    transition: all 0.5s;
+}
+
+.menu-button-active {
+    transform: translateX(300px) rotate(360deg);
+    @media only screen and (max-width:1000px) {
+        transform:translateX(0);
+        z-index: 3;
+    }
 }
 
 .btn {
@@ -56,3 +96,4 @@ body {
         cursor:pointer;
     }
   }
+  

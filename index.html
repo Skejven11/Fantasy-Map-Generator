@@ -13,6 +13,12 @@
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         drawMyIslands();
+        const menuButton = document.querySelector(".menu-button");
+        const menu = document.querySelector(".user-menu");
+        menuButton.addEventListener("click", ()=>{
+        menu.classList.toggle("user-menu-active");
+        menuButton.classList.toggle("menu-button-active");
+    });
   });
     function genMap() {
         drawMyIslands();
@@ -24,8 +30,11 @@
     <div class="main-container">
         <div class="canvas-container">
             <h1>Fantasy Map Generator</h1>
+            <button class="menu-button">menu</button>
             <canvas id="myCanvas"></canvas>
             <button class="btn" onclick="genMap()">Generate Map</button>
+            <div class="user-menu">
+            </div>
         </div>
     </div>
 </body>
