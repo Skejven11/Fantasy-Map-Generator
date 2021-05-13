@@ -1,5 +1,6 @@
 function genIslands() {
 
+	//Basic world shape
 	var world = new CAWorld({
 		width: 100,
 		height: 100,
@@ -30,6 +31,11 @@ function genIslands() {
 		{ cellType: 'wall', hasProperty: 'open', value: 1 }
 	], 0);
 
+
+
+
+
+	//Details
 	world = new CAWorld({
 		width: 100,
 		height: 100,
@@ -37,10 +43,16 @@ function genIslands() {
 	});
 
 	world.registerCellType('water', {
+		getSize: function () {
+			return 8;
+		},
+		getSprite: function () {
+			return false;
+		},
 		getColor: function () {
 			if (this.shallow) return 'rgb(52, 235, 229)';
 			else if (this.mediumShallow) return 'rgb(52, 177, 235)'
-			else return 'rgb(51, 153, 255)';;
+			else return 'rgb(51, 153, 255)';
 		},
 		process: function (neighbors) {
 			this.shallow = this.countSurroundingCellsWithValue(neighbors, "beach")>1;
@@ -52,6 +64,18 @@ function genIslands() {
 
 	world.registerCellType('island', {
 		isSolid: true,
+		getSize: function () {
+			if (this.mountain) return 16;
+			else return 8;
+		},
+		getSprite: function () {
+			if (this.mountain) {
+				const sprite = new Image();
+        		sprite.src = "images/mountains.png";
+				return sprite;
+			}
+			else return false;
+		},
 		getColor: function()
 		{
 			if(this.beach) return 'rgb(255, 255, 153)';
@@ -61,7 +85,7 @@ function genIslands() {
 				return 'rgb(34,'+g+',50)';
 			}
 			else if (this.mountain) return 'rgb(186,186,186)';
-			//else if (this.cliff) return 'rgb(186,186,186)';
+			else if (this.cliff) return 'rgb(186,186,186)';
 
 		},
 		process: function(neighbors) {
@@ -89,7 +113,7 @@ function drawMyIslands() {
 	var ctx = canvas.getContext('2d');
 	const btnGen = document.querySelector(".btn-generate");
 
-	var world = genIslands();
+	var world = genIslands(world, ctx);
 
 	btnGen.disabled=true;
 	canvas.width  = world.width*world.cellSize;
@@ -97,19 +121,40 @@ function drawMyIslands() {
 
 	for (let i=0;i<5;i++) {
 		setTimeout(function(){
-			draw(world, ctx);
 			world.step();
+			draw(world,ctx, i);
 			if (i==4) btnGen.disabled=false;
 		},i*150);
 	}
 }
 
-function draw(world, ctx) {
+function draw(world, ctx, iteration) {
+	//array that stores map elements which are bigger than 8x8px (mountains, cities etc.)
+	var bigElements = [];
+
+	//go over whole world, draw 8x8px elements and push 16x16px elements into the array
 	for (y=0;y<world.height;y++) {
 		for (x=0;x<world.width;x++) {
-			ctx.fillStyle = world.grid[y][x].getColor();
-			ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
-			
+			if (world.grid[y][x].getSprite()) {
+				//if element is 16x16px push it into the array
+				if (world.grid[y][x].getSize()===16) {
+					bigElements.push([world.grid[y][x],y,x]);
+				}
+				//if not just draw the sprite
+				else {
+					ctx.drawImage(world.grid[y][x].getSprite(),x*world.cellSize,y*world.cellSize,8,8);
+				}
+			}
+			else {
+				ctx.fillStyle = world.grid[y][x].getColor();
+				ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
+			}
 		}
 	}
+
+
+	//draw 16x16px elements
+	if (iteration==4) bigElements.forEach(element=> {
+		ctx.drawImage(element[0].getSprite(),element[2]*world.cellSize-12,element[1]*world.cellSize-12,24,24);
+	});
 }
