@@ -3,15 +3,16 @@
 <head>
     <meta charset="utf-8"/>
     <title>Praca Inżynierska</title>
-    <script type="text/javascript" src="scripts/cellauto.js"></script>
     <script type="text/javascript" src="scripts/genIslands.js"></script>
+    <script type="text/javascript" src="scripts/cellauto.js"></script>
+    <script type="text/javascript" src="scripts/main.js"></script>
 
     <link rel="stylesheet" href="style/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Fondamento&display=swap" rel="stylesheet"> 
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        drawMyIslands();
+        genIslands();
         const menuButton = document.querySelector(".menu-button");
         const menu = document.querySelector(".user-menu");
         menuButton.addEventListener("click", ()=>{
@@ -20,7 +21,7 @@
     });
   });
     function genMap() {
-        drawMyIslands();
+        genIslands();
     }
 </script>
 </head>
