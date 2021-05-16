@@ -70,7 +70,7 @@ function genIslands() {
 	world.registerCellType('island', {
 		isSolid: true,
 		getSize: function () {
-			if (this.mountain) return 24;
+			if (this.mountain||this.city) return 24;
 			else return 8;
 		},
 		getSprite: function () {
@@ -91,12 +91,14 @@ function genIslands() {
 			}
 			else if (this.mountain) return 'rgb(0,0,0)'
 			else if (this.river) return colorPalette.river;
+			else if (this.city) return colorPalette.red;
 
 		},
 
 		process: function(neighbors) {
-			if (this.river||(world.iteration==1&&getChance(16,1)&&this.countSurroundingCellsWithValue(neighbors, 'mountain')==1)&&this.countSurroundingCellsWithValue(neighbors, 'river')==0
-			&&!this.countSurroundingCellsWithValue(neighbors, 'water')&&!this.countSurroundingCellsWithValue(neighbors, 'beach')) {
+
+			//river generation
+			if (this.river) {
 				this.river = true;
 				for (i=0;i<8;i++) {
 					if (neighbors[i]&&neighbors[i].mountain) this.riverSource = i;
@@ -104,9 +106,24 @@ function genIslands() {
 
 					if (this.countSurroundingCellsWithValue(neighbors, 'water')>1) this.riverSource = false;
 					else if (getChance(2,1)) {
-						if (getChance(2,1)) this.riverSource++;
-						else this.riverSource--;
+						if (getChance(2,1)) {
+							this.riverSource++;
+							this.changedDirection = true;
+						}
+						else {
+							this.riverSource--;
+							this.changedDirection = true;
+						}
 					}
+				}
+				
+			}
+			if ((world.iteration==1&&getChance(16,1)&&this.countSurroundingCellsWithValue(neighbors, 'mountain')==1)&&this.countSurroundingCellsWithValue(neighbors, 'river')==0
+			&&!this.countSurroundingCellsWithValue(neighbors, 'water')&&!this.countSurroundingCellsWithValue(neighbors, 'beach')) {
+				this.river = true;
+				for (i=0;i<8;i++) {
+					if (neighbors[i]&&neighbors[i].mountain) this.riverSource = i;
+					else if (neighbors[i]&&neighbors[i].river) this.riverSource = i;
 				}
 			}
 			else if ((this.terrain||this.beach)&&this.countSurroundingCellsWithValue(neighbors, 'river')==1) {
@@ -114,14 +131,24 @@ function genIslands() {
 					if (neighbors[i]&&neighbors[i].river&&neighbors[i].riverSource===i) 	{ 
 						this.river = true;
 						this.beach = false;
+						this.changedDirection = false;
 					}
 				}
+			}
+
+			//city generation
+			if (this.terrain&&this.countSurroundingCellsWithValue(neighbors, 'river')>1&&!this.countSurroundingCellsWithValue(neighbors, 'mountain')&&getChance(64,1)&&world.iteration>28
+			&&this.countSurroundingCellsWithValue(neighbors, 'city')==0) {
+				this.city = true;
+			}
+			if ((this.terrain||this.beach)&&this.countSurroundingCellsWithValue(neighbors, 'water')>2&&getChance(32,1)&&world.iteration>28&&this.countSurroundingCellsWithValue(neighbors, 'city')==0) {
+				this.city = true;
 			}
 
 			this.beach = (this.beach && this.countSurroundingCellsWithValue(neighbors, 'water') > 1 && this.countSurroundingCellsWithValue(neighbors, 'beach')>0 
 				&& this.countSurroundingCellsWithValue(neighbors, 'terrain')>1)||(this.beach&&this.countSurroundingCellsWithValue(neighbors, 'river')>0);
 
-			this.terrain = !this.beach&&!this.mountain&&!this.cliff&&!this.river;
+			this.terrain = !this.beach&&!this.mountain&&!this.cliff&&!this.river&&!this.city;
 			
 			this.mountain = (this.mountain&&!this.countSurroundingCellsWithValue(neighbors, 'water'))||
 				(world.iteration<4&&getChance(12,1)&&!this.countSurroundingCellsWithValue(neighbors, 'water')&&!this.countSurroundingCellsWithValue(neighbors, 'beach')&&this.countSurroundingCellsWithValue(neighbors, 'mountain')>=1);

@@ -71,7 +71,10 @@ body {
 }
 
 .user-menu * {
-  opacity: 0;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  -webkit-transform: scale(0);
+          transform: scale(0);
 }
 
 .user-menu-active {
@@ -80,7 +83,8 @@ body {
 }
 
 .user-menu-active * {
-  opacity: 1;
+  -webkit-transform: scale(100%);
+          transform: scale(100%);
 }
 
 @media only screen and (max-width: 1400px) {

@@ -51,7 +51,8 @@ body {
     transition: all 0.5s;
     border-radius: 0 4px 4px 0;
     * {
-        opacity:0;
+        transition: all 0.3s;
+        transform: scale(0);
     }
 }
 
@@ -59,7 +60,7 @@ body {
     left:100%;
     background-color: rgb(228, 222, 204);
     * {
-        opacity:1;
+        transform: scale(100%);
     }
     @media only screen and (max-width:1400px) {
         z-index: 2;
