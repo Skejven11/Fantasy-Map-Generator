@@ -4,7 +4,8 @@ function genIslands() {
 		shallow: 'rgb(52, 235, 229)',
 		mShallow: 'rgb(52, 177, 235)',
 		deepWater: 'rgb(51, 153, 255)',
-		river: 'rgb(52,200,229)'
+		river: 'rgb(52,200,229)',
+		red: 'rgb(200,30,30)'
 	}
 
 	//Basic world shape
@@ -23,14 +24,14 @@ function genIslands() {
 			this.wasOpen = this.open;
 		}
 	}, function () {
-		this.open = Math.random() > 0.55;
+		this.open = Math.random() > 0.535;
 	});
 
 	world.initialize([
 		{ name: 'wall', distribution: 100 }
 	]);
 
-	for (i=0; i<10; i++) {
+	for (i=0; i<15; i++) {
 		world.step();
 	}
 
@@ -101,7 +102,8 @@ function genIslands() {
 					if (neighbors[i]&&neighbors[i].mountain) this.riverSource = i;
 					else if (neighbors[i]&&neighbors[i].river) this.riverSource = i;
 
-					if (getChance(2,1)) {
+					if (this.countSurroundingCellsWithValue(neighbors, 'water')>1) this.riverSource = false;
+					else if (getChance(2,1)) {
 						if (getChance(2,1)) this.riverSource++;
 						else this.riverSource--;
 					}
@@ -109,8 +111,9 @@ function genIslands() {
 			}
 			else if ((this.terrain||this.beach)&&this.countSurroundingCellsWithValue(neighbors, 'river')==1) {
 				for (i=0;i<8;i++) {
-					if (neighbors[i]&&neighbors[i].river&&neighbors[i].riverSource==i) 	{ 
+					if (neighbors[i]&&neighbors[i].river&&neighbors[i].riverSource===i) 	{ 
 						this.river = true;
+						this.beach = false;
 					}
 				}
 			}
