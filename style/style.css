@@ -1,6 +1,7 @@
 body {
   background-color: #302d2c;
   margin: 0 0;
+  font-family: 'Fondamento', cursive;
 }
 
 .main-container {
@@ -43,7 +44,6 @@ body {
 .canvas-container h1 {
   color: #313131;
   text-shadow: 4px 4px 0.25em white;
-  font-family: 'Fondamento', cursive;
 }
 
 .canvas-container * {
@@ -58,6 +58,7 @@ body {
 }
 
 .user-menu {
+  text-align: center;
   width: 300px;
   height: 500px;
   background-color: transparent;
@@ -71,8 +72,8 @@ body {
 }
 
 .user-menu * {
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
   -webkit-transform: scale(0);
           transform: scale(0);
 }
@@ -83,8 +84,8 @@ body {
 }
 
 .user-menu-active * {
-  -webkit-transform: scale(100%);
-          transform: scale(100%);
+  -webkit-transform: scale(1);
+          transform: scale(1);
 }
 
 @media only screen and (max-width: 1400px) {
@@ -92,6 +93,17 @@ body {
     z-index: 2;
     left: 63%;
   }
+}
+
+.user-menu-section {
+  display: inline-block;
+  text-align: center;
+  width: 49%;
+  height: 60px;
+}
+
+.user-menu-section input[type=range] {
+  width: 130px;
 }
 
 .menu-button {

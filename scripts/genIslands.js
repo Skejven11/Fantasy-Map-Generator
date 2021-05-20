@@ -79,6 +79,11 @@ function genIslands() {
         		sprite.src = "images/mountains.png";
 				return sprite;
 			}
+			else if (this.city) {
+				const sprite = new Image();
+        		sprite.src = "images/city.png";
+				return sprite;
+			}
 			else return false;
 		},
 		getColor: function()
@@ -91,8 +96,6 @@ function genIslands() {
 			}
 			else if (this.mountain) return 'rgb(0,0,0)'
 			else if (this.river) return colorPalette.river;
-			else if (this.city) return colorPalette.red;
-
 		},
 
 		process: function(neighbors) {
@@ -139,10 +142,16 @@ function genIslands() {
 			//city generation
 			if (this.terrain&&this.countSurroundingCellsWithValue(neighbors, 'river')>1&&!this.countSurroundingCellsWithValue(neighbors, 'mountain')&&getChance(64,1)&&world.iteration>28
 			&&this.countSurroundingCellsWithValue(neighbors, 'city')==0) {
-				this.city = true;
+				for (i = 0; i<8; i++) {
+					if (neighbors[i]&&neighbors[i].countSurroundingCellsWithValue(neighbors, 'city')==0) {
+						this.city=true;
+					}
+				}
 			}
-			if ((this.terrain||this.beach)&&this.countSurroundingCellsWithValue(neighbors, 'water')>2&&getChance(32,1)&&world.iteration>28&&this.countSurroundingCellsWithValue(neighbors, 'city')==0) {
-				this.city = true;
+			if ((this.terrain||this.beach)&&this.countSurroundingCellsWithValue(neighbors, 'water')>2&&getChance(64,1)&&world.iteration>28&&this.countSurroundingCellsWithValue(neighbors, 'city')==0) {
+				for (i = 0; i<8; i++) {
+					if (neighbors[i]&&neighbors[i].countSurroundingCellsWithValue(neighbors, 'city')==0) this.city=true;
+				}
 			}
 
 			this.beach = (this.beach && this.countSurroundingCellsWithValue(neighbors, 'water') > 1 && this.countSurroundingCellsWithValue(neighbors, 'beach')>0 

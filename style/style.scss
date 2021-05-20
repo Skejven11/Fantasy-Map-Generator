@@ -1,6 +1,7 @@
 body {
     background-color:hsl(24, 5%, 18%);
     margin: 0 0;
+    font-family: 'Fondamento', cursive;
 }
 
 @mixin flex-center {
@@ -26,7 +27,6 @@ body {
     h1 {
         color:rgb(49, 49, 49);
         text-shadow: 4px 4px 0.25em rgb(255, 255, 255);
-        font-family: 'Fondamento', cursive;
     }
     * {
         z-index: inherit;
@@ -41,6 +41,7 @@ body {
 }
 
 .user-menu {
+    text-align: center;
     width:300px;
     height:500px;
     background-color: transparent;
@@ -51,7 +52,7 @@ body {
     transition: all 0.5s;
     border-radius: 0 4px 4px 0;
     * {
-        transition: all 0.3s;
+        transition: all 0.4s;
         transform: scale(0);
     }
 }
@@ -60,11 +61,21 @@ body {
     left:100%;
     background-color: rgb(228, 222, 204);
     * {
-        transform: scale(100%);
+        transform: scale(1);
     }
     @media only screen and (max-width:1400px) {
         z-index: 2;
         left:63%;
+    }
+}
+
+.user-menu-section {
+    display:inline-block;
+    text-align: center;
+    width:49%;
+    height:60px;
+    input[type=range]{
+        width:130px;
     }
 }
 
