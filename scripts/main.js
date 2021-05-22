@@ -20,8 +20,18 @@ function initializeWorld(world) {
 
 //drawing on canvas
 function draw(world, ctx, iteration) {
-	//array that stores map elements which are bigger than 8x8px (mountains, cities etc.)
-	var bigElements = [];
+	//arrays that store map elements which are bigger than 8x8px (mountains, cities etc.)
+	let cities = [];
+	let forests = [];
+	let mountains = [];
+
+	//loading spirte once instead of every cell
+	const mountainSprite = new Image();
+    mountainSprite.src = "images/mountains.png";
+	const citySprite = new Image();
+    citySprite.src = "images/city.png";
+	const forestSprite = new Image();
+    forestSprite.src = "images/forest.png";
 
 	//go over whole world, draw 8x8px elements and push 16x16px elements into the array
 	for (y=0;y<world.height;y++) {
@@ -29,15 +39,15 @@ function draw(world, ctx, iteration) {
 			if (world.grid[y][x].terrain&&iteration>0) {
 			}
 			else {
-				if (world.grid[y][x].getSprite()) {
-					//if element is 16x16px push it into the array
-					if (world.grid[y][x].getSize()!==8) {
-						bigElements.push([world.grid[y][x],y,x]);
-					}
-					//if not just draw the sprite
-					else {
-						ctx.drawImage(world.grid[y][x].getSprite(),x*world.cellSize,y*world.cellSize,8,8);
-					}
+				//bigger elements to array so we can arrange their rendering time
+				if (world.grid[y][x].city) {
+					cities.push([world.grid[y][x],y,x]);
+				}
+				else if (world.grid[y][x].forest) {
+					forests.push([world.grid[y][x],y,x]);
+				}
+				else if (world.grid[y][x].mountain) {
+					mountains.push([world.grid[y][x],y,x]);
 				}
 				else {
 					ctx.fillStyle = world.grid[y][x].getColor();
@@ -47,9 +57,15 @@ function draw(world, ctx, iteration) {
 		}
 	}
 
-	//draw 16x16px elements
-		bigElements.forEach(element=> {
-		ctx.drawImage(element[0].getSprite(),element[2]*world.cellSize-8,element[1]*world.cellSize-10,element[0].getSize(),element[0].getSize());
+	//bigger element rendering priority
+	forests.forEach(element=> {
+		ctx.drawImage(forestSprite,element[2]*world.cellSize-2,element[1]*world.cellSize-2,element[0].getSize(),element[0].getSize());
+	});
+	mountains.forEach(element=> {
+		ctx.drawImage(mountainSprite,element[2]*world.cellSize-8,element[1]*world.cellSize-10,element[0].getSize(),element[0].getSize());
+	});
+	cities.forEach(element=> {
+		ctx.drawImage(citySprite,element[2]*world.cellSize-8,element[1]*world.cellSize-8,element[0].getSize(),element[0].getSize());
 	});
 }
 

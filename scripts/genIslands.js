@@ -10,9 +10,9 @@ function genIslands() {
 
 	//Basic world shape
 	var world = new CAWorld({
-		width: 100,
-		height: 100,
-		cellSize: 8
+		width: 80,
+		height: 80,
+		cellSize: 10
 	});
 
 	world.registerCellType('wall', {
@@ -41,9 +41,9 @@ function genIslands() {
 
 	//Details
 	world = new CAWorld({
-		width: 100,
-		height: 100,
-		cellSize: 8,
+		width: 80,
+		height: 80,
+		cellSize: 10,
 		iteration:0
 	});
 
@@ -71,20 +71,8 @@ function genIslands() {
 		isSolid: true,
 		getSize: function () {
 			if (this.mountain||this.city) return 24;
-			else return 8;
-		},
-		getSprite: function () {
-			if (this.mountain) {
-				const sprite = new Image();
-        		sprite.src = "images/mountains.png";
-				return sprite;
-			}
-			else if (this.city) {
-				const sprite = new Image();
-        		sprite.src = "images/city.png";
-				return sprite;
-			}
-			else return false;
+			else if (this.forest) return 14;
+			else return world.cellSize;
 		},
 		getColor: function()
 		{
@@ -94,7 +82,6 @@ function genIslands() {
 				var g = (140+v).toString();
 				return 'rgb(34,'+g+',50)';
 			}
-			else if (this.mountain) return 'rgb(0,0,0)'
 			else if (this.river) return colorPalette.river;
 		},
 
@@ -129,7 +116,7 @@ function genIslands() {
 					else if (neighbors[i]&&neighbors[i].river) this.riverSource = i;
 				}
 			}
-			else if ((this.terrain||this.beach)&&this.countSurroundingCellsWithValue(neighbors, 'river')==1) {
+			else if ((this.terrain||this.beach||this.forest)&&this.countSurroundingCellsWithValue(neighbors, 'river')==1) {
 				for (i=0;i<8;i++) {
 					if (neighbors[i]&&neighbors[i].river&&neighbors[i].riverSource===i) 	{ 
 						this.river = true;
@@ -154,10 +141,14 @@ function genIslands() {
 				}
 			}
 
+			//forest generation
+			this.forest = (this.forest&&this.countSurroundingCellsWithValue(neighbors, 'water')<2)||
+				(!this.mountain&&getChance(24,1)&&this.countSurroundingCellsWithValue(neighbors, 'water')<2&&this.countSurroundingCellsWithValue(neighbors, 'forest')>=1);
+
 			this.beach = (this.beach && this.countSurroundingCellsWithValue(neighbors, 'water') > 1 && this.countSurroundingCellsWithValue(neighbors, 'beach')>0 
 				&& this.countSurroundingCellsWithValue(neighbors, 'terrain')>1)||(this.beach&&this.countSurroundingCellsWithValue(neighbors, 'river')>0);
 
-			this.terrain = !this.beach&&!this.mountain&&!this.cliff&&!this.river&&!this.city;
+			this.terrain = !this.beach&&!this.mountain&&!this.cliff&&!this.river&&!this.city&&!this.forest;
 			
 			this.mountain = (this.mountain&&!this.countSurroundingCellsWithValue(neighbors, 'water'))||
 				(world.iteration<4&&getChance(12,1)&&!this.countSurroundingCellsWithValue(neighbors, 'water')&&!this.countSurroundingCellsWithValue(neighbors, 'beach')&&this.countSurroundingCellsWithValue(neighbors, 'mountain')>=1);
@@ -169,6 +160,7 @@ function genIslands() {
 		this.beach = Math.random() > 0.2;
 		this.terrain = Math.random() > 0.1;
 		this.mountain = Math.random() > 0.99;
+		this.forest = Math.random() > 0.99;
 	});
 
 	world.initializeFromGrid([
