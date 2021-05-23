@@ -78,6 +78,10 @@ body {
           transform: scale(0);
 }
 
+.user-menu hr {
+  margin: 0 0;
+}
+
 .user-menu-active {
   left: 100%;
   background-color: #e4decc;

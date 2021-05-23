@@ -15,6 +15,10 @@ function initializeWorld(world) {
 			if (i==29) btnGen.disabled=false;
 		},i*60);
 	}
+
+	canvas.addEventListener('click', event=>{
+		getMousePos(world, canvas, event);
+	});
 }
 
 
@@ -24,6 +28,7 @@ function draw(world, ctx, iteration) {
 	let cities = [];
 	let forests = [];
 	let mountains = [];
+	let wDecorations = [];
 
 	//loading spirte once instead of every cell
 	const mountainSprite = new Image();
@@ -32,11 +37,13 @@ function draw(world, ctx, iteration) {
     citySprite.src = "images/city.png";
 	const forestSprite = new Image();
     forestSprite.src = "images/forest.png";
+	const wDecorationSprite = new Image();
+	wDecorationSprite.src = "images/waterMonster.png";
 
 	//go over whole world, draw 8x8px elements and push 16x16px elements into the array
 	for (y=0;y<world.height;y++) {
 		for (x=0;x<world.width;x++) {
-			if (world.grid[y][x].terrain&&iteration>0) {
+			if (world.grid[y][x].terrain&&iteration>2) {
 			}
 			else {
 				//bigger elements to array so we can arrange their rendering time
@@ -49,6 +56,9 @@ function draw(world, ctx, iteration) {
 				else if (world.grid[y][x].mountain) {
 					mountains.push([world.grid[y][x],y,x]);
 				}
+				else if (world.grid[y][x].waterDecoration) {
+					wDecorations.push([world.grid[y][x],y,x]);
+				}
 				else {
 					ctx.fillStyle = world.grid[y][x].getColor();
 					ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
@@ -59,13 +69,16 @@ function draw(world, ctx, iteration) {
 
 	//bigger element rendering priority
 	forests.forEach(element=> {
-		ctx.drawImage(forestSprite,element[2]*world.cellSize-2,element[1]*world.cellSize-2,element[0].getSize(),element[0].getSize());
+		ctx.drawImage(forestSprite,element[2]*world.cellSize-2,element[1]*world.cellSize-2);
 	});
 	mountains.forEach(element=> {
-		ctx.drawImage(mountainSprite,element[2]*world.cellSize-8,element[1]*world.cellSize-10,element[0].getSize(),element[0].getSize());
+		ctx.drawImage(mountainSprite,element[2]*world.cellSize-8,element[1]*world.cellSize-10);
 	});
 	cities.forEach(element=> {
-		ctx.drawImage(citySprite,element[2]*world.cellSize-8,element[1]*world.cellSize-8,element[0].getSize(),element[0].getSize());
+		ctx.drawImage(citySprite,element[2]*world.cellSize-8,element[1]*world.cellSize-12);
+	});
+	wDecorations.forEach(element=> {
+		ctx.drawImage(wDecorationSprite,element[2]*world.cellSize-(wDecorationSprite.width/2),element[1]*world.cellSize-(wDecorationSprite.height/2));
 	});
 }
 
@@ -74,4 +87,15 @@ function getChance(max, isLower) {
 	let value = Math.floor(Math.random()*max);
 	if (value>=isLower) return false;
 	else return true;
+}
+
+function getMousePos(world, canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+	var ctx = canvas.getContext('2d');
+    position = {
+      x: evt.clientX - rect.left,
+      y: evt.clientY - rect.top
+    };
+	console.clear();
+	console.log(world.grid[Math.floor(position.y/10)][Math.floor(position.x/10)]);
 }
