@@ -12,7 +12,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        genIslands();
+        genMap();
         const menuButton = document.querySelector(".menu-button");
         const menu = document.querySelector(".user-menu");
         menuButton.addEventListener("click", ()=>{
@@ -21,7 +21,9 @@
     });
   });
     function genMap() {
-        genIslands();
+        let config = getConfig();
+        console.log(config)
+        genIslands(config);
     }
 </script>
 </head>
@@ -31,27 +33,36 @@
         <div class="canvas-container">
             <h1>Fantasy Map Generator</h1>
             <button class="menu-button"></button>
-            <canvas id="myCanvas"></canvas>
+            <canvas id="myCanvas">Your browser doesn't support HTML5 canvas</canvas>
             <button class="btn-generate" onclick="genMap()">Generate Map</button>
             <div class="user-menu">
                 <h3>Generation Options</h3>
                 <hr></hr>
                 <div class="user-menu-section">
                     <b>Rivers</b>
-                    <input type="range" id="rivers" min="1" max="4">
+                    <input type="range" id="rivers" min="0" max="3" value="1">
                 </div>
                 <div class="user-menu-section">
                     <b>Mountains</b>
-                    <input type="range" id="mountains" min="1" max="4">
+                    <input type="range" id="mountains" min="0" max="3" value="1">
                 </div>
                 <hr></hr>
                 <div class="user-menu-section">
                     <b>Cities</b>
-                    <input type="range" id="mountains" min="1" max="4">
+                    <input type="range" id="cities" min="0" max="3" value="1">
                 </div>
                 <div class="user-menu-section">
                     <b>Forests</b>
-                    <input type="range" id="mountains" min="1" max="4">
+                    <input type="range" id="forests" min="0" max="3" value="1">
+                </div>
+                <hr></hr>
+                <div class="user-menu-section">
+                    <b>Beaches</b>
+                    <input type="range" id="beaches" min="0" max="3" value="1">
+                </div>
+                <div class="user-menu-section">
+                    <b>-</b>
+                    <input type="range" id="" min="0" max="3" value="1">
                 </div>
                 <hr></hr>
             </div>

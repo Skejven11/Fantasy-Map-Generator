@@ -82,6 +82,16 @@ function draw(world, ctx, iteration) {
 	});
 }
 
+function getConfig() {
+	let config = {};
+	config.rivers = document.getElementById("rivers").value;
+	config.mountains = document.getElementById("mountains").value;
+	config.cities = document.getElementById("cities").value;
+	config.forests = document.getElementById("forests").value;
+	config.beaches = document.getElementById("beaches").value;
+	return config;
+}
+
 //small function for probability of cell stuff
 function getChance(max, isLower) {
 	let value = Math.floor(Math.random()*max);
@@ -99,3 +109,4 @@ function getMousePos(world, canvas, evt) {
 	console.clear();
 	console.log(world.grid[Math.floor(position.y/10)][Math.floor(position.x/10)]);
 }
+

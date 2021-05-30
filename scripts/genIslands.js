@@ -1,4 +1,4 @@
-function genIslands() {
+function genIslands(config) {
 
 	var colorPalette = {
 		shallow: 'rgb(52, 235, 229)',
@@ -73,7 +73,7 @@ function genIslands() {
 			if(this.beach) return 'rgb(255, 255, 153)';
 			else if (this.river) return colorPalette.river;
 			else {
-				var v = Math.floor(Math.random()*25);
+				var v = Math.floor(Math.random()*17);
 				var g = (140+v).toString();
 				return 'rgb(34,'+g+',50)';
 			}
@@ -102,7 +102,7 @@ function genIslands() {
 				}
 				
 			}
-			if ((world.iteration==1&&getChance(16,1)&&this.countSurroundingCellsWithValue(neighbors, 'mountain')==1)&&this.countSurroundingCellsWithValue(neighbors, 'river')==0
+			if ((world.iteration==1&&getChance(16,1*config.rivers)&&this.countSurroundingCellsWithValue(neighbors, 'mountain')==1)&&this.countSurroundingCellsWithValue(neighbors, 'river')==0
 			&&!this.countSurroundingCellsWithValue(neighbors, 'water')&&!this.countSurroundingCellsWithValue(neighbors, 'beach')) {
 				this.river = true;
 				for (i=0;i<8;i++) {
@@ -114,6 +114,7 @@ function genIslands() {
 				for (i=0;i<8;i++) {
 					if (neighbors[i]&&neighbors[i].river&&neighbors[i].riverSource===i) 	{ 
 						this.river = true;
+						this.forest = false;
 						this.beach = false;
 						this.changedDirection = false;
 					}
@@ -121,18 +122,18 @@ function genIslands() {
 			}
 
 			//city generation
-			if (this.terrain&&this.countSurroundingCellsWithValue(neighbors, 'river')>1&&!this.countSurroundingCellsWithValue(neighbors, 'mountain')&&getChance(64,1)&&world.iteration>28
+			if ((this.terrain||this.forest)&&this.countSurroundingCellsWithValue(neighbors, 'river')>1&&!this.countSurroundingCellsWithValue(neighbors, 'mountain')&&getChance(64,1*config.cities)&&world.iteration>28
 			&&this.countSurroundingCellsWithValue(neighbors, 'city')==0) {
 					this.city=true;
 			}
-			if ((this.terrain||this.beach)&&this.countSurroundingCellsWithValue(neighbors, 'water')>2&&this.countSurroundingCellsWithValue(neighbors, 'water')<5&&getChance(80,1)&&world.iteration>28
+			if ((this.terrain||this.beach)&&this.countSurroundingCellsWithValue(neighbors, 'water')>2&&this.countSurroundingCellsWithValue(neighbors, 'water')<5&&getChance(80,1*config.cities)&&world.iteration>28
 			&&this.countSurroundingCellsWithValue(neighbors, 'city')==0) {
 				this.city=true;
 			}
 
 			//forest generation
 			this.forest = (this.forest&&this.countSurroundingCellsWithValue(neighbors, 'water')<2)||
-				(!this.mountain&&!this.river&&getChance(24,1)&&this.countSurroundingCellsWithValue(neighbors, 'water')<2&&this.countSurroundingCellsWithValue(neighbors, 'forest')>=1);
+				(!this.mountain&&!this.river&&getChance(24,1*config.forests)&&this.countSurroundingCellsWithValue(neighbors, 'water')<2&&this.countSurroundingCellsWithValue(neighbors, 'forest')>=1);
 
 			//beach generation
 			this.beach = (this.beach && this.countSurroundingCellsWithValue(neighbors, 'water') > 1 && this.countSurroundingCellsWithValue(neighbors, 'beach')>0 
@@ -144,7 +145,7 @@ function genIslands() {
 			
 			//mountain generation
 			this.mountain = (this.mountain&&!this.countSurroundingCellsWithValue(neighbors, 'water'))||
-				(world.iteration<4&&getChance(12,1)&&!this.countSurroundingCellsWithValue(neighbors, 'water')&&!this.countSurroundingCellsWithValue(neighbors, 'beach')&&this.countSurroundingCellsWithValue(neighbors, 'mountain')>=1);
+				(world.iteration<4&&getChance(12,1*config.mountains)&&!this.countSurroundingCellsWithValue(neighbors, 'water')&&!this.countSurroundingCellsWithValue(neighbors, 'beach')&&this.countSurroundingCellsWithValue(neighbors, 'mountain')>=1);
 
 			//cliff generation
 			//this.cliff = this.countSurroundingCellsWithValue(neighbors, 'water')>1&&this.countSurroundingCellsWithValue(neighbors, 'beach')>1;
@@ -152,9 +153,9 @@ function genIslands() {
 
 	}, function () {
 		this.island = true;
-		this.beach = Math.random() > 0.2;
-		this.mountain = Math.random() > 0.99;
-		this.forest = Math.random() > 0.99;
+		if (config.beaches!=0) this.beach = Math.random() > 0.2-config.beaches*0.2;
+		if (config.mountains!=0) this.mountain = Math.random() > 1-config.mountains*0.01;
+		if (config.forests!=0) this.forest = Math.random() > 1-config.forests*0.01;
 	});
 
 	world.initializeFromGrid([

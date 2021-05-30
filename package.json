@@ -19,5 +19,8 @@
   "homepage": "https://github.com/Skejven11/FantasyMapGenerator#readme",
   "devDependencies": {
     "sass": "^1.32.12"
+  },
+  "dependencies": {
+    "html-to-image": "^1.6.2"
   }
 }
