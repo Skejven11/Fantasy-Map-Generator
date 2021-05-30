@@ -42,7 +42,7 @@ function genIslands(config) {
 		{ cellType: 'wall', hasProperty: 'open', value: 1 }
 	], 0);
 
-	//Details
+	//World details
 	world = new CAWorld({
 		width: 80,
 		height: 80,
@@ -144,17 +144,26 @@ function genIslands(config) {
 			this.terrain = !this.mountain&&!this.cliff&&!this.river&&!this.city&&!this.forest;
 			
 			//mountain generation
-			this.mountain = (this.mountain&&!this.countSurroundingCellsWithValue(neighbors, 'water'))||
-				(world.iteration<4&&getChance(12,1*config.mountains)&&!this.countSurroundingCellsWithValue(neighbors, 'water')&&!this.countSurroundingCellsWithValue(neighbors, 'beach')&&this.countSurroundingCellsWithValue(neighbors, 'mountain')>=1);
+			if ((world.iteration<4&&getChance(12,1*config.mountains)&&!this.countSurroundingCellsWithValue(neighbors, 'water')&&!this.countSurroundingCellsWithValue(neighbors, 'beach')&&this.countSurroundingCellsWithValue(neighbors, 'mountain')>=1)) {
+				this.mountain = true;
+				if (getChance(3,1)) this.mountainSize = 18;
+				else this.mountainSize = 24;
+			}
+			if (this.mountain&&!this.countSurroundingCellsWithValue(neighbors, 'water')) this.mountain = true;
 
 			//cliff generation
 			//this.cliff = this.countSurroundingCellsWithValue(neighbors, 'water')>1&&this.countSurroundingCellsWithValue(neighbors, 'beach')>1;
 		}
 
+		//generate proper cells on first world creation
 	}, function () {
 		this.island = true;
 		if (config.beaches!=0) this.beach = Math.random() > 0.2-config.beaches*0.2;
-		if (config.mountains!=0) this.mountain = Math.random() > 1-config.mountains*0.01;
+		if (config.mountains!=0&&Math.random() > 1-config.mountains*0.01) {
+			this.mountain = true;
+			if (getChance(3,1)) this.mountainSize = 18;
+			else this.mountainSize = 24;
+		}
 		if (config.forests!=0) this.forest = Math.random() > 1-config.forests*0.01;
 	});
 

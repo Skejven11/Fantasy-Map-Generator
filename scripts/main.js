@@ -72,7 +72,7 @@ function draw(world, ctx, iteration) {
 		ctx.drawImage(forestSprite,element[2]*world.cellSize-2,element[1]*world.cellSize-2);
 	});
 	mountains.forEach(element=> {
-		ctx.drawImage(mountainSprite,element[2]*world.cellSize-8,element[1]*world.cellSize-10);
+		ctx.drawImage(mountainSprite,element[2]*world.cellSize-8,element[1]*world.cellSize-10, element[0].mountainSize, element[0].mountainSize);
 	});
 	cities.forEach(element=> {
 		ctx.drawImage(citySprite,element[2]*world.cellSize-8,element[1]*world.cellSize-12);

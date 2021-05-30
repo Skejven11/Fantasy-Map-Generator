@@ -55,6 +55,7 @@ body {
   height: 800px;
   border: 4px solid black;
   border-radius: 0.5em;
+  background-color: green;
 }
 
 .user-menu {
