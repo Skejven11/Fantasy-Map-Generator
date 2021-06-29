@@ -6,7 +6,6 @@ function initializeWorld(world) {
 	btnGen.disabled=true;
 	canvas.width  = world.width*world.cellSize;
 	canvas.height = world.height*world.cellSize;
-
 	for (let i=0;i<30;i++) {
 		setTimeout(function(){
 			world.step();
@@ -64,9 +63,8 @@ function draw(world, ctx, iteration) {
 					ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
 				}
 			}
-		}
 	}
-
+}
 	//bigger element rendering priority
 	forests.forEach(element=> {
 		ctx.drawImage(forestSprite,element[2]*world.cellSize-2,element[1]*world.cellSize-2);

@@ -21,6 +21,7 @@
     "sass": "^1.32.12"
   },
   "dependencies": {
-    "html-to-image": "^1.6.2"
+    "html-to-image": "^1.6.2",
+    "three": "^0.129.0"
   }
 }

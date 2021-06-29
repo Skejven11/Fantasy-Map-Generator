@@ -67,7 +67,7 @@ body {
     * {
         transform: scale(1);
     }
-    @media only screen and (max-width:1400px) {
+    @media only screen and (max-width:1500px) {
         z-index: 2;
         left:63%;
     }
@@ -98,7 +98,7 @@ body {
 
 .menu-button-active {
     transform: translateX(300px) rotate(360deg);
-    @media only screen and (max-width:1400px) {
+    @media only screen and (max-width:1500px) {
         transform:translateX(0);
         z-index: 3;
     }

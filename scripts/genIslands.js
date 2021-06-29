@@ -81,7 +81,52 @@ function genIslands(config) {
 
 		process: function(neighbors) {
 
-			//river generation
+			//------------------river generation-------------------
+
+			//Might be better algorithm idk
+			/*if (this.river) {
+				if (neighbors[this.riverSource]&&this.delayCell!=world.iteration) {
+					if (getChance(2,1)&&this.changedDirection==false) {
+						if (getChance(2,1)) {
+							this.riverSource++;
+							this.changedDirection = true;
+						}
+						else {
+							this.riverSource--;
+							this.changedDirection = true;
+						}
+					}
+					if (this.riverSource>3&&neighbors[this.riverSource-4]) {
+						neighbors[this.riverSource-4].river = true;
+						neighbors[this.riverSource-4].beach = false;
+						neighbors[this.riverSource-4].forest = false;
+						neighbors[this.riverSource-4].changedDirection = false;
+						neighbors[this.riverSource-4].riverSource = this.riverSource;
+						if (neighbors[this.riverSource-4].delayCell===undefined) neighbors[this.riverSource-4].delayCell = world.iteration;
+					}
+					else if (this.riverSource<3&&neighbors[this.riverSource+4]) {
+						neighbors[this.riverSource+4].river = true;
+						neighbors[this.riverSource+4].beach = false;
+						neighbors[this.riverSource+4].forest = false;
+						neighbors[this.riverSource+4].changedDirection = false;
+						neighbors[this.riverSource+4].riverSource = this.riverSource;
+						if (neighbors[this.riverSource+4].delayCell===undefined) neighbors[this.riverSource+4].delayCell = world.iteration;
+					}
+				}
+			}
+
+			if ((world.iteration==1&&getChance(16,1*config.rivers)&&this.countSurroundingCellsWithValue(neighbors, 'mountain')==1)&&this.countSurroundingCellsWithValue(neighbors, 'river')==0
+			&&!this.countSurroundingCellsWithValue(neighbors, 'water')&&!this.countSurroundingCellsWithValue(neighbors, 'beach')) {
+				this.river = true;
+				this.changedDirection = false;
+				this.delayCell = world.iteration;
+				for (i=0;i<8;i++) {
+					if (neighbors[i]&&neighbors[i].mountain) this.riverSource = i;
+				}
+			}
+			*/
+			
+			//changing direction of rivers
 			if (this.river) {
 				this.river = true;
 				for (i=0;i<8;i++) {
@@ -89,7 +134,7 @@ function genIslands(config) {
 					else if (neighbors[i]&&neighbors[i].river) this.riverSource = i;
 
 					if (this.countSurroundingCellsWithValue(neighbors, 'water')>1) this.riverSource = false;
-					else if (getChance(2,1)) {
+					else if (getChance(8,1*config.rivers)) {
 						if (getChance(2,1)) {
 							this.riverSource++;
 							this.changedDirection = true;
@@ -102,6 +147,7 @@ function genIslands(config) {
 				}
 				
 			}
+			//generating first river cells
 			if ((world.iteration==1&&getChance(16,1*config.rivers)&&this.countSurroundingCellsWithValue(neighbors, 'mountain')==1)&&this.countSurroundingCellsWithValue(neighbors, 'river')==0
 			&&!this.countSurroundingCellsWithValue(neighbors, 'water')&&!this.countSurroundingCellsWithValue(neighbors, 'beach')) {
 				this.river = true;
@@ -110,6 +156,7 @@ function genIslands(config) {
 					else if (neighbors[i]&&neighbors[i].river) this.riverSource = i;
 				}
 			}
+			//generating next river cells
 			else if ((this.terrain||this.beach||this.forest)&&this.countSurroundingCellsWithValue(neighbors, 'river')==1) {
 				for (i=0;i<8;i++) {
 					if (neighbors[i]&&neighbors[i].river&&neighbors[i].riverSource===i) 	{ 
@@ -120,8 +167,9 @@ function genIslands(config) {
 					}
 				}
 			}
+			
 
-			//city generation
+			//-------------------city generation-------------------
 			if ((this.terrain||this.forest)&&this.countSurroundingCellsWithValue(neighbors, 'river')>1&&!this.countSurroundingCellsWithValue(neighbors, 'mountain')&&getChance(64,1*config.cities)&&world.iteration>28
 			&&this.countSurroundingCellsWithValue(neighbors, 'city')==0) {
 					this.city=true;
@@ -131,23 +179,23 @@ function genIslands(config) {
 				this.city=true;
 			}
 
-			//forest generation
+			//-------------------forest generation-------------------
 			this.forest = (this.forest&&this.countSurroundingCellsWithValue(neighbors, 'water')<2)||
 				(!this.mountain&&!this.river&&getChance(24,1*config.forests)&&this.countSurroundingCellsWithValue(neighbors, 'water')<2&&this.countSurroundingCellsWithValue(neighbors, 'forest')>=1);
 
-			//beach generation
+			//-------------------beach generation-------------------
 			this.beach = (this.beach && this.countSurroundingCellsWithValue(neighbors, 'water') > 1 && this.countSurroundingCellsWithValue(neighbors, 'beach')>0 
 				&& this.countSurroundingCellsWithValue(neighbors, 'terrain')>1)||(this.beach&&this.countSurroundingCellsWithValue(neighbors, 'river')>1)
 				||(this.terrain&&this.countSurroundingCellsWithValue(neighbors, 'beach')>1&&this.countSurroundingCellsWithValue(neighbors, 'water')>3)
-
-			//terrain generation
+			//-------------------terrain generation-------------------
 			this.terrain = !this.mountain&&!this.cliff&&!this.river&&!this.city&&!this.forest;
 			
-			//mountain generation
+			//-------------------mountain generation-------------------
 			if ((world.iteration<4&&getChance(12,1*config.mountains)&&!this.countSurroundingCellsWithValue(neighbors, 'water')&&!this.countSurroundingCellsWithValue(neighbors, 'beach')&&this.countSurroundingCellsWithValue(neighbors, 'mountain')>=1)) {
 				this.mountain = true;
-				if (getChance(3,1)) this.mountainSize = 18;
-				else this.mountainSize = 24;
+				if (getChance(3,1)) this.mountainSize = 22;
+				else this.mountainSize = 30;
+				return;
 			}
 			if (this.mountain&&!this.countSurroundingCellsWithValue(neighbors, 'water')) this.mountain = true;
 
