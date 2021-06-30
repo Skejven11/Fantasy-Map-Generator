@@ -19,7 +19,22 @@
         menu.classList.toggle("user-menu-active");
         menuButton.classList.toggle("menu-button-active");
     });
-  });
+
+
+        const infoButton = document.querySelector(".info-btn");
+        const modalScreen = document.querySelector(".modal-screen");
+        const modalContent = document.querySelector(".modal-content");
+        infoButton.addEventListener("click", ()=>{
+            modalScreen.style.visibility = "visible";
+            modalContent.style.top = "15%";
+        });
+        window.onclick = function(event) {
+        if (event.target == modalScreen) {
+         modalScreen.style.visibility = "hidden";
+         modalContent.style.top = "-100%";
+        }
+        } 
+    });
     function genMap() {
         let config = getConfig();
         genIslands(config);
@@ -32,6 +47,7 @@
         <div class="canvas-container">
             <h1>Fantasy Map Generator</h1>
             <button class="menu-button"></button>
+            <button class="info-btn"><b>i</b></button>
             <canvas id="myCanvas">Your browser doesn't support HTML5 canvas</canvas>
             <button class="btn-generate" onclick="genMap()">Generate Map</button>
             <div class="user-menu">
@@ -81,6 +97,10 @@
                     <input type="checkbox" id="" value="false">
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="modal-screen">
+        <div class="modal-content">
         </div>
     </div>
 </body>

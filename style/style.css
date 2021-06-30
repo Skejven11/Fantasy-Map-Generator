@@ -146,6 +146,24 @@ body {
   }
 }
 
+.info-btn {
+  position: absolute;
+  left: 2%;
+  top: 0.8%;
+  width: 30px;
+  height: 45px;
+  background-color: transparent;
+  color: #313131;
+  text-align: center;
+  border: none;
+  font-size: 2.25rem;
+  font-family: 'Fondamento', cursive;
+}
+
+.info-btn:hover {
+  cursor: pointer;
+}
+
 .btn-generate {
   margin-top: 2em;
   background-color: transparent;
@@ -172,5 +190,36 @@ body {
   background-color: grey;
   border: 2px solid red;
   color: red;
+}
+
+.modal-screen {
+  visibility: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(49, 49, 49, 0.8);
+  z-index: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.modal-screen .modal-content {
+  width: 600px;
+  height: 700px;
+  background-color: #e4decc;
+  border-radius: 5px;
+  position: fixed;
+  top: -100%;
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
 }
 /*# sourceMappingURL=style.css.map */
