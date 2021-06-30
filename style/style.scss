@@ -81,6 +81,12 @@ body {
     input[type=range]{
         width:130px;
     }
+    b {
+        width:150px;
+    }
+    input[type=checkbox] {
+        position:relative;
+    }
 }
 
 .menu-button {

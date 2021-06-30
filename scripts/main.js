@@ -87,6 +87,9 @@ function getConfig() {
 	config.cities = document.getElementById("cities").value;
 	config.forests = document.getElementById("forests").value;
 	config.beaches = document.getElementById("beaches").value;
+	config.sprawlingRivers = document.getElementById("sprawlingRivers").checked;
+	config.wDecorations = document.getElementById("wDecorations").checked;
+	config.lDecorations = document.getElementById("lDecorations").checked;
 	return config;
 }
 

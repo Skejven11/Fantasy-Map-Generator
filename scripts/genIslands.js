@@ -1,5 +1,6 @@
 function genIslands(config) {
 
+	var riverId = 0;
 	var colorPalette = {
 		shallow: 'rgb(52, 235, 229)',
 		mShallow: 'rgb(52, 177, 235)',
@@ -60,7 +61,7 @@ function genIslands(config) {
 			this.mediumShallow = !this.shallow && this.countSurroundingCellsWithValue(neighbors, "shallow")>0 || this.countSurroundingCellsWithValue(neighbors, 'island')>2;
 			this.shallow = this.countSurroundingCellsWithValue(neighbors, "beach")>1;
 			this.deepWater = !this.shallow&&!this.mediumShallow&&!this.waterDecoration;
-			this.waterDecoration = this.countSurroundingCellsWithValue(neighbors, 'deepWater')==8&&getChance(80, 1)&&world.iteration==29;
+			if (config.wDecorations) this.waterDecoration = this.countSurroundingCellsWithValue(neighbors, 'deepWater')==8&&getChance(80, 1)&&world.iteration==29;
 		}
 	}, function () {
 		this.water = true;
@@ -133,15 +134,16 @@ function genIslands(config) {
 					if (neighbors[i]&&neighbors[i].mountain) this.riverSource = i;
 					else if (neighbors[i]&&neighbors[i].river) this.riverSource = i;
 
+					var  add = 0;
+					if (this.riverSource==7||this.riverSource==4||this.riverSource==2) var add=4;
+
 					if (this.countSurroundingCellsWithValue(neighbors, 'water')>1) this.riverSource = false;
-					else if (getChance(8,1*config.rivers)) {
+					else if (getChance(10,1*config.rivers+add)&&!this.createdRiver) {
 						if (getChance(2,1)) {
 							this.riverSource++;
-							this.changedDirection = true;
 						}
 						else {
 							this.riverSource--;
-							this.changedDirection = true;
 						}
 					}
 				}
@@ -163,10 +165,27 @@ function genIslands(config) {
 						this.river = true;
 						this.forest = false;
 						this.beach = false;
-						this.changedDirection = false;
+						if (!config.sprawlingRivers) neighbors[i].createdRiver = true;
 					}
 				}
 			}
+			/*else if ((this.terrain||this.beach||this.forest)&&this.countSurroundingCellsWithValue(neighbors, 'river')==2) {
+				for (i=0;i<8;i++) {
+					if (neighbors[i]&&neighbors[i].river) {
+						var neighbor1 = i+2;
+						if (neighbor1>7) neighbor1-=8;
+						var neighbor2 = i-2;
+						if (neighbor2<0) neighbor2+=8;
+						if (neighbors[neighbor2]&&neighbors[neighbor2].river) console.log("xd")
+
+						if ((neighbors[neighbor1]&&neighbors[neighbor1].river)||(neighbors[neighbor2]&&neighbors[neighbor2].river)) {
+							this.river = true;
+							this.forest = false;
+							this.beach = false;
+						}
+					}
+				}
+			}*/
 			
 
 			//-------------------city generation-------------------
