@@ -59,6 +59,9 @@ body {
     hr{
         margin: 0 0;
     }
+    .checkbox {
+        height:30px;
+    }
 }
 
 .user-menu-active {
@@ -113,7 +116,7 @@ body {
 .info-btn {
     position:absolute;
     left:2%;
-    top:0.8%;
+    top:1.2%;
     width:30px;
     height:45px;
     background-color: transparent;
@@ -162,14 +165,45 @@ body {
       background-color: rgba(49, 49, 49, 0.8);
       z-index: 1;
       @include flex-center();
+
       .modal-content {
-        width:600px;
-        height:700px;
+        width:500px;
+        height:600px;
         background-color: rgb(228, 222, 204);
         border-radius: 5px;
         position: fixed;
         top:-100%;
         transition: all 0.4s;
+        padding:2rem 2rem 2rem 2rem;
+
+        > b {
+            display: inline-block;
+            width:100%;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        > p {
+            font-size:1.1rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: rgb(158, 101, 27);
+        }
+
+        .links {
+            width:100%;
+            @include flex-center();
+            display: block;
+            text-align: center;
+            margin-top:13%;
+            .fa-github {
+                font-size: 25px;
+                margin-left:10px;
+                color:rgb(158, 101, 27);
+            }
+        }
       }
   }
   

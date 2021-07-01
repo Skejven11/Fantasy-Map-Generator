@@ -9,6 +9,7 @@
 
     <link rel="stylesheet" href="style/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Fondamento&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -16,10 +17,9 @@
         const menuButton = document.querySelector(".menu-button");
         const menu = document.querySelector(".user-menu");
         menuButton.addEventListener("click", ()=>{
-        menu.classList.toggle("user-menu-active");
-        menuButton.classList.toggle("menu-button-active");
-    });
-
+            menu.classList.toggle("user-menu-active");
+            menuButton.classList.toggle("menu-button-active");
+        });
 
         const infoButton = document.querySelector(".info-btn");
         const modalScreen = document.querySelector(".modal-screen");
@@ -29,12 +29,13 @@
             modalContent.style.top = "15%";
         });
         window.onclick = function(event) {
-        if (event.target == modalScreen) {
-         modalScreen.style.visibility = "hidden";
-         modalContent.style.top = "-100%";
-        }
+            if (event.target == modalScreen) {
+            modalScreen.style.visibility = "hidden";
+            modalContent.style.top = "-100%";
+            }
         } 
     });
+    
     function genMap() {
         let config = getConfig();
         genIslands(config);
@@ -80,19 +81,19 @@
                     <input type="range" id="" min="0" max="3" value="1">
                 </div>
                 <hr></hr>
-                <div class="user-menu-section">
+                <div class="user-menu-section checkbox">
                     <label for="wDecoration">Water Decoration</label>
                     <input type="checkbox" id="wDecorations" value="true" checked>
                 </div>
-                <div class="user-menu-section">
+                <div class="user-menu-section checkbox">
                     <label for="lDecoration">Land Decoration</label>
                     <input type="checkbox" id="lDecorations" value="true" checked>
                 </div>
-                <div class="user-menu-section">
+                <div class="user-menu-section checkbox">
                     <label for="sprawlingRivers">Sprawling Rivers</label>
                     <input type="checkbox" id="sprawlingRivers" value="false">
                 </div>
-                <div class="user-menu-section">
+                <div class="user-menu-section checkbox">
                     <label for="">-</label>
                     <input type="checkbox" id="" value="false">
                 </div>
@@ -101,6 +102,24 @@
     </div>
     <div class="modal-screen">
         <div class="modal-content">
+            <b>About</b>
+            <p>
+                Fantasy Map Generator is an engineering thesis project created using HTML5, CSS3 (SASS) and JavaScript ES6. It's based on cellular automata model using Sanojian's
+                <a href="http://sanojian.github.io/cellauto/">cellauto.js</a> library. You can check github page for this project down below.
+            </p>
+            <hr>
+            <b>How does it work?</b>
+            <p>
+                All squares (called cells) on the map have different states and properties. Cell can change it's state based on states and properties of all the surrounding 8 neighbors.
+                For example river cell can only appear near a mountain cell, that's why the amount of mountain cells on the map affects the amount of rivers created. With settings
+                menu you can adjust generation of some of the different cells, but results may vary as most of the cells have some sort of randomness involved in the generation. 
+                You can also turn on and off some of the options like "sprawling rivers", which, if turned on, makes river generation much more chaotic and complex.
+            </p>
+            <hr>
+            <div class="links">
+                <b>Created by Bartosz Zysk</b>
+                <a href="https://github.com/Skejven11/Fantasy-Map-Generator" class="fa fa-github"></a>
+            </div>
         </div>
     </div>
 </body>

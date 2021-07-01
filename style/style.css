@@ -83,6 +83,10 @@ body {
   margin: 0 0;
 }
 
+.user-menu .checkbox {
+  height: 30px;
+}
+
 .user-menu-active {
   left: 100%;
   background-color: #e4decc;
@@ -149,7 +153,7 @@ body {
 .info-btn {
   position: absolute;
   left: 2%;
-  top: 0.8%;
+  top: 1.2%;
   width: 30px;
   height: 45px;
   background-color: transparent;
@@ -213,13 +217,52 @@ body {
 }
 
 .modal-screen .modal-content {
-  width: 600px;
-  height: 700px;
+  width: 500px;
+  height: 600px;
   background-color: #e4decc;
   border-radius: 5px;
   position: fixed;
   top: -100%;
   -webkit-transition: all 0.4s;
   transition: all 0.4s;
+  padding: 2rem 2rem 2rem 2rem;
+}
+
+.modal-screen .modal-content > b {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.modal-screen .modal-content > p {
+  font-size: 1.1rem;
+}
+
+.modal-screen .modal-content a {
+  text-decoration: none;
+  color: #9e651b;
+}
+
+.modal-screen .modal-content .links {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: block;
+  text-align: center;
+  margin-top: 13%;
+}
+
+.modal-screen .modal-content .links .fa-github {
+  font-size: 25px;
+  margin-left: 10px;
+  color: #9e651b;
 }
 /*# sourceMappingURL=style.css.map */
