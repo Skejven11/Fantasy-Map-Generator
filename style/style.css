@@ -150,6 +150,39 @@ body {
   }
 }
 
+.loading-gear {
+  visibility: hidden;
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  left: 42.5%;
+  top: 42.5%;
+  background: url("../images/gear.png") no-repeat center;
+  background-size: 150px 150px;
+}
+
+@-webkit-keyframes rotate {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
+  }
+}
+
+@keyframes rotate {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
+  }
+}
+
 .info-btn {
   position: absolute;
   left: 2%;

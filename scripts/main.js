@@ -2,7 +2,10 @@ function initializeWorld(world) {
 	var canvas = document.getElementById("myCanvas");
 	var ctx = canvas.getContext('2d');
 	const btnGen = document.querySelector(".btn-generate");
+	const gear = document.querySelector(".loading-gear");
 
+	gear.style.visibility = "visible";
+	gear.style.animation = "1.5s infinite ease-in-out rotate";
 	btnGen.disabled=true;
 	canvas.width  = world.width*world.cellSize;
 	canvas.height = world.height*world.cellSize;
@@ -11,8 +14,12 @@ function initializeWorld(world) {
 			world.step();
 			world.iteration++;
 			draw(world,ctx, i);
-			if (i==29) btnGen.disabled=false;
-		},i*60);
+			if (i==29) {
+				btnGen.disabled=false;
+				gear.style.visibility = "hidden";
+				gear.style.animation = "";
+			}
+		},i*100);
 	}
 
 	canvas.addEventListener('click', event=>{
