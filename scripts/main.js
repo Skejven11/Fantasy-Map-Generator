@@ -46,6 +46,10 @@ function draw(world, ctx, iteration) {
 	const wDecorationSprite = new Image();
 	wDecorationSprite.src = "images/waterMonster.png";
 
+	//loading terrain spritesheat
+	const spriteSheat = new Image();
+	spriteSheat.src = "images/spritesheat.png";
+
 	//go over whole world, draw 8x8px elements and push 16x16px elements into the array
 	for (y=0;y<world.height;y++) {
 		for (x=0;x<world.width;x++) {
@@ -64,6 +68,12 @@ function draw(world, ctx, iteration) {
 				}
 				else if (world.grid[y][x].waterDecoration) {
 					wDecorations.push([world.grid[y][x],y,x]);
+				}
+				else if (world.grid[y][x].beach) {
+					if (world.grid[y][x].spriteNr!=20) ctx.drawImage(spriteSheat,world.cellSize*world.grid[y][x].spriteNr,0,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
+				}
+				else if (world.grid[y][x].terrain) {
+					if (world.grid[y][x].spriteNr!=20) ctx.drawImage(spriteSheat,world.cellSize*world.grid[y][x].spriteNr,10,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
 				}
 				else {
 					ctx.fillStyle = world.grid[y][x].getColor();

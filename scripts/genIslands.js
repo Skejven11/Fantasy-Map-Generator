@@ -73,6 +73,7 @@ function genIslands(config) {
 		{
 			if(this.beach) return 'rgb(255, 255, 153)';
 			else if (this.river) return colorPalette.river;
+			else if (this.riverFill) return colorPalette.river;
 			else {
 				var v = Math.floor(Math.random()*17);
 				var g = (140+v).toString();
@@ -169,23 +170,8 @@ function genIslands(config) {
 					}
 				}
 			}
-			/*else if ((this.terrain||this.beach||this.forest)&&this.countSurroundingCellsWithValue(neighbors, 'river')==2) {
-				for (i=0;i<8;i++) {
-					if (neighbors[i]&&neighbors[i].river) {
-						var neighbor1 = i+2;
-						if (neighbor1>7) neighbor1-=8;
-						var neighbor2 = i-2;
-						if (neighbor2<0) neighbor2+=8;
-						if (neighbors[neighbor2]&&neighbors[neighbor2].river) console.log("xd")
 
-						if ((neighbors[neighbor1]&&neighbors[neighbor1].river)||(neighbors[neighbor2]&&neighbors[neighbor2].river)) {
-							this.river = true;
-							this.forest = false;
-							this.beach = false;
-						}
-					}
-				}
-			}*/
+
 			
 
 			//-------------------city generation-------------------
@@ -206,9 +192,34 @@ function genIslands(config) {
 			this.beach = (this.beach && this.countSurroundingCellsWithValue(neighbors, 'water') > 1 && this.countSurroundingCellsWithValue(neighbors, 'beach')>0 
 				&& this.countSurroundingCellsWithValue(neighbors, 'terrain')>1)||(this.beach&&this.countSurroundingCellsWithValue(neighbors, 'river')>1)
 				||(this.terrain&&this.countSurroundingCellsWithValue(neighbors, 'beach')>1&&this.countSurroundingCellsWithValue(neighbors, 'water')>3)
+			//applying proper sprite from the spritesheat
+			if (this.beach) {
+				if (neighbors[1]!=null&&neighbors[3]!=null&&neighbors[4]!=null&&neighbors[6]!=null) {
+					if (neighbors[1].water&&(neighbors[3].beach||neighbors[3].terrain)&&(neighbors[4].beach||neighbors[4].terrain)) this.spriteNr = 0;
+					else if (neighbors[6].water&&(neighbors[3].beach||neighbors[3].terrain)&&(neighbors[4].beach||neighbors[4].terrain)) this.spriteNr = 1;
+					else if (neighbors[3].water&&(neighbors[1].beach||neighbors[1].terrain)&&(neighbors[6].beach||neighbors[6].terrain)) this.spriteNr = 2;
+					else if (neighbors[4].water&&(neighbors[1].beach||neighbors[1].terrain)&&(neighbors[6].beach||neighbors[6].terrain)) this.spriteNr = 3;
+					else if (neighbors[1].water&&neighbors[4].water) this.spriteNr = 4;
+					else if (neighbors[1].water&&neighbors[3].water) this.spriteNr = 5;
+					else if (neighbors[6].water&&neighbors[3].water) this.spriteNr = 6;
+					else if (neighbors[6].water&&neighbors[4].water) this.spriteNr = 7;
+				}
+				else this.spriteNr = 20;
+			}
+
 			//-------------------terrain generation-------------------
-			this.terrain = !this.mountain&&!this.cliff&&!this.river&&!this.city&&!this.forest;
-			
+			this.terrain = !this.mountain&&!this.cliff&&!this.river&&!this.city&&!this.forest&&!this.riverFill&&!this.beach;
+			//applying proper sprite from the spritesheat
+			if (this.terrain) {
+				if (neighbors[1]!=null&&neighbors[3]!=null&&neighbors[4]!=null&&neighbors[6]!=null) {
+					if (neighbors[1].beach&&neighbors[4].beach) this.spriteNr = 0;
+					else if (neighbors[1].beach&&neighbors[3].beach) this.spriteNr = 1;
+					else if (neighbors[6].beach&&neighbors[4].beach) this.spriteNr = 2;
+					else if (neighbors[6].beach&&neighbors[3].beach) this.spriteNr = 3;
+					else this.spriteNr = 4;
+				}
+			}
+
 			//-------------------mountain generation-------------------
 			if ((world.iteration<4&&getChance(12,1*config.mountains)&&!this.countSurroundingCellsWithValue(neighbors, 'water')&&!this.countSurroundingCellsWithValue(neighbors, 'beach')&&this.countSurroundingCellsWithValue(neighbors, 'mountain')>=1)) {
 				this.mountain = true;
@@ -241,3 +252,16 @@ function genIslands(config) {
 
 	initializeWorld(world);
 };
+
+
+
+/*
+0 lewa góra
+1 góra
+2
+3 lewo
+4 prawo
+5
+6 dół
+7
+*/
