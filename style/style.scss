@@ -76,6 +76,20 @@ body {
     }
 }
 
+.user-menu-select {
+    text-align: center;
+    width:100%;
+    height:75px;
+    @include flex-center();
+    flex-direction: column;
+    b {
+        margin-bottom:5px;
+    }
+    select {
+        width:40%;
+    }
+}
+
 .user-menu-section {
     display:inline-block;
     text-align: center;

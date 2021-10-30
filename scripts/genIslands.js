@@ -5,7 +5,7 @@ function genIslands(config) {
 		shallow: 'rgb(52, 235, 229)',
 		mShallow: 'rgb(52, 177, 235)',
 		deepWater: 'rgb(51, 153, 255)',
-		river: 'rgb(52,200,229)',
+		river: 'rgb(50,160,250)',
 		red: 'rgb(200,30,30)'
 	}
 
@@ -69,6 +69,7 @@ function genIslands(config) {
 
 	world.registerCellType('island', {
 		isSolid: true,
+		spriteNr: null,
 		getColor: function()
 		{
 			if(this.beach) return 'rgb(255, 255, 153)';
@@ -189,11 +190,17 @@ function genIslands(config) {
 				(!this.mountain&&!this.river&&getChance(24,1*config.forests)&&this.countSurroundingCellsWithValue(neighbors, 'water')<2&&this.countSurroundingCellsWithValue(neighbors, 'forest')>=1);
 
 			//-------------------beach generation-------------------
-			this.beach = (this.beach && this.countSurroundingCellsWithValue(neighbors, 'water') > 1 && this.countSurroundingCellsWithValue(neighbors, 'beach')>0 
+			if ((this.beach && this.countSurroundingCellsWithValue(neighbors, 'water') > 1 && this.countSurroundingCellsWithValue(neighbors, 'beach')>0 
 				&& this.countSurroundingCellsWithValue(neighbors, 'terrain')>1)||(this.beach&&this.countSurroundingCellsWithValue(neighbors, 'river')>1)
-				||(this.terrain&&this.countSurroundingCellsWithValue(neighbors, 'beach')>1&&this.countSurroundingCellsWithValue(neighbors, 'water')>3)
+				||(this.terrain&&this.countSurroundingCellsWithValue(neighbors, 'beach')>1&&this.countSurroundingCellsWithValue(neighbors, 'water')>3)) {
+				this.beach = true;
+			}
+			else {
+				this.beach = false;
+			}
 			//applying proper sprite from the spritesheat
-			if (this.beach) {
+			if (this.beach&&this.spriteNr==null) {
+				console.log("XD")
 				if (neighbors[1]!=null&&neighbors[3]!=null&&neighbors[4]!=null&&neighbors[6]!=null) {
 					if (neighbors[1].water&&(neighbors[3].beach||neighbors[3].terrain)&&(neighbors[4].beach||neighbors[4].terrain)) this.spriteNr = 0;
 					else if (neighbors[6].water&&(neighbors[3].beach||neighbors[3].terrain)&&(neighbors[4].beach||neighbors[4].terrain)) this.spriteNr = 1;
@@ -203,12 +210,17 @@ function genIslands(config) {
 					else if (neighbors[1].water&&neighbors[3].water) this.spriteNr = 5;
 					else if (neighbors[6].water&&neighbors[3].water) this.spriteNr = 6;
 					else if (neighbors[6].water&&neighbors[4].water) this.spriteNr = 7;
+					else this.spriteNr = 8;
 				}
-				else this.spriteNr = 20;
 			}
 
 			//-------------------terrain generation-------------------
-			this.terrain = !this.mountain&&!this.cliff&&!this.river&&!this.city&&!this.forest&&!this.riverFill&&!this.beach;
+			if (!this.mountain&&!this.cliff&&!this.river&&!this.city&&!this.forest&&!this.riverFill&&!this.beach) {
+				this.terrain = true;
+			}
+			else {
+				this.terrain = false;
+			}
 			//applying proper sprite from the spritesheat
 			if (this.terrain) {
 				if (neighbors[1]!=null&&neighbors[3]!=null&&neighbors[4]!=null&&neighbors[6]!=null) {
@@ -216,7 +228,9 @@ function genIslands(config) {
 					else if (neighbors[1].beach&&neighbors[3].beach) this.spriteNr = 1;
 					else if (neighbors[6].beach&&neighbors[4].beach) this.spriteNr = 2;
 					else if (neighbors[6].beach&&neighbors[3].beach) this.spriteNr = 3;
-					else this.spriteNr = 4;
+					else {
+						this.spriteNr = null;
+					}
 				}
 			}
 
@@ -255,7 +269,7 @@ function genIslands(config) {
 
 
 
-/*
+/* neighbors:
 0 lewa góra
 1 góra
 2

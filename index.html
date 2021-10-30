@@ -4,6 +4,7 @@
     <meta charset="utf-8"/>
     <title>Praca Inżynierska</title>
     <script type="text/javascript" src="scripts/genIslands.js"></script>
+    <script type="text/javascript" src="scripts/genContinental.js"></script>
     <script type="text/javascript" src="scripts/cellauto.js"></script>
     <script type="text/javascript" src="scripts/main.js"></script>
 
@@ -38,7 +39,14 @@
     
     function genMap() {
         let config = getConfig();
-        genIslands(config);
+        switch (config.genType) {
+            case '1':
+                genIslands(config);
+                break;
+            case '2':
+                genContinental(config);
+                break;
+        }
     }
 </script>
 </head>
@@ -54,6 +62,14 @@
             <button class="btn-generate" onclick="genMap()">Generate Map</button>
             <div class="user-menu">
                 <h3>Generation Options</h3>
+                <hr></hr>
+                <div class="user-menu-select">
+                    <b>Choose generation type:</b>
+                    <select id="genSelection">
+                        <option value="1">Islands</option>
+                        <option value="2">Continental</option>
+                    </select>
+                </div>
                 <hr></hr>
                 <div class="user-menu-section">
                     <b>Rivers</b>

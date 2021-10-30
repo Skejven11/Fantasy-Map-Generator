@@ -50,12 +50,9 @@ function draw(world, ctx, iteration) {
 	const spriteSheat = new Image();
 	spriteSheat.src = "images/spritesheat.png";
 
-	//go over whole world, draw 8x8px elements and push 16x16px elements into the array
+	//go over whole world, draw 10x10px elements and push 16x16px elements into the array
 	for (y=0;y<world.height;y++) {
 		for (x=0;x<world.width;x++) {
-			if (world.grid[y][x].terrain&&iteration>2) {
-			}
-			else {
 				//bigger elements to array so we can arrange their rendering time
 				if (world.grid[y][x].city) {
 					cities.push([world.grid[y][x],y,x]);
@@ -73,7 +70,13 @@ function draw(world, ctx, iteration) {
 					if (world.grid[y][x].spriteNr!=20) ctx.drawImage(spriteSheat,world.cellSize*world.grid[y][x].spriteNr,0,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
 				}
 				else if (world.grid[y][x].terrain) {
-					if (world.grid[y][x].spriteNr!=20) ctx.drawImage(spriteSheat,world.cellSize*world.grid[y][x].spriteNr,10,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
+					if (world.grid[y][x].spriteNr==null&&world.iteration<4) {
+						ctx.fillStyle = world.grid[y][x].getColor();
+						ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
+					}
+					else if (world.iteration==3) {
+						ctx.drawImage(spriteSheat,world.cellSize*world.grid[y][x].spriteNr,10,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
+					}
 				}
 				else {
 					ctx.fillStyle = world.grid[y][x].getColor();
@@ -81,7 +84,7 @@ function draw(world, ctx, iteration) {
 				}
 			}
 	}
-}
+
 	//bigger element rendering priority
 	forests.forEach(element=> {
 		ctx.drawImage(forestSprite,element[2]*world.cellSize-2,element[1]*world.cellSize-2);
@@ -99,6 +102,7 @@ function draw(world, ctx, iteration) {
 
 function getConfig() {
 	let config = {};
+	config.genType = document.getElementById("genSelection").value;
 	config.rivers = document.getElementById("rivers").value;
 	config.mountains = document.getElementById("mountains").value;
 	config.cities = document.getElementById("cities").value;
