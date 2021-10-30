@@ -1,5 +1,5 @@
 body {
-  background-color: #302d2c;
+  background-color: #1d1c1b;
   margin: 0 0;
   font-family: 'Fondamento', cursive;
 }
@@ -20,7 +20,7 @@ body {
   position: relative;
   width: 900px;
   height: 980px;
-  background-color: #e4decc;
+  background-color: #dfdacb;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -89,7 +89,7 @@ body {
 
 .user-menu-active {
   left: 100%;
-  background-color: #e4decc;
+  background-color: #dfdacb;
 }
 
 .user-menu-active * {
@@ -279,7 +279,7 @@ body {
 .modal-screen .modal-content {
   width: 500px;
   height: 600px;
-  background-color: #e4decc;
+  background-color: #dfdacb;
   border-radius: 5px;
   position: fixed;
   top: -100%;

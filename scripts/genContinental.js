@@ -14,7 +14,8 @@ function genContinental(config) {
 		width: 80,
 		height: 80,
 		cellSize: 10,
-		iteration:0
+		iteration:0,
+		continentDirection: Math.floor(Math.random()*4)
 	});
 
 	world.registerCellType('wall', {
@@ -22,12 +23,47 @@ function genContinental(config) {
 			var surrounding = this.countSurroundingCellsWithValue(neighbors, 'wasOpen');
 			this.open = (this.wasOpen && surrounding >= 3) || surrounding >= 5 || (surrounding>=3 && getChance(8, 1));
 			if (world.iteration===15&&surrounding<4) this.open = false; 
+			switch (world.continentDirection) {
+				case 0:
+					world.grid[0][0].open = true;
+					break;
+				case 1:
+					world.grid[0][79].open = true;
+					break;
+				case 2:
+					world.grid[79][79].open = true;
+					break;
+				case 3:
+					world.grid[79][0].open = true;
+					break;
+			}
 		},
 		reset: function () {
 			this.wasOpen = this.open;
 		}
 	}, function () {
-		this.open = Math.random() > 0.6;
+		switch (world.continentDirection) {
+			case 0:
+				if ((this.x<40&&this.y<5)||(this.x<5&&this.y<40)) this.open = true;
+				else if (this.x<60&&this.y<60) this.open = Math.random() > 0.55;
+				else this.open = Math.random() > 0.75;
+				break;
+			case 1:
+				if ((this.x>40&&this.y<5)||(this.x>75&&this.y<40)) this.open = true;
+				else if (this.x>20&&this.y<60) this.open = Math.random() > 0.55;
+				else this.open = Math.random() > 0.75;
+				break;
+			case 2:
+				if ((this.x>40&&this.y>75)||(this.x>75&&this.y>40)) this.open = true;
+				else if (this.x>20&&this.y>20) this.open = Math.random() > 0.55;
+				else this.open = Math.random() > 0.75;
+				break;
+			case 3:
+				if ((this.x<40&&this.y>75)||(this.x<5&&this.y>40)) this.open = true;
+				else if (this.x<60&&this.y>20) this.open = Math.random() > 0.55;
+				else this.open = Math.random() > 0.75;
+				break;
+		}
 	});
 
 	world.initialize([
@@ -61,7 +97,7 @@ function genContinental(config) {
 			 this.mediumShallow = !this.shallow && this.countSurroundingCellsWithValue(neighbors, "shallow")>0 || this.countSurroundingCellsWithValue(neighbors, 'island')>2;
 			 this.shallow = this.countSurroundingCellsWithValue(neighbors, "beach")>1;
 			 this.deepWater = !this.shallow&&!this.mediumShallow&&!this.waterDecoration;
-			// if (config.wDecorations) this.waterDecoration = this.countSurroundingCellsWithValue(neighbors, 'deepWater')==8&&getChance(80, 1)&&world.iteration==29;
+			 if (config.wDecorations) this.waterDecoration = this.countSurroundingCellsWithValue(neighbors, 'deepWater')==8&&getChance(80, 1)&&world.iteration==29;
 		}
 	}, function () {
 		this.water = true;

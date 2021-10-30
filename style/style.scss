@@ -1,8 +1,10 @@
 body {
-    background-color:hsl(24, 5%, 18%);
+    background-color:hsl(30, 4%, 11%);
     margin: 0 0;
     font-family: 'Fondamento', cursive;
 }
+
+$menu-color: rgb(223, 218, 203);
 
 @mixin flex-center {
     display: flex;
@@ -18,7 +20,7 @@ body {
     position: relative;
     width:900px;
     height:980px;
-    background-color: rgb(228, 222, 204);
+    background-color: $menu-color;
     @include flex-center();
     justify-content: initial;
     flex-direction: column;
@@ -66,7 +68,7 @@ body {
 
 .user-menu-active {
     left:100%;
-    background-color: rgb(228, 222, 204);
+    background-color: $menu-color;
     * {
         transform: scale(1);
     }
@@ -203,7 +205,7 @@ body {
       .modal-content {
         width:500px;
         height:600px;
-        background-color: rgb(228, 222, 204);
+        background-color: $menu-color;
         border-radius: 5px;
         position: fixed;
         top:-100%;

@@ -171,6 +171,16 @@ function genIslands(config) {
 					}
 				}
 			}
+			if ((this.terrain||this.beach||this.forest)&&this.countSurroundingCellsWithValue(neighbors, 'river')>1&&world.iteration==29) { 
+				for (i=0;i<8;i++) {
+					if (neighbors[i]&&neighbors[i].river&&neighbors[i].riverSource===i&&!neighbors[i].createdRiver) 	{ 
+						this.river = true;
+						this.forest = false;
+						this.beach = false;
+					}
+				}
+			}
+
 
 
 			
@@ -200,7 +210,6 @@ function genIslands(config) {
 			}
 			//applying proper sprite from the spritesheat
 			if (this.beach&&this.spriteNr==null) {
-				console.log("XD")
 				if (neighbors[1]!=null&&neighbors[3]!=null&&neighbors[4]!=null&&neighbors[6]!=null) {
 					if (neighbors[1].water&&(neighbors[3].beach||neighbors[3].terrain)&&(neighbors[4].beach||neighbors[4].terrain)) this.spriteNr = 0;
 					else if (neighbors[6].water&&(neighbors[3].beach||neighbors[3].terrain)&&(neighbors[4].beach||neighbors[4].terrain)) this.spriteNr = 1;

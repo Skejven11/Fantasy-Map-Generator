@@ -13,15 +13,14 @@ function initializeWorld(world) {
 		setTimeout(function(){
 			world.step();
 			world.iteration++;
-			draw(world,ctx, i);
+			if (world.iteration>1) draw(world, ctx, i)
 			if (i==29) {
 				btnGen.disabled=false;
 				gear.style.visibility = "hidden";
 				gear.style.animation = "";
 			}
-		},i*100);
+		},i*75);
 	}
-
 	canvas.addEventListener('click', event=>{
 		getMousePos(world, canvas, event);
 	});
