@@ -1,6 +1,4 @@
 function genIslands(config) {
-
-	var riverId = 0;
 	var colorPalette = {
 		shallow: 'rgb(52, 235, 229)',
 		mShallow: 'rgb(52, 177, 235)',
@@ -70,8 +68,7 @@ function genIslands(config) {
 	world.registerCellType('island', {
 		isSolid: true,
 		spriteNr: null,
-		getColor: function()
-		{
+		getColor: function() {
 			if(this.beach) return 'rgb(255, 255, 153)';
 			else if (this.river) return colorPalette.river;
 			else if (this.riverFill) return colorPalette.river;
@@ -188,7 +185,7 @@ function genIslands(config) {
 			//-------------------city generation-------------------
 			if ((this.terrain||this.forest)&&this.countSurroundingCellsWithValue(neighbors, 'river')>1&&!this.countSurroundingCellsWithValue(neighbors, 'mountain')&&getChance(64,1*config.cities)&&world.iteration>28
 			&&this.countSurroundingCellsWithValue(neighbors, 'city')==0) {
-					this.city=true;
+				this.city=true;
 			}
 			if ((this.terrain||this.beach)&&this.countSurroundingCellsWithValue(neighbors, 'water')>2&&this.countSurroundingCellsWithValue(neighbors, 'water')<5&&getChance(80,1*config.cities)&&world.iteration>28
 			&&this.countSurroundingCellsWithValue(neighbors, 'city')==0) {
@@ -196,8 +193,18 @@ function genIslands(config) {
 			}
 
 			//-------------------forest generation-------------------
-			this.forest = (this.forest&&this.countSurroundingCellsWithValue(neighbors, 'water')<2)||
-				(!this.mountain&&!this.river&&getChance(24,1*config.forests)&&this.countSurroundingCellsWithValue(neighbors, 'water')<2&&this.countSurroundingCellsWithValue(neighbors, 'forest')>=1);
+			if (this.forest) {
+				this.forest  = true;
+				if (this.Sprite===undefined) {
+					this.Sprite = new Image();
+					this.Sprite.src = getChance(2,1) ? "images/forest.png" : "images/forest2.png";
+				}
+			}
+			if (!this.mountain&&!this.river&&getChance(24,1*config.forests)&&this.countSurroundingCellsWithValue(neighbors, 'water')<2&&this.countSurroundingCellsWithValue(neighbors, 'forest')>=1) {
+				this.forest = true;
+				this.Sprite = new Image();
+				this.Sprite.src = getChance(2,1) ? "images/forest.png" : "images/forest2.png";
+			}
 
 			//-------------------beach generation-------------------
 			if ((this.beach && this.countSurroundingCellsWithValue(neighbors, 'water') > 1 && this.countSurroundingCellsWithValue(neighbors, 'beach')>0 

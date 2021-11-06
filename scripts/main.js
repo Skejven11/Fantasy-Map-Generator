@@ -13,7 +13,7 @@ function initializeWorld(world) {
 		setTimeout(function(){
 			world.step();
 			world.iteration++;
-			if (world.iteration>1) draw(world, ctx, i)
+			if (world.iteration>1) draw(world, ctx, canvas, getConfig().landName)
 			if (i==29) {
 				btnGen.disabled=false;
 				gear.style.visibility = "hidden";
@@ -28,7 +28,7 @@ function initializeWorld(world) {
 
 
 //drawing on canvas
-function draw(world, ctx, iteration) {
+function draw(world, ctx, canvas, landName) {
 	//arrays that store map elements which are bigger than 8x8px (mountains, cities etc.)
 	let cities = [];
 	let forests = [];
@@ -40,10 +40,10 @@ function draw(world, ctx, iteration) {
     mountainSprite.src = "images/mountains.png";
 	const citySprite = new Image();
     citySprite.src = "images/city.png";
-	const forestSprite = new Image();
-    forestSprite.src = "images/forest.png";
 	const wDecorationSprite = new Image();
 	wDecorationSprite.src = "images/waterMonster.png";
+	const ribbonSprite = new Image();
+	ribbonSprite.src = "images/ribbon.png";
 
 	//loading terrain spritesheat
 	const spriteSheat = new Image();
@@ -86,7 +86,7 @@ function draw(world, ctx, iteration) {
 
 	//bigger element rendering priority
 	forests.forEach(element=> {
-		ctx.drawImage(forestSprite,element[2]*world.cellSize-2,element[1]*world.cellSize-2);
+		ctx.drawImage(element[0].Sprite,element[2]*world.cellSize-2,element[1]*world.cellSize-2);
 	});
 	mountains.forEach(element=> {
 		ctx.drawImage(mountainSprite,element[2]*world.cellSize-8,element[1]*world.cellSize-10, element[0].mountainSize, element[0].mountainSize);
@@ -97,19 +97,32 @@ function draw(world, ctx, iteration) {
 	wDecorations.forEach(element=> {
 		ctx.drawImage(wDecorationSprite,element[2]*world.cellSize-(wDecorationSprite.width/2),element[1]*world.cellSize-(wDecorationSprite.height/2));
 	});
+	ctx.drawImage(ribbonSprite,0,550)
+	let fontSize = 90;
+	if (landName==="") landName = "Enroth"
+	ctx.font = fontSize+"75px Fondamento";
+	while (ctx.measureText("Land of "+landName).width>500) {
+		fontSize--;
+		ctx.font = fontSize+"px Fondamento";
+	}
+	ctx.fillStyle = "black";
+	ctx.textAlign = "center";
+	ctx.fillText("Land of "+landName,canvas.width/2, 735)
 }
 
 function getConfig() {
-	let config = {};
-	config.genType = document.getElementById("genSelection").value;
-	config.rivers = document.getElementById("rivers").value;
-	config.mountains = document.getElementById("mountains").value;
-	config.cities = document.getElementById("cities").value;
-	config.forests = document.getElementById("forests").value;
-	config.beaches = document.getElementById("beaches").value;
-	config.sprawlingRivers = document.getElementById("sprawlingRivers").checked;
-	config.wDecorations = document.getElementById("wDecorations").checked;
-	config.lDecorations = document.getElementById("lDecorations").checked;
+	let config = {
+		landName : document.getElementById("landName").value,
+		genType : document.getElementById("genSelection").value,
+		rivers : document.getElementById("rivers").value,
+		mountains : document.getElementById("mountains").value,
+		cities : document.getElementById("cities").value,
+		forests : document.getElementById("forests").value,
+		beaches : document.getElementById("beaches").value,
+		sprawlingRivers : document.getElementById("sprawlingRivers").checked,
+		wDecorations : document.getElementById("wDecorations").checked,
+		lDecorations : document.getElementById("lDecorations").checked,
+	}
 	return config;
 }
 
