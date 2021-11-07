@@ -2,7 +2,7 @@ function genIslands(config) {
 	var colorPalette = {
 		shallow: 'rgb(52, 235, 229)',
 		mShallow: 'rgb(52, 177, 235)',
-		deepWater: 'rgb(51, 153, 255)',
+		deepWater: 'rgb(51, 153, 260)',
 		river: 'rgb(50,160,250)',
 		red: 'rgb(200,30,30)'
 	}
@@ -41,7 +41,7 @@ function genIslands(config) {
 		{ cellType: 'wall', hasProperty: 'open', value: 1 }
 	], 0);
 
-	//World details
+	//----------------World details------------------
 	world = new CAWorld({
 		width: 80,
 		height: 80,
@@ -49,22 +49,31 @@ function genIslands(config) {
 		iteration:0
 	});
 
+	//---------------Water Details--------------
 	world.registerCellType('water', {
 		getColor: function () {
 			if (this.shallow) return colorPalette.shallow;
 			else if (this.mediumShallow) return colorPalette.mShallow;
 			else if (this.deepWater) return colorPalette.deepWater;
 		},
+
 		process: function (neighbors) {
 			this.mediumShallow = !this.shallow && this.countSurroundingCellsWithValue(neighbors, "shallow")>0 || this.countSurroundingCellsWithValue(neighbors, 'island')>2;
 			this.shallow = this.countSurroundingCellsWithValue(neighbors, "beach")>1;
 			this.deepWater = !this.shallow&&!this.mediumShallow&&!this.waterDecoration;
-			if (config.wDecorations) this.waterDecoration = this.countSurroundingCellsWithValue(neighbors, 'deepWater')==8&&getChance(80, 1)&&world.iteration==29;
+			if (config.wDecorations&&this.countSurroundingCellsWithValue(neighbors, 'deepWater')==8&&getChance(40, 1)&&world.iteration==29) {
+				if (!this.isInRange(6, 'waterDecoration', world)) {
+					this.waterDecoration = true;
+					this.Sprite = new Image();
+					this.Sprite.src = "images/waterMonster.png";
+				}
+			}
 		}
 	}, function () {
 		this.water = true;
 	});
 
+	//-----------------------Land Details-----------------------
 	world.registerCellType('island', {
 		isSolid: true,
 		spriteNr: null,
@@ -255,7 +264,6 @@ function genIslands(config) {
 				this.mountain = true;
 				if (getChance(3,1)) this.mountainSize = 22;
 				else this.mountainSize = 30;
-				return;
 			}
 			if (this.mountain&&!this.countSurroundingCellsWithValue(neighbors, 'water')) this.mountain = true;
 
