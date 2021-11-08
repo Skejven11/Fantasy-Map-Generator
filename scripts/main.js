@@ -34,12 +34,18 @@ function draw(world, ctx, canvas) {
 	let forests = [];
 	let mountains = [];
 	let wDecorations = [];
+	let lDecorations = [];
 
 	//loading spirte once instead of every cell
 	const mountainSprite = new Image();
     mountainSprite.src = "images/mountains.png";
 	const citySprite = new Image();
     citySprite.src = "images/city.png";
+	const fakeSprite = new Image(); //load fake sprites so they're fully loaded 
+	fakeSprite.src = "images/village.png";
+	fakeSprite.src = "images/castle.png";
+	fakeSprite.src = "images/waterMonster.png"
+	fakeSprite.src = "images/ship.png"
 
 	//loading terrain spritesheat
 	const spriteSheat = new Image();
@@ -61,6 +67,9 @@ function draw(world, ctx, canvas) {
 				else if (world.grid[y][x].waterDecoration) {
 					wDecorations.push([world.grid[y][x],y,x]);
 				}
+				else if (world.grid[y][x].landDecoration) {
+					lDecorations.push([world.grid[y][x],y,x]);
+				}
 				else if (world.grid[y][x].beach) {
 					if (world.grid[y][x].spriteNr!=20) ctx.drawImage(spriteSheat,world.cellSize*world.grid[y][x].spriteNr,0,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
 				}
@@ -79,7 +88,6 @@ function draw(world, ctx, canvas) {
 				}
 			}
 	}
-	if (world.iteration==29) ctx.translate(0.5, 0.5);
 
 	//bigger element rendering priority
 	forests.forEach(element=> {
@@ -89,14 +97,17 @@ function draw(world, ctx, canvas) {
 		ctx.drawImage(mountainSprite,element[2]*world.cellSize-8,element[1]*world.cellSize-10, element[0].mountainSize, element[0].mountainSize);
 	});
 	cities.forEach(element=> {
-		ctx.drawImage(citySprite,element[2]*world.cellSize-8,element[1]*world.cellSize-12);
+		ctx.drawImage(citySprite,element[2]*world.cellSize-(citySprite.width/2),element[1]*world.cellSize-(citySprite.height/2));
 	});
 	wDecorations.forEach(element=> {
 		ctx.drawImage(element[0].Sprite,element[2]*world.cellSize-(element[0].Sprite.width/2),element[1]*world.cellSize-(element[0].Sprite.height/2));
 	});
+	lDecorations.forEach(element=>{
+		ctx.drawImage(element[0].Sprite,element[2]*world.cellSize-(element[0].Sprite.width/2),element[1]*world.cellSize-(element[0].Sprite.height/2));
+	})
 
 	//draw ribbon at the bottom of the map
-	drawRibbon(canvas, ctx);
+	if (getConfig().ribbon) drawRibbon(canvas, ctx);
 }
 
 function getConfig() {
@@ -111,6 +122,7 @@ function getConfig() {
 		sprawlingRivers : document.getElementById("sprawlingRivers").checked,
 		wDecorations : document.getElementById("wDecorations").checked,
 		lDecorations : document.getElementById("lDecorations").checked,
+		ribbon : document.getElementById("ribbon").checked
 	}
 	return config;
 }
@@ -137,7 +149,8 @@ function drawRibbon(canvas, ctx) {
 	const ribbonSprite = new Image();
 	ribbonSprite.src = "images/ribbon.png";
 	let fontSize = 90;
-	const landName = getConfig().landName;
+	let landName = getConfig().landName;
+	if (landName==="") landName = "GIVE IT A NAME"
 
 	ctx.drawImage(ribbonSprite,0,550)
 

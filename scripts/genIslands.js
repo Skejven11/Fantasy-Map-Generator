@@ -61,11 +61,11 @@ function genIslands(config) {
 			this.mediumShallow = !this.shallow && this.countSurroundingCellsWithValue(neighbors, "shallow")>0 || this.countSurroundingCellsWithValue(neighbors, 'island')>2;
 			this.shallow = this.countSurroundingCellsWithValue(neighbors, "beach")>1;
 			this.deepWater = !this.shallow&&!this.mediumShallow&&!this.waterDecoration;
-			if (config.wDecorations&&this.countSurroundingCellsWithValue(neighbors, 'deepWater')==8&&getChance(40, 1)&&world.iteration==29) {
+			if (config.wDecorations&&this.countSurroundingCellsWithValue(neighbors, 'deepWater')==8&&getChance(30, 1)&&world.iteration==29) {
 				if (!this.isInRange(6, 'waterDecoration', world)) {
 					this.waterDecoration = true;
 					this.Sprite = new Image();
-					this.Sprite.src = "images/waterMonster.png";
+					this.Sprite.src = getChance(2,1) ? "images/waterMonster.png" : "images/ship.png";
 				}
 			}
 		}
@@ -91,49 +91,6 @@ function genIslands(config) {
 		process: function(neighbors) {
 
 			//------------------river generation-------------------
-
-			//Might be better algorithm idk
-			/*if (this.river) {
-				if (neighbors[this.riverSource]&&this.delayCell!=world.iteration) {
-					if (getChance(2,1)&&this.changedDirection==false) {
-						if (getChance(2,1)) {
-							this.riverSource++;
-							this.changedDirection = true;
-						}
-						else {
-							this.riverSource--;
-							this.changedDirection = true;
-						}
-					}
-					if (this.riverSource>3&&neighbors[this.riverSource-4]) {
-						neighbors[this.riverSource-4].river = true;
-						neighbors[this.riverSource-4].beach = false;
-						neighbors[this.riverSource-4].forest = false;
-						neighbors[this.riverSource-4].changedDirection = false;
-						neighbors[this.riverSource-4].riverSource = this.riverSource;
-						if (neighbors[this.riverSource-4].delayCell===undefined) neighbors[this.riverSource-4].delayCell = world.iteration;
-					}
-					else if (this.riverSource<3&&neighbors[this.riverSource+4]) {
-						neighbors[this.riverSource+4].river = true;
-						neighbors[this.riverSource+4].beach = false;
-						neighbors[this.riverSource+4].forest = false;
-						neighbors[this.riverSource+4].changedDirection = false;
-						neighbors[this.riverSource+4].riverSource = this.riverSource;
-						if (neighbors[this.riverSource+4].delayCell===undefined) neighbors[this.riverSource+4].delayCell = world.iteration;
-					}
-				}
-			}
-
-			if ((world.iteration==1&&getChance(16,1*config.rivers)&&this.countSurroundingCellsWithValue(neighbors, 'mountain')==1)&&this.countSurroundingCellsWithValue(neighbors, 'river')==0
-			&&!this.countSurroundingCellsWithValue(neighbors, 'water')&&!this.countSurroundingCellsWithValue(neighbors, 'beach')) {
-				this.river = true;
-				this.changedDirection = false;
-				this.delayCell = world.iteration;
-				for (i=0;i<8;i++) {
-					if (neighbors[i]&&neighbors[i].mountain) this.riverSource = i;
-				}
-			}
-			*/
 			
 			//changing direction of rivers
 			if (this.river) {
@@ -266,6 +223,15 @@ function genIslands(config) {
 				else this.mountainSize = 30;
 			}
 			if (this.mountain&&!this.countSurroundingCellsWithValue(neighbors, 'water')) this.mountain = true;
+
+			//-----------------------Land Decoration generation--------------
+			if ((this.terrain||this.forest)&&config.lDecorations&&this.countSurroundingCellsWithValue(neighbors, 'terrain')==8&&getChance(30, 1)&&world.iteration==29) {
+				if (!this.isInRange(6, 'landDecoration', world)) {
+					this.landDecoration = true;
+					this.Sprite = new Image();
+					this.Sprite.src = getChance(2,1) ? "images/village.png" : "images/village.png";
+				}
+			}
 
 			//cliff generation
 			//this.cliff = this.countSurroundingCellsWithValue(neighbors, 'water')>1&&this.countSurroundingCellsWithValue(neighbors, 'beach')>1;

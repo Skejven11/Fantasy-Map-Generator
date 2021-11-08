@@ -41,10 +41,10 @@
         let config = getConfig();
         switch (config.genType) {
             case '1':
-                genIslands(config);
+                genContinental(config);
                 break;
             case '2':
-                genContinental(config);
+                genIslands(config);
                 break;
         }
     }
@@ -66,8 +66,8 @@
                 <div class="user-menu-select">
                     <b>Choose generation type:</b>
                     <select id="genSelection">
-                        <option value="1">Islands</option>
-                        <option value="2">Continental</option>
+                        <option value="1">Continental</option>
+                        <option value="2">Islands</option>
                     </select>
                 </div>
                 <hr></hr>
@@ -116,8 +116,8 @@
                     <input type="checkbox" id="sprawlingRivers" value="false">
                 </div>
                 <div class="user-menu-section checkbox">
-                    <label for="">-</label>
-                    <input type="checkbox" id="" value="false">
+                    <label for="ribbon">Draw Ribbon</label>
+                    <input type="checkbox" id="ribbon" value="true" checked>
                 </div>
             </div>
         </div>
