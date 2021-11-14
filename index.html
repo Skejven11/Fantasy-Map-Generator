@@ -12,7 +12,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Fondamento&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<script>
+<script type="module">
+    import {downloadCanvas} from "./scripts/download.js"
+
     document.addEventListener("DOMContentLoaded", () => {
         genMap();
         const menuButton = document.querySelector(".menu-button");
@@ -35,6 +37,16 @@
             modalContent.style.top = "-100%";
             }
         } 
+
+        const genButton = document.querySelector(".btn-generate");
+        genButton.addEventListener("click", ()=>{
+            genMap();
+        })
+
+        const saveButton = document.querySelector(".btn-save");
+        saveButton.addEventListener("click", ()=>{
+            downloadCanvas(getConfig().landName);
+        })
     });
     
     function genMap() {
@@ -57,9 +69,16 @@
             <h1>Fantasy Map Generator</h1>
             <button class="menu-button"></button>
             <button class="info-btn"><b>i</b></button>
-            <canvas id="myCanvas">Your browser doesn't support HTML5 canvas</canvas>
+            <div class="canvas-container-proper-xd" id="canvas-border">
+                <canvas id="myCanvas">Your browser doesn't support HTML5 canvas</canvas>
+            </div>
             <div class="loading-gear"></div>
-            <button class="btn-generate" onclick="genMap()">Generate Map</button>
+            <div class="button-container">
+                <button class="btn-generate" onclick="genMap()">Generate Map</button>
+                <button class="btn-save">
+                    <img src="images/save-icon.png">
+                </button>
+            </div>
             <div class="user-menu">
                 <h3>Generation Options</h3>
                 <hr></hr>

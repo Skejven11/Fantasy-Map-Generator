@@ -2,11 +2,13 @@ function initializeWorld(world) {
 	var canvas = document.getElementById("myCanvas");
 	var ctx = canvas.getContext('2d');
 	const btnGen = document.querySelector(".btn-generate");
+	const btnSave = document.querySelector(".btn-save");
 	const gear = document.querySelector(".loading-gear");
 
 	gear.style.visibility = "visible";
 	gear.style.animation = "1.5s infinite ease-in-out rotate";
 	btnGen.disabled=true;
+	btnSave.disabled=true;
 	canvas.width  = world.width*world.cellSize;
 	canvas.height = world.height*world.cellSize;
 	for (let i=0;i<30;i++) {
@@ -16,6 +18,7 @@ function initializeWorld(world) {
 			if (world.iteration>1) draw(world, ctx, canvas)
 			if (i==29) {
 				btnGen.disabled=false;
+				btnSave.disabled=false;
 				gear.style.visibility = "hidden";
 				gear.style.animation = "";
 			}
@@ -130,31 +133,29 @@ function getConfig() {
 //small function for probability of cell stuff
 function getChance(max, isLower) {
 	let value = Math.floor(Math.random()*max);
-	if (value>=isLower) return false;
-	else return true;
+	return value >= isLower ? false : true;
 }
 
 function getMousePos(world, canvas, evt) { //function used for debugging, displays clicked cell's properties
     var rect = canvas.getBoundingClientRect();
-	var ctx = canvas.getContext('2d');
     position = {
       x: evt.clientX - rect.left,
       y: evt.clientY - rect.top
     };
 	console.clear();
-	console.log(world.grid[Math.floor(position.y/10)][Math.floor(position.x/10)]);
+	console.log(world.grid[Math.floor(position.y/world.cellSize)][Math.floor(position.x/world.cellSize)]);
 }
 
 function drawRibbon(canvas, ctx) {
 	const ribbonSprite = new Image();
 	ribbonSprite.src = "images/ribbon.png";
+	ctx.drawImage(ribbonSprite,0,550)
+
 	let fontSize = 90;
 	let landName = getConfig().landName;
 	if (landName==="") landName = "GIVE IT A NAME"
-
-	ctx.drawImage(ribbonSprite,0,550)
-
 	ctx.font = fontSize+"px Fondamento";
+	
 	while (ctx.measureText("Land of "+landName).width>500) {
 		fontSize--;
 		ctx.font = fontSize+"px Fondamento";
@@ -163,4 +164,3 @@ function drawRibbon(canvas, ctx) {
 	ctx.textAlign = "center";
 	ctx.fillText("Land of "+landName,canvas.width/2, 700+fontSize/2)
 }
-

@@ -103,7 +103,18 @@ function genContinental(config) {
 				if (!this.isInRange(6, 'waterDecoration', world)) {
 					this.waterDecoration = true;
 					this.Sprite = new Image();
-					this.Sprite.src = getChance(2,1) ? "images/waterMonster.png" : "images/ship.png";
+					const whichSprite = Math.floor(Math.random()*3)
+					switch (whichSprite) {
+						case 0:
+							this.Sprite.src = "images/ship.png";
+							break;
+						case 1:
+							this.Sprite.src = "images/waterMonster.png";
+							break;
+						case 2:
+							this.Sprite.src = "images/wave.png";
+							break;
+					}
 				}
 			}
 		}
