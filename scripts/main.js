@@ -1,22 +1,32 @@
 function initializeWorld(world) {
-	var canvas = document.getElementById("myCanvas");
+	const canvas = document.getElementById("myCanvas");
 	var ctx = canvas.getContext('2d');
 	const btnGen = document.querySelector(".btn-generate");
 	const btnSave = document.querySelector(".btn-save");
 	const gear = document.querySelector(".loading-gear");
+	const btnMenu = document.querySelector(".menu-button");
+    const menu = document.querySelector(".user-menu");
 
 	gear.style.visibility = "visible";
 	gear.style.animation = "1.5s infinite ease-in-out rotate";
+	menu.classList.remove("user-menu-active");
+    btnMenu.classList.remove("menu-button-active");
+	btnMenu.disabled=true;
 	btnGen.disabled=true;
 	btnSave.disabled=true;
+	
 	canvas.width  = world.width*world.cellSize;
 	canvas.height = world.height*world.cellSize;
+	
 	for (let i=0;i<30;i++) {
 		setTimeout(function(){
 			world.step();
 			world.iteration++;
 			if (world.iteration>1) draw(world, ctx, canvas)
 			if (i==29) {
+				menu.classList.add("user-menu-active");
+    			btnMenu.classList.add("menu-button-active");
+				btnMenu.disabled=false;
 				btnGen.disabled=false;
 				btnSave.disabled=false;
 				gear.style.visibility = "hidden";
@@ -24,14 +34,18 @@ function initializeWorld(world) {
 			}
 		},i*75);
 	}
-	canvas.addEventListener('click', event=>{
-		getMousePos(world, canvas, event);
-	});
+	if (canvas.getAttribute('data-click-listener') !== 'true') { 
+		canvas.setAttribute('data-click-listener', true);
+		canvas.addEventListener('click', event=>{
+			getMousePos(world, canvas, event);
+		});
+	}
 }
 
 
 //drawing on canvas
 function draw(world, ctx, canvas) {
+	ctx.clearRect(0,0,canvas.width, canvas.height);
 	//arrays that store map elements which are bigger than 8x8px (mountains, cities etc.)
 	let cities = [];
 	let forests = [];
@@ -48,6 +62,7 @@ function draw(world, ctx, canvas) {
 	fakeSprite.src = "images/village.png";
 	fakeSprite.src = "images/castle.png";
 	fakeSprite.src = "images/waterMonster.png"
+	fakeSprite.src = "images/wave.png"
 	fakeSprite.src = "images/ship.png"
 
 	//loading terrain spritesheat
@@ -77,11 +92,11 @@ function draw(world, ctx, canvas) {
 					if (world.grid[y][x].spriteNr!=20) ctx.drawImage(spriteSheat,world.cellSize*world.grid[y][x].spriteNr,0,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
 				}
 				else if (world.grid[y][x].terrain) {
-					if (world.grid[y][x].spriteNr==null&&world.iteration<4) {
+					if (world.grid[y][x].spriteNr==null) {
 						ctx.fillStyle = world.grid[y][x].getColor();
 						ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
 					}
-					else if (world.iteration==3) {
+					else {
 						ctx.drawImage(spriteSheat,world.cellSize*world.grid[y][x].spriteNr,10,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
 					}
 				}
@@ -142,11 +157,10 @@ function getMousePos(world, canvas, evt) { //function used for debugging, displa
       x: evt.clientX - rect.left,
       y: evt.clientY - rect.top
     };
-	console.clear();
 	console.log(world.grid[Math.floor(position.y/world.cellSize)][Math.floor(position.x/world.cellSize)]);
 }
 
-function drawRibbon(canvas, ctx) {
+function drawRibbon(canvas, ctx) { //draws ribbon and "title" of the map
 	const ribbonSprite = new Image();
 	ribbonSprite.src = "images/ribbon.png";
 	ctx.drawImage(ribbonSprite,0,550)
@@ -156,7 +170,7 @@ function drawRibbon(canvas, ctx) {
 	if (landName==="") landName = "GIVE IT A NAME"
 	ctx.font = fontSize+"px Fondamento";
 	
-	while (ctx.measureText("Land of "+landName).width>500) {
+	while (ctx.measureText("Land of "+landName).width>500) { //if the title doesn't fit lower font size till it fits
 		fontSize--;
 		ctx.font = fontSize+"px Fondamento";
 	}

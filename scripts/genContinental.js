@@ -22,7 +22,7 @@ function genContinental(config) {
 		process: function (neighbors) {
 			var surrounding = this.countSurroundingCellsWithValue(neighbors, 'wasOpen');
 			this.open = (this.wasOpen && surrounding >= 3) || surrounding >= 5 || (surrounding>=3 && getChance(8, 1));
-			if (world.iteration===15&&surrounding<4) this.open = false; 
+			if (world.iteration===19&&surrounding<4) this.open = false; 
 			switch (world.continentDirection) {
 				case 0:
 					world.grid[0][0].open = true;
@@ -193,9 +193,6 @@ function genContinental(config) {
 			}
 
 
-
-			
-
 			//-------------------city generation-------------------
 			if ((this.terrain||this.forest)&&this.countSurroundingCellsWithValue(neighbors, 'river')>1&&!this.countSurroundingCellsWithValue(neighbors, 'mountain')&&getChance(64,1*config.cities)&&world.iteration>28
 			&&this.countSurroundingCellsWithValue(neighbors, 'city')==0) {
@@ -228,7 +225,8 @@ function genContinental(config) {
 					}
 				}
 			}
-			if (!this.mountain&&!this.river&&getChance(40,1*config.forests)&&this.countSurroundingCellsWithValue(neighbors, 'water')<2&&this.countSurroundingCellsWithValue(neighbors, 'forest')>=1) {
+			if (!this.mountain&&!this.river&&!this.beach&&getChance(40,1*config.forests)&&this.countSurroundingCellsWithValue(neighbors, 'water')<2
+				&&this.countSurroundingCellsWithValue(neighbors, 'forest')>=1) {
 				this.forest = true;
 				this.Sprite = new Image();
 				const val = Math.floor(Math.random()*4);
@@ -250,30 +248,32 @@ function genContinental(config) {
 
 			//-------------------beach generation-------------------
 			if ((this.beach && this.countSurroundingCellsWithValue(neighbors, 'water') > 1 && this.countSurroundingCellsWithValue(neighbors, 'beach')>0 
-				&& this.countSurroundingCellsWithValue(neighbors, 'terrain')>1)||(this.beach&&this.countSurroundingCellsWithValue(neighbors, 'river')>1)
-				||(this.terrain&&this.countSurroundingCellsWithValue(neighbors, 'beach')>1&&this.countSurroundingCellsWithValue(neighbors, 'water')>3)) {
+				&& (this.countSurroundingCellsWithValue(neighbors, 'terrain')>1||this.countSurroundingCellsWithValue(neighbors, 'forest')))
+				||(this.beach&&this.countSurroundingCellsWithValue(neighbors, 'river')>1)
+				||(this.beach&&this.countSurroundingCellsWithValue(neighbors, 'water')>3&&this.countSurroundingCellsWithValue(neighbors, 'beach')>1)
+				||(this.terrain&&this.countSurroundingCellsWithValue(neighbors, 'water')>3&&this.countSurroundingCellsWithValue(neighbors, 'beach')>1)) {
 				this.beach = true;
+				//applying proper sprite from the spritesheat
+				if (this.spriteNr==null) {
+					if (neighbors[1]!=null&&neighbors[3]!=null&&neighbors[4]!=null&&neighbors[6]!=null) {
+						if (neighbors[1].water&&(neighbors[3].beach||neighbors[3].terrain)&&(neighbors[4].beach||neighbors[4].terrain)) this.spriteNr = 0;
+						else if (neighbors[6].water&&(neighbors[3].beach||neighbors[3].terrain)&&(neighbors[4].beach||neighbors[4].terrain)) this.spriteNr = 1;
+						else if (neighbors[3].water&&(neighbors[1].beach||neighbors[1].terrain)&&(neighbors[6].beach||neighbors[6].terrain)) this.spriteNr = 2;
+						else if (neighbors[4].water&&(neighbors[1].beach||neighbors[1].terrain)&&(neighbors[6].beach||neighbors[6].terrain)) this.spriteNr = 3;
+						else if (neighbors[1].water&&neighbors[4].water) this.spriteNr = 4;
+						else if (neighbors[1].water&&neighbors[3].water) this.spriteNr = 5;
+						else if (neighbors[6].water&&neighbors[3].water) this.spriteNr = 6;
+						else if (neighbors[6].water&&neighbors[4].water) this.spriteNr = 7;
+						else this.spriteNr = 8;
+					}
+				}
 			}
 			else {
 				this.beach = false;
 			}
-			//applying proper sprite from the spritesheat
-			if (this.beach&&this.spriteNr==null) {
-				if (neighbors[1]!=null&&neighbors[3]!=null&&neighbors[4]!=null&&neighbors[6]!=null) {
-					if (neighbors[1].water&&(neighbors[3].beach||neighbors[3].terrain)&&(neighbors[4].beach||neighbors[4].terrain)) this.spriteNr = 0;
-					else if (neighbors[6].water&&(neighbors[3].beach||neighbors[3].terrain)&&(neighbors[4].beach||neighbors[4].terrain)) this.spriteNr = 1;
-					else if (neighbors[3].water&&(neighbors[1].beach||neighbors[1].terrain)&&(neighbors[6].beach||neighbors[6].terrain)) this.spriteNr = 2;
-					else if (neighbors[4].water&&(neighbors[1].beach||neighbors[1].terrain)&&(neighbors[6].beach||neighbors[6].terrain)) this.spriteNr = 3;
-					else if (neighbors[1].water&&neighbors[4].water) this.spriteNr = 4;
-					else if (neighbors[1].water&&neighbors[3].water) this.spriteNr = 5;
-					else if (neighbors[6].water&&neighbors[3].water) this.spriteNr = 6;
-					else if (neighbors[6].water&&neighbors[4].water) this.spriteNr = 7;
-					else this.spriteNr = 8;
-				}
-			}
 
 			//-------------------terrain generation-------------------
-			if (!this.mountain&&!this.cliff&&!this.river&&!this.city&&!this.forest&&!this.riverFill&&!this.beach) {
+			if (!this.mountain&&!this.cliff&&!this.river&&!this.city&&!this.forest&&!this.riverFill&&!this.beach&&!this.water) {
 				this.terrain = true;
 			}
 			else {
@@ -295,7 +295,7 @@ function genContinental(config) {
 			//-------------------mountain generation-------------------
 			if ((world.iteration<4&&getChance(12,1*config.mountains)&&!this.countSurroundingCellsWithValue(neighbors, 'water')&&!this.countSurroundingCellsWithValue(neighbors, 'beach')&&this.countSurroundingCellsWithValue(neighbors, 'mountain')>=1)) {
 				this.mountain = true;
-				if (getChance(3,1)) this.mountainSize = 22;
+				if (getChance(3,1)) this.mountainSize = 24;
 				else this.mountainSize = 30;
 			}
 			if (this.mountain&&!this.countSurroundingCellsWithValue(neighbors, 'water')) this.mountain = true;
@@ -318,8 +318,8 @@ function genContinental(config) {
 		if (config.beaches!=0) this.beach = Math.random() > 0.2-config.beaches*0.2;
 		if (config.mountains!=0&&Math.random() > 1-config.mountains*0.01) {
 			this.mountain = true;
-			if (getChance(3,1)) this.mountainSize = 18;
-			else this.mountainSize = 24;
+			if (getChance(3,1)) this.mountainSize = 24;
+			else this.mountainSize = 30;
 		}
 		if (config.forests!=0) this.forest = Math.random() > 1-config.forests*0.01;
 	});

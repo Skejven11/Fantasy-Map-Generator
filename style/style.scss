@@ -124,6 +124,9 @@ $menu-color: rgb(223, 218, 203);
     border: none;
     background: url('../images/gear.png') no-repeat center;
     background-size: 35px 35px;
+    &:disabled {
+        cursor: not-allowed;
+    }
 }
 
 .menu-button-active {
@@ -187,8 +190,8 @@ $menu-color: rgb(223, 218, 203);
         transition: all 0.35s;
         border: 2px solid rgb(49, 49, 49);
         &:hover {
-            background-color: rgb(158, 101, 27);
-            color:white;
+            background-color: rgb(209, 195, 84);
+            color:black;
             cursor:pointer;
         }
         &:disabled {

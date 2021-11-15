@@ -171,6 +171,10 @@ body {
   background-size: 35px 35px;
 }
 
+.menu-button:disabled {
+  cursor: not-allowed;
+}
+
 .menu-button-active {
   -webkit-transform: translateX(300px) rotate(360deg);
           transform: translateX(300px) rotate(360deg);
@@ -265,8 +269,8 @@ body {
 }
 
 .button-container .btn-generate:hover {
-  background-color: #9e651b;
-  color: white;
+  background-color: #d1c354;
+  color: black;
   cursor: pointer;
 }
 
