@@ -225,7 +225,7 @@ function genContinental(config) {
 					}
 				}
 			}
-			if (!this.mountain&&!this.river&&!this.beach&&getChance(40,1*config.forests)&&this.countSurroundingCellsWithValue(neighbors, 'water')<2
+			if (!this.mountain&&!this.river&&!this.beach&&!this.landDecoration&&getChance(40,1*config.forests)&&this.countSurroundingCellsWithValue(neighbors, 'water')<2
 				&&this.countSurroundingCellsWithValue(neighbors, 'forest')>=1) {
 				this.forest = true;
 				this.Sprite = new Image();
@@ -273,7 +273,7 @@ function genContinental(config) {
 			}
 
 			//-------------------terrain generation-------------------
-			if (!this.mountain&&!this.cliff&&!this.river&&!this.city&&!this.forest&&!this.riverFill&&!this.beach&&!this.water) {
+			if (!this.mountain&&!this.cliff&&!this.river&&!this.city&&!this.forest&&!this.landDecoration&&!this.beach&&!this.water) {
 				this.terrain = true;
 			}
 			else {
@@ -301,7 +301,7 @@ function genContinental(config) {
 			if (this.mountain&&!this.countSurroundingCellsWithValue(neighbors, 'water')) this.mountain = true;
 			
 			//-----------------------Land Decoration generation--------------
-			if ((this.terrain||this.forest)&&config.lDecorations&&this.countSurroundingCellsWithValue(neighbors, 'water')<1&&getChance(30, 1)&&world.iteration==29) {
+			if ((this.terrain||this.forest)&&config.lDecorations&&this.countSurroundingCellsWithValue(neighbors, 'water')<1&&getChance(30, 1)&&world.iteration>28) {
 				if (!this.isInRange(8, 'landDecoration', world)&&!this.isInRange(2, 'water', world)) {
 					this.landDecoration = true;
 					this.Sprite = new Image();
@@ -330,6 +330,7 @@ function genContinental(config) {
 	], grid);
 
 	initializeWorld(world);
+	return world;
 };
 
 

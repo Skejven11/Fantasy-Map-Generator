@@ -1,3 +1,4 @@
+var worldGlobal = null;
 function initializeWorld(world) {
 	const canvas = document.getElementById("myCanvas");
 	var ctx = canvas.getContext('2d');
@@ -34,10 +35,11 @@ function initializeWorld(world) {
 			}
 		},i*75);
 	}
+	worldGlobal = world;
 	if (canvas.getAttribute('data-click-listener') !== 'true') { 
 		canvas.setAttribute('data-click-listener', true);
 		canvas.addEventListener('click', event=>{
-			getMousePos(world, canvas, event);
+			getMousePos(canvas, event);
 		});
 	}
 }
@@ -75,24 +77,34 @@ function draw(world, ctx, canvas) {
 				//bigger elements to array so we can arrange their rendering time
 				if (world.grid[y][x].city) {
 					cities.push([world.grid[y][x],y,x]);
+					ctx.fillStyle = world.grid[y][x].getColor();
+					ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
 				}
 				else if (world.grid[y][x].forest) {
 					forests.push([world.grid[y][x],y,x]);
+					ctx.fillStyle = world.grid[y][x].getColor();
+					ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
 				}
 				else if (world.grid[y][x].mountain) {
 					mountains.push([world.grid[y][x],y,x]);
+					ctx.fillStyle = world.grid[y][x].getColor();
+					ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
 				}
 				else if (world.grid[y][x].waterDecoration) {
 					wDecorations.push([world.grid[y][x],y,x]);
+					ctx.fillStyle = world.grid[y][x].getColor();
+					ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
 				}
 				else if (world.grid[y][x].landDecoration) {
 					lDecorations.push([world.grid[y][x],y,x]);
+					ctx.fillStyle = world.grid[y][x].getColor();
+					ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
 				}
 				else if (world.grid[y][x].beach) {
 					if (world.grid[y][x].spriteNr!=20) ctx.drawImage(spriteSheat,world.cellSize*world.grid[y][x].spriteNr,0,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
 				}
 				else if (world.grid[y][x].terrain) {
-					if (world.grid[y][x].spriteNr==null) {
+					if (world.grid[y][x].spriteNr===null) {
 						ctx.fillStyle = world.grid[y][x].getColor();
 						ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
 					}
@@ -151,7 +163,8 @@ function getChance(max, isLower) {
 	return value >= isLower ? false : true;
 }
 
-function getMousePos(world, canvas, evt) { //function used for debugging, displays clicked cell's properties
+function getMousePos(canvas, evt) { //function used for debugging, displays clicked cell's properties
+	const world = worldGlobal;
     var rect = canvas.getBoundingClientRect();
     position = {
       x: evt.clientX - rect.left,
