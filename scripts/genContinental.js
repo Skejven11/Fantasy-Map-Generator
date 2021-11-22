@@ -225,8 +225,8 @@ function genContinental(config) {
 					}
 				}
 			}
-			if (this.terrain&&this.spriteNr==null&&getChance(40,1*config.forests)&&this.countSurroundingCellsWithValue(neighbors, 'water')<2
-				&&this.countSurroundingCellsWithValue(neighbors, 'forest')>=1) {
+			if (this.terrain&&getChance(40,1*config.forests)&&this.countSurroundingCellsWithValue(neighbors, 'beach')<2
+				&&this.countSurroundingCellsWithValue(neighbors, 'forest')>=1&&world.iteration>3) {
 				this.forest = true;
 				this.Sprite = new Image();
 				const val = Math.floor(Math.random()*4);
@@ -255,18 +255,16 @@ function genContinental(config) {
 				this.beach = true;
 				this.forest = false;
 				//applying proper sprite from the spritesheat
-				if (this.spriteNr==null) {
-					if (neighbors[1]!=null&&neighbors[3]!=null&&neighbors[4]!=null&&neighbors[6]!=null) {
+				if (this.spriteNr==null&&neighbors[1]!=null&&neighbors[3]!=null&&neighbors[4]!=null&&neighbors[6]!=null) {
 						if (neighbors[1].water&&neighbors[3].water&&neighbors[4].water&&!neighbors[6].water) this.spriteNr = 1;
-						if (neighbors[6].water&&neighbors[3].water&&neighbors[4].water&&!neighbors[1].water) this.spriteNr = 2;
-						if (neighbors[6].water&&neighbors[1].water&&neighbors[4].water&&!neighbors[3].water) this.spriteNr = 3;
-						if (neighbors[6].water&&neighbors[1].water&&neighbors[3].water&&!neighbors[4].water) this.spriteNr = 4;
-						if (neighbors[1].water&&neighbors[4].water&&!neighbors[3].water&&!neighbors[6].water) this.spriteNr = 5;
-						if (neighbors[1].water&&neighbors[3].water&&!neighbors[4].water&&!neighbors[6].water) this.spriteNr = 6;
-						if (neighbors[6].water&&neighbors[3].water&&!neighbors[4].water&&!neighbors[1].water) this.spriteNr = 7;
-						if (neighbors[6].water&&neighbors[4].water&&!neighbors[3].water&&!neighbors[1].water) this.spriteNr = 8;
+						else if (neighbors[6].water&&neighbors[3].water&&neighbors[4].water&&!neighbors[1].water) this.spriteNr = 2;
+						else if (neighbors[6].water&&neighbors[1].water&&neighbors[4].water&&!neighbors[3].water) this.spriteNr = 3;
+						else if (neighbors[6].water&&neighbors[1].water&&neighbors[3].water&&!neighbors[4].water) this.spriteNr = 4;
+						else if (neighbors[1].water&&neighbors[4].water&&!neighbors[3].water&&!neighbors[6].water) this.spriteNr = 5;
+						else if (neighbors[1].water&&neighbors[3].water&&!neighbors[4].water&&!neighbors[6].water) this.spriteNr = 6;
+						else if (neighbors[6].water&&neighbors[3].water&&!neighbors[4].water&&!neighbors[1].water) this.spriteNr = 7;
+						else if (neighbors[6].water&&neighbors[4].water&&!neighbors[3].water&&!neighbors[1].water) this.spriteNr = 8;
 					}
-				}
 			}
 			else {
 				this.beach = false;
@@ -281,13 +279,18 @@ function genContinental(config) {
 			}
 			//applying proper sprite from the spritesheat
 			if (this.terrain) {
-				if (neighbors[1]!=null&&neighbors[3]!=null&&neighbors[4]!=null&&neighbors[6]!=null) {
-					if (neighbors[1].beach&&neighbors[4].beach) this.spriteNr = 0;
-					else if (neighbors[1].beach&&neighbors[3].beach) this.spriteNr = 1;
-					else if (neighbors[6].beach&&neighbors[4].beach) this.spriteNr = 2;
-					else if (neighbors[6].beach&&neighbors[3].beach) this.spriteNr = 3;
+				if (neighbors[1]!=null&&neighbors[3]!=null&&neighbors[4]!=null&&neighbors[6]!=null&&!this.spriteApply&&world.iteration==3) {
+					this.spriteApply = true;
+					if (neighbors[1].beach&&neighbors[4].beach) this.spriteNr = 3;
+					else if (neighbors[1].beach&&neighbors[3].beach) this.spriteNr = 4;
+					else if (neighbors[6].beach&&neighbors[4].beach) this.spriteNr = 5;
+					else if (neighbors[6].beach&&neighbors[3].beach) this.spriteNr = 6;
+					else if (neighbors[1].water&&neighbors[4].water&&!neighbors[3].water&&!neighbors[6].water) this.spriteNr = 7;
+					else if (neighbors[1].water&&neighbors[3].water&&!neighbors[4].water&&!neighbors[6].water) this.spriteNr = 8;
+					else if (neighbors[6].water&&neighbors[3].water&&!neighbors[4].water&&!neighbors[1].water) this.spriteNr = 9;
+					else if (neighbors[6].water&&neighbors[4].water&&!neighbors[3].water&&!neighbors[1].water) this.spriteNr = 10;
 					else {
-						this.spriteNr = null;
+						this.spriteNr = Math.floor(Math.random()*2);
 					}
 				}
 			}
