@@ -225,7 +225,7 @@ function genContinental(config) {
 					}
 				}
 			}
-			if (!this.mountain&&!this.river&&!this.beach&&!this.landDecoration&&getChance(40,1*config.forests)&&this.countSurroundingCellsWithValue(neighbors, 'water')<2
+			if (this.terrain&&this.spriteNr==null&&getChance(40,1*config.forests)&&this.countSurroundingCellsWithValue(neighbors, 'water')<2
 				&&this.countSurroundingCellsWithValue(neighbors, 'forest')>=1) {
 				this.forest = true;
 				this.Sprite = new Image();
@@ -253,18 +253,18 @@ function genContinental(config) {
 				||(this.beach&&this.countSurroundingCellsWithValue(neighbors, 'water')>3&&this.countSurroundingCellsWithValue(neighbors, 'beach')>1)
 				||(this.terrain&&this.countSurroundingCellsWithValue(neighbors, 'water')>3&&this.countSurroundingCellsWithValue(neighbors, 'beach')>1)) {
 				this.beach = true;
+				this.forest = false;
 				//applying proper sprite from the spritesheat
 				if (this.spriteNr==null) {
 					if (neighbors[1]!=null&&neighbors[3]!=null&&neighbors[4]!=null&&neighbors[6]!=null) {
-						if (neighbors[1].water&&(neighbors[3].beach||neighbors[3].terrain)&&(neighbors[4].beach||neighbors[4].terrain)) this.spriteNr = 0;
-						else if (neighbors[6].water&&(neighbors[3].beach||neighbors[3].terrain)&&(neighbors[4].beach||neighbors[4].terrain)) this.spriteNr = 1;
-						else if (neighbors[3].water&&(neighbors[1].beach||neighbors[1].terrain)&&(neighbors[6].beach||neighbors[6].terrain)) this.spriteNr = 2;
-						else if (neighbors[4].water&&(neighbors[1].beach||neighbors[1].terrain)&&(neighbors[6].beach||neighbors[6].terrain)) this.spriteNr = 3;
-						else if (neighbors[1].water&&neighbors[4].water) this.spriteNr = 4;
-						else if (neighbors[1].water&&neighbors[3].water) this.spriteNr = 5;
-						else if (neighbors[6].water&&neighbors[3].water) this.spriteNr = 6;
-						else if (neighbors[6].water&&neighbors[4].water) this.spriteNr = 7;
-						else this.spriteNr = 8;
+						if (neighbors[1].water&&neighbors[3].water&&neighbors[4].water&&!neighbors[6].water) this.spriteNr = 1;
+						if (neighbors[6].water&&neighbors[3].water&&neighbors[4].water&&!neighbors[1].water) this.spriteNr = 2;
+						if (neighbors[6].water&&neighbors[1].water&&neighbors[4].water&&!neighbors[3].water) this.spriteNr = 3;
+						if (neighbors[6].water&&neighbors[1].water&&neighbors[3].water&&!neighbors[4].water) this.spriteNr = 4;
+						if (neighbors[1].water&&neighbors[4].water&&!neighbors[3].water&&!neighbors[6].water) this.spriteNr = 5;
+						if (neighbors[1].water&&neighbors[3].water&&!neighbors[4].water&&!neighbors[6].water) this.spriteNr = 6;
+						if (neighbors[6].water&&neighbors[3].water&&!neighbors[4].water&&!neighbors[1].water) this.spriteNr = 7;
+						if (neighbors[6].water&&neighbors[4].water&&!neighbors[3].water&&!neighbors[1].water) this.spriteNr = 8;
 					}
 				}
 			}
@@ -302,7 +302,7 @@ function genContinental(config) {
 			
 			//-----------------------Land Decoration generation--------------
 			if (this.landDecoration||(this.terrain||this.forest)&&config.lDecorations&&this.countSurroundingCellsWithValue(neighbors, 'water')<1&&getChance(30, 1)&&world.iteration==29) {
-				if (!this.isInRange(8, 'landDecoration', world)&&!this.isInRange(2, 'water', world)) {
+				if (!this.isInRange(8, 'landDecoration', world)&&!this.isInRange(8, 'city', world)&&!this.isInRange(2, 'water', world)) {
 					this.landDecoration = true;
 					this.forest = false;
 					this.Sprite = new Image();

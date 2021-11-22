@@ -68,55 +68,50 @@ function draw(world, ctx, canvas) {
 	//go over whole world, draw 10x10px elements and push 16x16px elements into the array
 	for (y=0;y<world.height;y++) {
 		for (x=0;x<world.width;x++) {
-			
-				//bigger elements to array so we can arrange their rendering time
-				if (world.grid[y][x].city) {
+			ctx.fillStyle = world.grid[y][x].getColor();
+			ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
+
+			switch (true) {
+				case world.grid[y][x].city:
 					cities.push([world.grid[y][x],y,x]);
-					ctx.fillStyle = world.grid[y][x].getColor();
-					ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
-				}
-				else if (world.grid[y][x].forest) {
+					break;
+
+				case world.grid[y][x].forest:
 					forests.push([world.grid[y][x],y,x]);
-					ctx.fillStyle = world.grid[y][x].getColor();
-					ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
-				}
-				else if (world.grid[y][x].mountain) {
+					break;
+
+				case world.grid[y][x].mountain:
 					mountains.push([world.grid[y][x],y,x]);
-					ctx.fillStyle = world.grid[y][x].getColor();
-					ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
-				}
-				else if (world.grid[y][x].waterDecoration) {
+					break;
+
+				case world.grid[y][x].waterDecoration:
 					wDecorations.push([world.grid[y][x],y,x]);
-					ctx.fillStyle = world.grid[y][x].getColor();
-					ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
-				}
-				else if (world.grid[y][x].landDecoration) {
+					break;
+
+				case world.grid[y][x].landDecoration:
 					lDecorations.push([world.grid[y][x],y,x]);
+					break;
+
+				case world.grid[y][x].beach:
+					ctx.drawImage(spriteSheat,world.cellSize*world.grid[y][x].spriteNr,0,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
+					break;
+
+				case world.grid[y][x].terrain&&world.grid[y][x].spriteNr!=null:
+					ctx.drawImage(spriteSheat,world.cellSize*world.grid[y][x].spriteNr,10,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
+					break;
+
+				default:
 					ctx.fillStyle = world.grid[y][x].getColor();
 					ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
-				}
-				else if (world.grid[y][x].beach) {
-					if (world.grid[y][x].spriteNr!=20) ctx.drawImage(spriteSheat,world.cellSize*world.grid[y][x].spriteNr,0,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
-				}
-				else if (world.grid[y][x].terrain) {
-					if (world.grid[y][x].spriteNr===null) {
-						ctx.fillStyle = world.grid[y][x].getColor();
-						ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
-					}
-					else {
-						ctx.drawImage(spriteSheat,world.cellSize*world.grid[y][x].spriteNr,10,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
-					}
-				}
-				else {
-					ctx.fillStyle = world.grid[y][x].getColor();
-					ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
-				}
+					break;
+				
 			}
+		}
 	}
 
 	//bigger element rendering priority
 	forests.forEach(element=> {
-		ctx.drawImage(element[0].Sprite,element[2]*world.cellSize-(element[0].Sprite.width/2),element[1]*world.cellSize-(element[0].Sprite.height/2));
+		ctx.drawImage(element[0].Sprite,element[2]*world.cellSize-2,element[1]*world.cellSize-(element[0].Sprite.height/2));
 	});
 	mountains.forEach(element=> {
 		ctx.drawImage(mountainSprite,element[2]*world.cellSize-8,element[1]*world.cellSize-10, element[0].mountainSize, element[0].mountainSize);
