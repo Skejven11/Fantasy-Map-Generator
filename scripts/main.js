@@ -60,12 +60,6 @@ function draw(world, ctx, canvas) {
     mountainSprite.src = "images/mountains.png";
 	const citySprite = new Image();
     citySprite.src = "images/city.png";
-	const fakeSprite = new Image(); //load fake sprites so they're fully loaded 
-	fakeSprite.src = "images/village.png";
-	fakeSprite.src = "images/castle.png";
-	fakeSprite.src = "images/waterMonster.png"
-	fakeSprite.src = "images/wave.png"
-	fakeSprite.src = "images/ship.png"
 
 	//loading terrain spritesheat
 	const spriteSheat = new Image();
@@ -74,6 +68,7 @@ function draw(world, ctx, canvas) {
 	//go over whole world, draw 10x10px elements and push 16x16px elements into the array
 	for (y=0;y<world.height;y++) {
 		for (x=0;x<world.width;x++) {
+			
 				//bigger elements to array so we can arrange their rendering time
 				if (world.grid[y][x].city) {
 					cities.push([world.grid[y][x],y,x]);
@@ -121,7 +116,7 @@ function draw(world, ctx, canvas) {
 
 	//bigger element rendering priority
 	forests.forEach(element=> {
-		ctx.drawImage(element[0].Sprite,element[2]*world.cellSize-2,element[1]*world.cellSize-2);
+		ctx.drawImage(element[0].Sprite,element[2]*world.cellSize-(element[0].Sprite.width/2),element[1]*world.cellSize-(element[0].Sprite.height/2));
 	});
 	mountains.forEach(element=> {
 		ctx.drawImage(mountainSprite,element[2]*world.cellSize-8,element[1]*world.cellSize-10, element[0].mountainSize, element[0].mountainSize);

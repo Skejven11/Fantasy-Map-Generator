@@ -301,9 +301,10 @@ function genContinental(config) {
 			if (this.mountain&&!this.countSurroundingCellsWithValue(neighbors, 'water')) this.mountain = true;
 			
 			//-----------------------Land Decoration generation--------------
-			if ((this.terrain||this.forest)&&config.lDecorations&&this.countSurroundingCellsWithValue(neighbors, 'water')<1&&getChance(30, 1)&&world.iteration>28) {
+			if (this.landDecoration||(this.terrain||this.forest)&&config.lDecorations&&this.countSurroundingCellsWithValue(neighbors, 'water')<1&&getChance(30, 1)&&world.iteration==29) {
 				if (!this.isInRange(8, 'landDecoration', world)&&!this.isInRange(2, 'water', world)) {
 					this.landDecoration = true;
+					this.forest = false;
 					this.Sprite = new Image();
 					this.Sprite.src = getChance(2,1) ? "images/village.png" : "images/castle.png";
 				}
@@ -321,7 +322,7 @@ function genContinental(config) {
 			if (getChance(3,1)) this.mountainSize = 24;
 			else this.mountainSize = 30;
 		}
-		if (config.forests!=0) this.forest = Math.random() > 1-config.forests*0.01;
+		if (config.forests!=0) this.forest = Math.random() > 1-config.forests*0.02;
 	});
 
 	world.initializeFromGrid([

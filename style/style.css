@@ -368,4 +368,8 @@ body {
   margin-left: 10px;
   color: #9e651b;
 }
+
+.invisible {
+  display: none;
+}
 /*# sourceMappingURL=style.css.map */
