@@ -172,6 +172,8 @@ function defaultSettings() {
 	document.getElementById("ribbon").checked = true;
 	document.getElementById("worldShape").value = 30;
 	document.getElementById("worldDetail").value = 30;
+	document.getElementById("worldSteps").innerHTML = 30;
+	document.getElementById("detailSteps").innerHTML = 30;
 }
 
 //small function for probability of cell stuff
