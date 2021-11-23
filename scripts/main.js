@@ -7,6 +7,7 @@ function initializeWorld(world) {
 	const gear = document.querySelector(".loading-gear");
 	const btnMenu = document.querySelector(".menu-button");
     const menu = document.querySelector(".user-menu");
+	const config = getConfig();
 
 	gear.style.visibility = "visible";
 	gear.style.animation = "1.5s infinite ease-in-out rotate";
@@ -19,21 +20,19 @@ function initializeWorld(world) {
 	canvas.width  = world.width*world.cellSize;
 	canvas.height = world.height*world.cellSize;
 	
-	for (let i=0;i<30;i++) {
+	for (let i=0;i<=config.detailSteps;i++) {
 		setTimeout(function(){
 			world.step();
 			world.iteration++;
 			if (world.iteration>1) draw(world, ctx, canvas)
-			if (i==29) {
-				menu.classList.add("user-menu-active");
-    			btnMenu.classList.add("menu-button-active");
+			if (i==config.detailSteps) {
 				btnMenu.disabled=false;
 				btnGen.disabled=false;
 				btnSave.disabled=false;
 				gear.style.visibility = "hidden";
 				gear.style.animation = "";
 			}
-		},i*75);
+		},i*(500/config.generationSpeed));
 	}
 	worldGlobal = world;
 	if (canvas.getAttribute('data-click-listener') !== 'true') { 
@@ -99,6 +98,14 @@ function draw(world, ctx, canvas) {
 				case world.grid[y][x].terrain&&world.grid[y][x].spriteNr!=null:
 					ctx.drawImage(spriteSheat,world.cellSize*world.grid[y][x].spriteNr,10,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
 					break;
+				
+				case world.grid[y][x].shallow&&world.grid[y][x].spriteNr!=null:
+					ctx.drawImage(spriteSheat,world.cellSize*world.grid[y][x].spriteNr,20,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
+					break;
+
+				case world.grid[y][x].mediumShallow&&world.grid[y][x].spriteNr!=null:
+					ctx.drawImage(spriteSheat,world.cellSize*world.grid[y][x].spriteMNr,20,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
+					break;
 
 				default:
 					ctx.fillStyle = world.grid[y][x].getColor();
@@ -139,12 +146,32 @@ function getConfig() {
 		cities : document.getElementById("cities").value,
 		forests : document.getElementById("forests").value,
 		beaches : document.getElementById("beaches").value,
+		generationSpeed : document.getElementById("speed").value,
 		sprawlingRivers : document.getElementById("sprawlingRivers").checked,
 		wDecorations : document.getElementById("wDecorations").checked,
 		lDecorations : document.getElementById("lDecorations").checked,
-		ribbon : document.getElementById("ribbon").checked
+		ribbon : document.getElementById("ribbon").checked,
+		worldSteps : document.getElementById("worldShape").value,
+		detailSteps : document.getElementById("worldDetail").value,
 	}
 	return config;
+}
+
+function defaultSettings() {
+	document.getElementById("landName").value = "";
+	document.getElementById("genSelection").value = 1;
+	document.getElementById("rivers").value = 2;
+	document.getElementById("mountains").value = 1;
+	document.getElementById("cities").value = 1;
+	document.getElementById("forests").value = 2;
+	document.getElementById("beaches").value = 1;
+	document.getElementById("speed").value = 6;
+	document.getElementById("sprawlingRivers").checked = false;
+	document.getElementById("wDecorations").checked = true;
+	document.getElementById("lDecorations").checked = true;
+	document.getElementById("ribbon").checked = true;
+	document.getElementById("worldShape").value = 30;
+	document.getElementById("worldDetail").value = 30;
 }
 
 //small function for probability of cell stuff

@@ -51,7 +51,7 @@ $menu-color: rgb(223, 218, 203);
 .user-menu {
     text-align: center;
     width:300px;
-    height:500px;
+    height:600px;
     background-color: transparent;
     position: absolute;
     top:0%;
@@ -110,6 +110,10 @@ $menu-color: rgb(223, 218, 203);
     }
     input[type=checkbox] {
         position:relative;
+    }
+    .btn-generate {
+        margin-top:15px;
+        width:155px;
     }
 }
 
@@ -178,29 +182,6 @@ $menu-color: rgb(223, 218, 203);
     @include flex-center();
     width:500px;
     margin-top:15px;
-    .btn-generate {
-        background-color: transparent;
-        color:rgb(49, 49, 49);
-        width:150px;
-        border-radius:7px;
-        padding: 8px 20px;
-        text-align: center;
-        font-size: 1rem;
-        font-family: 'Fondamento', cursive;
-        transition: all 0.35s;
-        border: 2px solid rgb(49, 49, 49);
-        &:hover {
-            background-color: rgb(209, 195, 84);
-            color:black;
-            cursor:pointer;
-        }
-        &:disabled {
-            cursor: not-allowed;
-            background-color:grey;
-            border: 2px solid red;
-            color:red;
-        }
-      }
     
       .btn-save {
         background-color: transparent;
@@ -217,6 +198,30 @@ $menu-color: rgb(223, 218, 203);
         }
       }
 }
+
+.btn-generate {
+    background-color: transparent;
+    color:rgb(49, 49, 49);
+    max-width:200px;
+    border-radius:7px;
+    padding: 8px 20px;
+    text-align: center;
+    font-size: 1rem;
+    font-family: 'Fondamento', cursive;
+    transition: all 0.35s;
+    border: 2px solid rgb(49, 49, 49);
+    &:hover {
+        background-color: rgb(209, 195, 84);
+        color:black;
+        cursor:pointer;
+    }
+    &:disabled {
+        cursor: not-allowed;
+        background-color:grey;
+        border: 2px solid red;
+        color:red;
+    }
+  }
 
   .modal-screen {
       visibility: hidden;

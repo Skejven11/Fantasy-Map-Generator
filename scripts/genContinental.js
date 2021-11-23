@@ -1,6 +1,4 @@
 function genContinental(config) {
-
-	var riverId = 0;
 	var colorPalette = {
 		shallow: 'rgb(52, 235, 229)',
 		mShallow: 'rgb(52, 177, 235)',
@@ -70,7 +68,7 @@ function genContinental(config) {
 		{ name: 'wall', distribution: 100 }
 	]);
 
-	for (i=0; i<20; i++) {
+	for (i=0; i<config.worldSteps; i++) {
 		world.step();
 		world.iteration++;
 	}
@@ -96,10 +94,30 @@ function genContinental(config) {
 		},
 
 		process: function (neighbors) {
-			this.mediumShallow = !this.shallow && this.countSurroundingCellsWithValue(neighbors, "shallow")>0 || this.countSurroundingCellsWithValue(neighbors, 'island')>2;
-			this.shallow = this.countSurroundingCellsWithValue(neighbors, "beach")>1;
+			if (this.countSurroundingCellsWithValue(neighbors, 'beach')>1&&world.iteration>3) {
+				this.shallow = true;
+				this.mediumShallow = false;
+				if (this.spriteNr==null&&neighbors[1]!=null&&neighbors[3]!=null&&neighbors[4]!=null&&neighbors[6]!=null&&world.iteration==config.detailSteps) {
+					if (neighbors[1].mediumShallow&&neighbors[4].mediumShallow&&!neighbors[3].mediumShallow&&!neighbors[6].mediumShallow) this.spriteNr = 1;
+					else if (neighbors[1].mediumShallow&&neighbors[3].mediumShallow&&!neighbors[4].mediumShallow&&!neighbors[6].mediumShallow) this.spriteNr = 2;
+					else if (neighbors[6].mediumShallow&&neighbors[3].mediumShallow&&!neighbors[4].mediumShallow&&!neighbors[1].mediumShallow) this.spriteNr = 3;
+					else if (neighbors[6].mediumShallow&&neighbors[4].mediumShallow&&!neighbors[3].mediumShallow&&!neighbors[1].mediumShallow) this.spriteNr = 4;
+					else this.spriteNr = 0;
+				}
+			}
+			if (!this.shallow && (this.countSurroundingCellsWithValue(neighbors, "shallow")>0 || this.countSurroundingCellsWithValue(neighbors, 'island')>2)&&world.iteration>3) {
+				this.mediumShallow = true;
+				this.shallow = false;
+				if (this.spriteMNr==null&&neighbors[1]!=null&&neighbors[3]!=null&&neighbors[4]!=null&&neighbors[6]!=null&&world.iteration==config.detailSteps) {
+					if (neighbors[1].deepWater&&neighbors[4].deepWater&&!neighbors[3].deepWater&&!neighbors[6].deepWater) this.spriteMNr = 6;
+					else if (neighbors[1].deepWater&&neighbors[3].deepWater&&!neighbors[4].deepWater&&!neighbors[6].deepWater) this.spriteMNr = 7;
+					else if (neighbors[6].deepWater&&neighbors[3].deepWater&&!neighbors[4].deepWater&&!neighbors[1].deepWater) this.spriteMNr = 8;
+					else if (neighbors[6].deepWater&&neighbors[4].deepWater&&!neighbors[3].deepWater&&!neighbors[1].deepWater) this.spriteMNr = 9;
+					else this.spriteMNr = 5;
+				}
+			}
 			this.deepWater = !this.shallow&&!this.mediumShallow&&!this.waterDecoration;
-			if (config.wDecorations&&this.countSurroundingCellsWithValue(neighbors, 'deepWater')==8&&getChance(40, 1)&&world.iteration==29) {
+			if (config.wDecorations&&this.countSurroundingCellsWithValue(neighbors, 'deepWater')==8&&getChance(40, 1)&&world.iteration==config.detailSteps) {
 				if (!this.isInRange(6, 'waterDecoration', world)) {
 					this.waterDecoration = true;
 					this.Sprite = new Image();
@@ -182,7 +200,7 @@ function genContinental(config) {
 					}
 				}
 			}
-			if ((this.terrain||this.beach||this.forest)&&this.countSurroundingCellsWithValue(neighbors, 'river')>1&&world.iteration==29) { 
+			if ((this.terrain||this.beach||this.forest)&&this.countSurroundingCellsWithValue(neighbors, 'river')>1&&world.iteration==config.detailSteps) { 
 				for (i=0;i<8;i++) {
 					if (neighbors[i]&&neighbors[i].river&&neighbors[i].riverSource===i&&!neighbors[i].createdRiver) 	{ 
 						this.river = true;
@@ -194,18 +212,19 @@ function genContinental(config) {
 
 
 			//-------------------city generation-------------------
-			if ((this.terrain||this.forest)&&this.countSurroundingCellsWithValue(neighbors, 'river')>1&&!this.countSurroundingCellsWithValue(neighbors, 'mountain')&&getChance(64,1*config.cities)&&world.iteration>28
+			if ((this.terrain||this.forest)&&this.countSurroundingCellsWithValue(neighbors, 'river')>1&&!this.countSurroundingCellsWithValue(neighbors, 'mountain')&&getChance(64,1*config.cities)&&world.iteration==config.detailSteps
 			&&this.countSurroundingCellsWithValue(neighbors, 'city')==0) {
 				this.city=true;
 			}
-			if ((this.terrain||this.beach)&&this.countSurroundingCellsWithValue(neighbors, 'water')>2&&this.countSurroundingCellsWithValue(neighbors, 'water')<5&&getChance(80,1*config.cities)&&world.iteration>28
+			if ((this.terrain||this.beach)&&this.countSurroundingCellsWithValue(neighbors, 'water')>2&&this.countSurroundingCellsWithValue(neighbors, 'water')<5&&getChance(80,1*config.cities)&&world.iteration==config.detailSteps
 			&&this.countSurroundingCellsWithValue(neighbors, 'city')==0) {
 				this.city=true;
 			}
 
 			//-------------------forest generation-------------------
 			if (this.forest) {
-				this.forest  = true;
+				if (this.countSurroundingCellsWithValue(neighbors, 'water')==0) this.forest = true;
+				else this.forest = false;
 				if (this.Sprite===undefined) {
 					this.Sprite = new Image();
 					const val = Math.floor(Math.random()*4);
@@ -226,7 +245,7 @@ function genContinental(config) {
 				}
 			}
 			if (this.terrain&&getChance(40,1*config.forests)&&this.countSurroundingCellsWithValue(neighbors, 'beach')<2
-				&&this.countSurroundingCellsWithValue(neighbors, 'forest')>=1&&world.iteration>3) {
+				&&this.countSurroundingCellsWithValue(neighbors, 'forest')>=1&&world.iteration>3&&this.countSurroundingCellsWithValue(neighbors, 'water')<1) {
 				this.forest = true;
 				this.Sprite = new Image();
 				const val = Math.floor(Math.random()*4);
@@ -264,6 +283,7 @@ function genContinental(config) {
 						else if (neighbors[1].water&&neighbors[3].water&&!neighbors[4].water&&!neighbors[6].water) this.spriteNr = 6;
 						else if (neighbors[6].water&&neighbors[3].water&&!neighbors[4].water&&!neighbors[1].water) this.spriteNr = 7;
 						else if (neighbors[6].water&&neighbors[4].water&&!neighbors[3].water&&!neighbors[1].water) this.spriteNr = 8;
+						else this.spriteNr = 0;
 					}
 			}
 			else {
@@ -304,7 +324,7 @@ function genContinental(config) {
 			if (this.mountain&&!this.countSurroundingCellsWithValue(neighbors, 'water')) this.mountain = true;
 			
 			//-----------------------Land Decoration generation--------------
-			if (this.landDecoration||(this.terrain||this.forest)&&config.lDecorations&&this.countSurroundingCellsWithValue(neighbors, 'water')<1&&getChance(30, 1)&&world.iteration==29) {
+			if (this.landDecoration||(this.terrain||this.forest)&&config.lDecorations&&this.countSurroundingCellsWithValue(neighbors, 'water')<1&&getChance(30, 1)&&world.iteration==config.detailSteps) {
 				if (!this.isInRange(8, 'landDecoration', world)&&!this.isInRange(8, 'city', world)&&!this.isInRange(2, 'water', world)) {
 					this.landDecoration = true;
 					this.forest = false;
