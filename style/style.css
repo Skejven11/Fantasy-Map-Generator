@@ -134,8 +134,22 @@ body {
   margin-bottom: 5px;
 }
 
-.user-menu-select select {
-  width: 40%;
+.user-menu-select div {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.user-menu-select div button {
+  position: absolute;
+  left: 75%;
 }
 
 .user-menu-section {
@@ -275,6 +289,15 @@ body {
 
 .button-container .btn-save:disabled {
   cursor: not-allowed;
+}
+
+.btn-gen-name {
+  background-color: transparent;
+  border: none;
+}
+
+.btn-gen-name:hover {
+  cursor: pointer;
 }
 
 .btn-generate {

@@ -21,7 +21,7 @@
     "sass": "^1.32.12"
   },
   "dependencies": {
-    "html-to-image": "^1.6.2",
+    "js-markov": "^3.0.3",
     "three": "^0.129.0"
   }
 }

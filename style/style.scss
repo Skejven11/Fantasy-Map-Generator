@@ -92,8 +92,13 @@ $menu-color: rgb(223, 218, 203);
     b {
         margin-bottom:5px;
     }
-    select {
-        width:40%;
+    div {
+        width:100%;
+        @include flex-center();
+        button {
+            position:absolute;
+            left:75%;
+        }
     }
 }
 
@@ -197,6 +202,14 @@ $menu-color: rgb(223, 218, 203);
             cursor: not-allowed;
         }
       }
+}
+
+.btn-gen-name {
+    background-color: transparent;
+    border:none;
+    &:hover {
+        cursor:pointer;
+    }
 }
 
 .btn-generate {

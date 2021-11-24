@@ -165,7 +165,7 @@ function defaultSettings() {
 	document.getElementById("cities").value = 1;
 	document.getElementById("forests").value = 2;
 	document.getElementById("beaches").value = 1;
-	document.getElementById("speed").value = 6;
+	document.getElementById("speed").value = 8;
 	document.getElementById("sprawlingRivers").checked = false;
 	document.getElementById("wDecorations").checked = true;
 	document.getElementById("lDecorations").checked = true;

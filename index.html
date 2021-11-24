@@ -3,17 +3,19 @@
 <head>
     <meta charset="utf-8"/>
     <title>Praca Inżynierska</title>
+
     <script type="text/javascript" src="scripts/genIslands.js"></script>
     <script type="text/javascript" src="scripts/genContinental.js"></script>
     <script type="text/javascript" src="scripts/cellauto.js"></script>
     <script type="text/javascript" src="scripts/main.js"></script>
+    <script src="https://unpkg.com/js-markov/dist/markov.js"></script>
 
     <link rel="stylesheet" href="style/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Fondamento&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <script type="module">
-    import {downloadCanvas} from "./scripts/download.js"
+    import {downloadCanvas, generateName} from "./scripts/download.js";
 
     document.addEventListener("DOMContentLoaded", () => {
         genMap();
@@ -62,10 +64,16 @@
         saveButton.addEventListener("click", ()=>{
             downloadCanvas(getConfig().landName);
         })
+
+        const genNameButton = document.getElementById("btn-gen-name");
+        genNameButton.addEventListener("click", ()=>{
+            generateName();
+        })
     });
     
     function genMap() {
         let config = getConfig();
+        if (config.landName=="") generateName();
         switch (config.genType) {
             case '1':
                 genContinental(config);
@@ -107,7 +115,10 @@
                 <hr></hr>
                 <div class="user-menu-select">
                     <b>Name of your land:</b>
-                    <input type="text" id="landName" maxlength="14" style="text-align: center">
+                    <div>
+                        <input type="text" id="landName" maxlength="15" style="text-align: center">
+                        <button id="btn-gen-name" class="btn-gen-name"><img src="images/name-generate-icon.png"></button>
+                    </div>
                 </div>
                 <hr></hr>
                 <div class="user-menu-section">
@@ -134,7 +145,7 @@
                 </div>
                 <div class="user-menu-section">
                     <b>Generation Speed</b>
-                    <input type="range" id="speed" min="1" max="11" value="6">
+                    <input type="range" id="speed" min="1" max="11" value="8">
                 </div>
                 <hr></hr>
                 <div class="user-menu-section">
