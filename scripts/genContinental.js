@@ -68,7 +68,7 @@ function genContinental(config) {
 		{ name: 'wall', distribution: 100 }
 	]);
 
-	for (i=0; i<config.worldSteps; i++) {
+	for (i=0; i<=config.worldSteps; i++) {
 		world.step();
 		world.iteration++;
 	}

@@ -208,5 +208,21 @@ function drawRibbon(canvas, ctx) { //draws ribbon and "title" of the map
 	}
 	ctx.fillStyle = "black";
 	ctx.textAlign = "center";
-	ctx.fillText("Land of "+landName,canvas.width/2, 700+fontSize/2)
+	curveText(ctx, "Land of "+landName, Math.PI *0.2)
+}
+
+function curveText(ctx, name, angle){
+	ctx.save();
+	ctx.translate(400, 1500);
+	ctx.rotate(-1 * angle / 2);
+	ctx.rotate(-1 * (angle / name.length) / 2);
+	for (var n = 0; n < name.length; n++) {
+		ctx.rotate(angle / name.length);
+		ctx.save();
+		ctx.translate(0, -1 * 800);
+		var char = name[n];
+		ctx.fillText(char, 0, 0);
+		ctx.restore();
+	}
+	ctx.restore();
 }

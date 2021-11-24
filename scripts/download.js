@@ -5,7 +5,7 @@ export function downloadCanvas(landName) {
 	htmlToImage.toPng(document.getElementById("canvas-border"))
 		.then(function (dataUrl) {
 			var imageDownloader = document.createElement('a');
-			imageDownloader.download = landName+"_map"
+			imageDownloader.download = landName+" map"
 			imageDownloader.href = dataUrl;
 			imageDownloader.click();
 		});
