@@ -3,7 +3,7 @@ function genContinental(config) {
 		shallow: 'rgb(52, 235, 229)',
 		mShallow: 'rgb(52, 177, 235)',
 		deepWater: 'rgb(51, 153, 255)',
-		river: 'rgb(50,160,250)',
+		river: 'rgb(79, 120, 255)',
 		red: 'rgb(200,30,30)'
 	}
 
@@ -117,7 +117,7 @@ function genContinental(config) {
 				}
 			}
 			this.deepWater = !this.shallow&&!this.mediumShallow&&!this.waterDecoration;
-			if (config.wDecorations&&this.countSurroundingCellsWithValue(neighbors, 'deepWater')==8&&getChance(40, 1)&&world.iteration==config.detailSteps) {
+			if (config.wDecorations&&this.countSurroundingCellsWithValue(neighbors, 'deepWater')==8&&getChance(80, 1)&&world.iteration>config.detailSteps-10) {
 				if (!this.isInRange(6, 'waterDecoration', world)) {
 					this.waterDecoration = true;
 					this.Sprite = new Image();
@@ -147,7 +147,6 @@ function genContinental(config) {
 		getColor: function() {
 			if(this.beach) return 'rgb(255, 255, 153)';
 			else if (this.river) return colorPalette.river;
-			else if (this.riverFill) return colorPalette.river;
 			else {
 				var v = Math.floor(Math.random()*17);
 				var g = (140+v).toString();
@@ -216,15 +215,24 @@ function genContinental(config) {
 					}
 				}
 			}
+			//generating cells to fill diagonal cells between river cells
+			if (this.island&&riverSurround>1) {
+				if (neighbors[1]!=null&&neighbors[3]!=null&&neighbors[4]!=null&&neighbors[6]!=null&&world.iteration==config.detailSteps) {
+					if (neighbors[6].river&&neighbors[3].river&&!neighbors[4].river&&!neighbors[1].river) {this.spriteNr = 0; this.riverFill = true; this.forest = false}
+					else if (neighbors[6].river&&neighbors[4].river&&!neighbors[3].river&&!neighbors[1].river) {this.spriteNr = 1; this.riverFill = true; this.forest = false}
+					else if (neighbors[1].river&&neighbors[4].river&&!neighbors[3].river&&!neighbors[6].river) {this.spriteNr = 2; this.riverFill = true; this.forest = false}
+					else if (neighbors[1].river&&neighbors[3].river&&!neighbors[4].river&&!neighbors[6].river) {this.spriteNr = 3; this.riverFill = true; this.forest = false}
+				}
+			}
 
 
 			//-------------------city generation-------------------
-			if ((this.terrain||this.forest)&&riverSurround>1&&!mountainSurround&&getChance(64,1*config.cities)&&world.iteration==config.detailSteps
-			&&citySurround==0) {
+			if ((this.terrain||this.forest)&&riverSurround>1&&!mountainSurround&&getChance(200,1*config.cities)&&world.iteration>config.detailSteps-10
+			&&!this.isInRange(8, 'city', world)) {
 				this.city=true;
 			}
-			if ((this.terrain||this.beach)&&waterSurround>2&&waterSurround<5&&getChance(80,1*config.cities)&&world.iteration==config.detailSteps
-			&&citySurround==0) {
+			if ((this.terrain||this.beach)&&waterSurround>2&&waterSurround<5&&getChance(200,1*config.cities)&&world.iteration>config.detailSteps-10
+			&&!this.isInRange(8, 'city', world)) {
 				this.city=true;
 			}
 
@@ -273,11 +281,10 @@ function genContinental(config) {
 			}
 
 			//-------------------beach generation-------------------
-			if ((this.beach && waterSurround > 1 && beachSurround>0 
-				&& (terrainSurround>1||forestSurround))
+			if ((this.beach && waterSurround > 1 && beachSurround>0 && (terrainSurround>1||forestSurround))
 				||(this.beach&&riverSurround>1)
 				||(this.beach&&waterSurround>3&&beachSurround>1)
-				||(this.terrain&&waterSurround>3&&beachSurround>1)) {
+				||(this.terrain&&waterSurround>1&&beachSurround>1)) {
 				this.beach = true;
 				this.forest = false;
 				//applying proper sprite from the spritesheat

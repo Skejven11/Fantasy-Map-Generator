@@ -29,10 +29,12 @@ function initializeWorld(world) {
 				btnMenu.disabled=false;
 				btnGen.disabled=false;
 				btnSave.disabled=false;
+				menu.classList.add("user-menu-active");
+				btnMenu.classList.add("menu-button-active");
 				gear.style.visibility = "hidden";
 				gear.style.animation = "";
 			}
-		},i*(500/config.generationSpeed));
+		},i*(400/config.generationSpeed));
 	}
 	worldGlobal = world;
 	if (canvas.getAttribute('data-click-listener') !== 'true') { 
@@ -53,6 +55,7 @@ function draw(world, ctx, canvas) {
 	let mountains = [];
 	let wDecorations = [];
 	let lDecorations = [];
+	let riverFills = [];
 
 	//loading spirte once instead of every cell
 	const mountainSprite = new Image();
@@ -91,6 +94,10 @@ function draw(world, ctx, canvas) {
 					lDecorations.push([world.grid[y][x],y,x]);
 					break;
 
+				case world.grid[y][x].riverFill:
+					riverFills.push([world.grid[y][x],y,x])
+					break;
+
 				case world.grid[y][x].beach:
 					ctx.drawImage(spriteSheat,world.cellSize*world.grid[y][x].spriteNr,0,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
 					break;
@@ -103,7 +110,7 @@ function draw(world, ctx, canvas) {
 					ctx.drawImage(spriteSheat,world.cellSize*world.grid[y][x].spriteNr,20,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
 					break;
 
-				case world.grid[y][x].mediumShallow&&world.grid[y][x].spriteNr!=null:
+				case world.grid[y][x].mediumShallow&&world.grid[y][x].spriteMNr!=null:
 					ctx.drawImage(spriteSheat,world.cellSize*world.grid[y][x].spriteMNr,20,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
 					break;
 
@@ -120,6 +127,9 @@ function draw(world, ctx, canvas) {
 	forests.forEach(element=> {
 		ctx.drawImage(element[0].Sprite,element[2]*world.cellSize-2,element[1]*world.cellSize-(element[0].Sprite.height/2));
 	});
+	riverFills.forEach(element=> {
+		ctx.drawImage(spriteSheat,world.cellSize*element[0].spriteNr,30,world.cellSize,world.cellSize,element[2]*world.cellSize,element[1]*world.cellSize, world.cellSize, world.cellSize);
+	})
 	mountains.forEach(element=> {
 		ctx.drawImage(mountainSprite,element[2]*world.cellSize-8,element[1]*world.cellSize-10, element[0].mountainSize, element[0].mountainSize);
 	});
@@ -158,22 +168,21 @@ function getConfig() {
 }
 
 function defaultSettings() {
-	document.getElementById("landName").value = "";
 	document.getElementById("genSelection").value = 1;
-	document.getElementById("rivers").value = 2;
+	document.getElementById("rivers").value = 1;
 	document.getElementById("mountains").value = 1;
 	document.getElementById("cities").value = 1;
 	document.getElementById("forests").value = 2;
 	document.getElementById("beaches").value = 1;
-	document.getElementById("speed").value = 8;
+	document.getElementById("speed").value = 6;
 	document.getElementById("sprawlingRivers").checked = false;
 	document.getElementById("wDecorations").checked = true;
 	document.getElementById("lDecorations").checked = true;
 	document.getElementById("ribbon").checked = true;
-	document.getElementById("worldShape").value = 30;
-	document.getElementById("worldDetail").value = 30;
-	document.getElementById("worldSteps").innerHTML = 30;
-	document.getElementById("detailSteps").innerHTML = 30;
+	document.getElementById("worldShape").value = 40;
+	document.getElementById("worldDetail").value = 35;
+	document.getElementById("worldSteps").innerHTML = 40;
+	document.getElementById("detailSteps").innerHTML = 35;
 }
 
 //small function for probability of cell stuff
@@ -195,9 +204,9 @@ function getMousePos(canvas, evt) { //function used for debugging, displays clic
 function drawRibbon(canvas, ctx) { //draws ribbon and "title" of the map
 	const ribbonSprite = new Image();
 	ribbonSprite.src = "images/ribbon.png";
-	ctx.drawImage(ribbonSprite,0,550)
+	ctx.drawImage(ribbonSprite,0,585)
 
-	let fontSize = 90;
+	let fontSize = 70;
 	let landName = getConfig().landName;
 	if (landName==="") landName = "GIVE IT A NAME"
 	ctx.font = fontSize+"px Fondamento";
@@ -208,12 +217,14 @@ function drawRibbon(canvas, ctx) { //draws ribbon and "title" of the map
 	}
 	ctx.fillStyle = "black";
 	ctx.textAlign = "center";
-	curveText(ctx, "Land of "+landName, Math.PI *0.2)
+	if (getConfig().genType==1) landName = "Land of " + landName;
+	else landName = "Isles of " + landName;
+	curveText(ctx,landName, Math.PI *0.205)
 }
 
 function curveText(ctx, name, angle){
 	ctx.save();
-	ctx.translate(400, 1500);
+	ctx.translate(400, 1455);
 	ctx.rotate(-1 * angle / 2);
 	ctx.rotate(-1 * (angle / name.length) / 2);
 	for (var n = 0; n < name.length; n++) {
