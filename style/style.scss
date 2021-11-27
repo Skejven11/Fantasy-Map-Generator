@@ -248,8 +248,8 @@ $menu-color: rgb(223, 218, 203);
       @include flex-center();
 
       .modal-content {
-        width:500px;
-        height:600px;
+        width:600px;
+        height:700px;
         background-color: $menu-color;
         border-radius: 5px;
         position: fixed;

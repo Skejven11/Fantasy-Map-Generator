@@ -82,7 +82,8 @@ function genContinental(config) {
 		width: 80,
 		height: 80,
 		cellSize: 10,
-		iteration:0
+		iteration:0,
+		isDesertCreated:false
 	});
 
 	//---------------Water Details--------------
@@ -145,7 +146,7 @@ function genContinental(config) {
 		isSolid: true,
 		spriteNr: null,
 		getColor: function() {
-			if(this.beach) return 'rgb(255, 255, 153)';
+			if(this.desert) return 'rgb(255, 255, 102)';
 			else if (this.river) return colorPalette.river;
 			else {
 				var v = Math.floor(Math.random()*17);
@@ -155,13 +156,14 @@ function genContinental(config) {
 		},
 
 		process: function(neighbors) {
-			let waterSurround = this.countSurroundingCellsWithValue(neighbors, 'water');
-			let riverSurround = this.countSurroundingCellsWithValue(neighbors, 'river');
-			let terrainSurround = this.countSurroundingCellsWithValue(neighbors, 'terrain');
-			let mountainSurround = this.countSurroundingCellsWithValue(neighbors, 'mountain');
-			let beachSurround = this.countSurroundingCellsWithValue(neighbors, 'beach');
-			let citySurround = this.countSurroundingCellsWithValue(neighbors, 'city');
-			let forestSurround = this.countSurroundingCellsWithValue(neighbors, 'forest');
+			const waterSurround = this.countSurroundingCellsWithValue(neighbors, 'water');
+			const riverSurround = this.countSurroundingCellsWithValue(neighbors, 'river');
+			const terrainSurround = this.countSurroundingCellsWithValue(neighbors, 'terrain');
+			const mountainSurround = this.countSurroundingCellsWithValue(neighbors, 'mountain');
+			const beachSurround = this.countSurroundingCellsWithValue(neighbors, 'beach');
+			const citySurround = this.countSurroundingCellsWithValue(neighbors, 'city');
+			const forestSurround = this.countSurroundingCellsWithValue(neighbors, 'forest');
+			const desertSurround = this.countSurroundingCellsWithValue(neighbors, 'desert');
 
 			//------------------river generation-------------------
 			//changing direction of rivers
@@ -260,7 +262,7 @@ function genContinental(config) {
 				}
 			}
 			if (this.terrain&&getChance(40,1*config.forests)&&beachSurround<2
-				&&forestSurround>=1&&world.iteration>3&&waterSurround<1) {
+				&&forestSurround>0&&world.iteration>3&&waterSurround<1) {
 				this.forest = true;
 				this.Sprite = new Image();
 				const val = Math.floor(Math.random()*4);
@@ -281,12 +283,13 @@ function genContinental(config) {
 			}
 
 			//-------------------beach generation-------------------
-			if ((this.beach && waterSurround > 1 && beachSurround>0 && (terrainSurround>1||forestSurround))
+			if ((this.beach && waterSurround > 1 && beachSurround>0 && (terrainSurround>1||desertSurround>1||forestSurround>1))
 				||(this.beach&&riverSurround>1)
 				||(this.beach&&waterSurround>3&&beachSurround>1)
 				||(this.terrain&&waterSurround>1&&beachSurround>1)) {
 				this.beach = true;
 				this.forest = false;
+				this.terrain = false;
 				//applying proper sprite from the spritesheat
 				if (this.spriteNr==null&&neighbors[1]!=null&&neighbors[3]!=null&&neighbors[4]!=null&&neighbors[6]!=null) {
 						if (neighbors[1].water&&neighbors[3].water&&neighbors[4].water&&!neighbors[6].water) this.spriteNr = 1;
@@ -304,8 +307,27 @@ function genContinental(config) {
 				this.beach = false;
 			}
 
+			//-------------------Desert Generation-------------------
+			//not sure if I will implement this, looks like a lot of work for it to look good
+			/*if (world.iteration>3&&(this.terrain||this.forest)&&beachSurround>1&&!world.isDesertCreated) {
+				if (getChance(10, 1)) {
+					world.isDesertCreated = true;
+					this.desert = true;
+					this.terrain = false;
+					this.forest = false;
+					console.log("XD")
+				}
+			}
+			if (this.desert
+				||((this.terrain||this.forest)&&desertSurround>0&&getChance(5,1))
+				||((this.terrain||this.forest)&&desertSurround>4)) {
+				this.desert = true
+				this.terrain = false;
+				this.forest = false;
+			}*/
+
 			//-------------------terrain generation-------------------
-			if (!this.mountain&&!this.cliff&&!this.river&&!this.city&&!this.forest&&!this.landDecoration&&!this.beach&&!this.water) {
+			if (!this.desert&&!this.mountain&&!this.cliff&&!this.river&&!this.city&&!this.forest&&!this.landDecoration&&!this.beach&&!this.water) {
 				this.terrain = true;
 			}
 			else {
@@ -368,7 +390,6 @@ function genContinental(config) {
 	], grid);
 
 	initializeWorld(world);
-	return world;
 };
 
 

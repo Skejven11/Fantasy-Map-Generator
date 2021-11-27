@@ -21,7 +21,7 @@ export async function generateName() {
 	markov.addStates(names)
 	markov.train();
 
-	var text = markov.generateRandom(15);
+	var text = markov.generateRandom(18);
 	text = text.charAt(0).toUpperCase()+text.slice(1);
 
 	nameInput.value = text;

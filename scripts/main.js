@@ -17,7 +17,7 @@ function initializeWorld(world) {
 	btnGen.disabled=true;
 	btnSave.disabled=true;
 	
-	canvas.width  = world.width*world.cellSize;
+	canvas.width = world.width*world.cellSize;
 	canvas.height = world.height*world.cellSize;
 	
 	for (let i=0;i<=config.detailSteps;i++) {
@@ -200,6 +200,7 @@ function getMousePos(canvas, evt) { //function used for debugging, displays clic
     };
 	console.log(world.grid[Math.floor(position.y/world.cellSize)][Math.floor(position.x/world.cellSize)]);
 }
+
 
 function drawRibbon(canvas, ctx) { //draws ribbon and "title" of the map
 	const ribbonSprite = new Image();
