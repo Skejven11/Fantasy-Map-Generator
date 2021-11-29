@@ -60,8 +60,6 @@ function draw(world, ctx, canvas) {
 	//loading spirte once instead of every cell
 	const mountainSprite = new Image();
     mountainSprite.src = "images/mountains.png";
-	const citySprite = new Image();
-    citySprite.src = "images/city.png";
 
 	//loading terrain spritesheat
 	const spriteSheat = new Image();
@@ -133,15 +131,21 @@ function draw(world, ctx, canvas) {
 	mountains.forEach(element=> {
 		ctx.drawImage(mountainSprite,element[2]*world.cellSize-8,element[1]*world.cellSize-10, element[0].mountainSize, element[0].mountainSize);
 	});
-	cities.forEach(element=> {
-		ctx.drawImage(citySprite,element[2]*world.cellSize-(citySprite.width/2),element[1]*world.cellSize-(citySprite.height/2));
-	});
 	wDecorations.forEach(element=> {
 		ctx.drawImage(element[0].Sprite,element[2]*world.cellSize-(element[0].Sprite.width/2),element[1]*world.cellSize-(element[0].Sprite.height/2));
 	});
 	lDecorations.forEach(element=>{
 		ctx.drawImage(element[0].Sprite,element[2]*world.cellSize-(element[0].Sprite.width/2),element[1]*world.cellSize-(element[0].Sprite.height/2));
 	})
+	cities.forEach(element=> {
+		ctx.drawImage(element[0].Sprite,element[2]*world.cellSize-(element[0].Sprite.width/2),element[1]*world.cellSize-(element[0].Sprite.height/2));
+		ctx.font = element[0].font;
+		ctx.strokeStyle = "black";
+		ctx.lineWidth = 2;
+		ctx.strokeText(element[0].cityName, element[2]*world.cellSize, element[1]*world.cellSize-(element[0].Sprite.height/2+5))
+		ctx.fillStyle = "white";
+		ctx.fillText(element[0].cityName, element[2]*world.cellSize, element[1]*world.cellSize-(element[0].Sprite.height/2+5));
+	});
 
 	//draw ribbon at the bottom of the map
 	if (getConfig().ribbon) drawRibbon(canvas, ctx);
@@ -209,7 +213,6 @@ function drawRibbon(canvas, ctx) { //draws ribbon and "title" of the map
 
 	let fontSize = 70;
 	let landName = getConfig().landName;
-	if (landName==="") landName = "GIVE IT A NAME"
 	ctx.font = fontSize+"px Fondamento";
 	
 	while (ctx.measureText("Land of "+landName).width>500) { //if the title doesn't fit lower font size till it fits

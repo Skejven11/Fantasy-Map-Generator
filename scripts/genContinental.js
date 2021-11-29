@@ -1,4 +1,4 @@
-function genContinental(config) {
+async function genContinental(config, generateCityName) {
 	var colorPalette = {
 		shallow: 'rgb(52, 235, 229)',
 		mShallow: 'rgb(52, 177, 235)',
@@ -6,6 +6,8 @@ function genContinental(config) {
 		river: 'rgb(79, 120, 255)',
 		red: 'rgb(200,30,30)'
 	}
+	const response = await fetch("./scripts/libraries/names.json");
+	const cityNames = await response.json();
 
 	//------------------------Basic world shape------------------------
 	var world = new CAWorld({
@@ -229,13 +231,30 @@ function genContinental(config) {
 
 
 			//-------------------city generation-------------------
-			if ((this.terrain||this.forest)&&riverSurround>1&&!mountainSurround&&getChance(200,1*config.cities)&&world.iteration>config.detailSteps-10
-			&&!this.isInRange(8, 'city', world)) {
-				this.city=true;
-			}
 			if ((this.terrain||this.beach)&&waterSurround>2&&waterSurround<5&&getChance(200,1*config.cities)&&world.iteration>config.detailSteps-10
+			&&!this.isInRange(8, 'city', world)
+			||(this.terrain||this.forest)&&riverSurround>1&&!mountainSurround&&getChance(200,1*config.cities)&&world.iteration>config.detailSteps-10
 			&&!this.isInRange(8, 'city', world)) {
 				this.city=true;
+				this.Sprite = new Image();
+				const whichSprite = Math.floor(Math.random()*3)
+				switch (whichSprite) {
+					case 0:
+						this.font = "10px Fondamento";
+						this.cityName = generateCityName(cityNames);
+						this.Sprite.src = "images/city0.png";
+						break;
+					case 1:
+						this.font = "12px Fondamento"
+						this.cityName = generateCityName(cityNames);
+						this.Sprite.src = "images/city1.png";
+						break;
+					case 2:
+						this.font = "14px Fondamento"
+						this.cityName = generateCityName(cityNames);
+						this.Sprite.src = "images/city2.png";
+						break;
+					}
 			}
 
 			//-------------------forest generation-------------------

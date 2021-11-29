@@ -26,3 +26,13 @@ export async function generateName() {
 
 	nameInput.value = text;
 }
+
+export function generateCityName(names) {
+	var markov = new Markov();
+	markov.addStates(names)
+	markov.train();
+
+	var text = markov.generateRandom(18);
+	text = text.charAt(0).toUpperCase()+text.slice(1);
+	return text;
+}

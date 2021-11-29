@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <script type="module">
-    import {downloadCanvas, generateName} from "./scripts/download.js";
+    import {downloadCanvas, generateName, generateCityName} from "./scripts/download.js";
 
     document.addEventListener("DOMContentLoaded", () => {
         genMap();
@@ -72,10 +72,11 @@
     
     function genMap() {
         let config = getConfig();
+        const nameInput = document.getElementById("landName");
         if (config.landName=="") generateName();
         switch (config.genType) {
             case '1':
-                genContinental(config);
+                genContinental(config, generateCityName);
                 break;
             case '2':
                 genIslands(config);
