@@ -70,13 +70,24 @@
         })
     });
     
-    function genMap() {
+    async function genMap() {
         let config = getConfig();
-        const nameInput = document.getElementById("landName");
+        //await doesn't want to work inside switch statement ????????????????
+        if (config.cityNames == 1) var cityNames = await (await fetch("./scripts/libraries/cityNamesGerm.json")).json();
+        else if (config.cityNames == 2) var cityNames = await (await fetch("./scripts/libraries/cityNamesSlav.json")).json();
+        else if (config.cityNames == 3) var cityNames = await (await fetch("./scripts/libraries/cityNamesAnglo.json")).json();
+        else if (config.cityNames == 4) var cityNames = await (await fetch("./scripts/libraries/cityNamesJap.json")).json();
+        else if (config.cityNames == 5) var cityNames = await (await fetch("./scripts/libraries/cityNamesPers.json")).json();
+        else if (config.cityNames == 6) var cityNames = await (await fetch("./scripts/libraries/cityNamesKhmer.json")).json();
+        else if (config.cityNames == 7) var cityNames = await (await fetch("./scripts/libraries/cityNamesEthiop.json")).json();
+        else if (config.cityNames == 8) var cityNames = await (await fetch("./scripts/libraries/cityNamesAlgier.json")).json();
+        else if (config.cityNames == 9) var cityNames = await (await fetch("./scripts/libraries/cityNamesPeru.json")).json();
+        else if (config.cityNames == 10) var cityNames = await (await fetch("./scripts/libraries/cityNamesMexico.json")).json();
         if (config.landName=="") generateName();
+
         switch (config.genType) {
             case '1':
-                genContinental(config, generateCityName);
+                genContinental(config, generateCityName, cityNames);
                 break;
             case '2':
                 genIslands(config);
@@ -119,6 +130,21 @@
                         <input type="text" id="landName" maxlength="18" style="text-align: center">
                         <button id="btn-gen-name" class="btn-gen-name"><img src="images/name-generate-icon.png"></button>
                     </div>
+                </div>
+                <div class="user-menu-select">
+                    <b>Choose city names generation:</b>
+                    <select id="cityNameGen">
+                        <option value="1">Germanic</option>
+                        <option value="2">Slavic</option>
+                        <option value="3">Anglo-Saxon</option>
+                        <option value="4">Japanese</option>
+                        <option value="5">Persian</option>
+                        <option value="6">Khmer</option>
+                        <option value="7">Ethiopian</option>
+                        <option value="8">Algieran</option>
+                        <option value="9">Peruvian</option>
+                        <option value="10">Mexican</option>
+                    </select>
                 </div>
                 <hr></hr>
                 <div class="user-menu-section">
@@ -207,7 +233,9 @@
     </div>
     <!--tags to load some troublesome images-->
     <img class="invisible" src="images/castle.png">
-    <img class="invisible" src="images/city.png">
+    <img class="invisible" src="images/city0.png">
+    <img class="invisible" src="images/city1.png">
+    <img class="invisible" src="images/city2.png">
     <img class="invisible" src="images/waterMonster.png">
     <img class="invisible" src="images/wave.png">
     <img class="invisible" src="images/village.png">

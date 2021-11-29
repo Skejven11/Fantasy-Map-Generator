@@ -1,4 +1,4 @@
-async function genContinental(config, generateCityName) {
+function genContinental(config, generateCityName, cityNames) {
 	var colorPalette = {
 		shallow: 'rgb(52, 235, 229)',
 		mShallow: 'rgb(52, 177, 235)',
@@ -6,8 +6,6 @@ async function genContinental(config, generateCityName) {
 		river: 'rgb(79, 120, 255)',
 		red: 'rgb(200,30,30)'
 	}
-	const response = await fetch("./scripts/libraries/names.json");
-	const cityNames = await response.json();
 
 	//------------------------Basic world shape------------------------
 	var world = new CAWorld({
@@ -240,17 +238,17 @@ async function genContinental(config, generateCityName) {
 				const whichSprite = Math.floor(Math.random()*3)
 				switch (whichSprite) {
 					case 0:
-						this.font = "10px Fondamento";
+						this.font = "11px Fondamento";
 						this.cityName = generateCityName(cityNames);
 						this.Sprite.src = "images/city0.png";
 						break;
 					case 1:
-						this.font = "12px Fondamento"
+						this.font = "13px Fondamento"
 						this.cityName = generateCityName(cityNames);
 						this.Sprite.src = "images/city1.png";
 						break;
 					case 2:
-						this.font = "14px Fondamento"
+						this.font = "15px Fondamento"
 						this.cityName = generateCityName(cityNames);
 						this.Sprite.src = "images/city2.png";
 						break;

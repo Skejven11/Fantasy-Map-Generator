@@ -154,6 +154,7 @@ function draw(world, ctx, canvas) {
 function getConfig() {
 	let config = {
 		landName : document.getElementById("landName").value,
+		cityNames : document.getElementById("cityNameGen").value,
 		genType : document.getElementById("genSelection").value,
 		rivers : document.getElementById("rivers").value,
 		mountains : document.getElementById("mountains").value,
@@ -173,9 +174,10 @@ function getConfig() {
 
 function defaultSettings() {
 	document.getElementById("genSelection").value = 1;
+	document.getElementById("cityNameGen").value = 1;
 	document.getElementById("rivers").value = 1;
 	document.getElementById("mountains").value = 1;
-	document.getElementById("cities").value = 1;
+	document.getElementById("cities").value = 2;
 	document.getElementById("forests").value = 2;
 	document.getElementById("beaches").value = 1;
 	document.getElementById("speed").value = 6;
