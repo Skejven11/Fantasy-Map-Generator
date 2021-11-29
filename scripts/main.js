@@ -142,6 +142,7 @@ function draw(world, ctx, canvas) {
 		ctx.font = element[0].font;
 		ctx.strokeStyle = "black";
 		ctx.lineWidth = 2;
+		ctx.textAlign = "center";
 		ctx.strokeText(element[0].cityName, element[2]*world.cellSize, element[1]*world.cellSize-(element[0].Sprite.height/2+5))
 		ctx.fillStyle = "white";
 		ctx.fillText(element[0].cityName, element[2]*world.cellSize, element[1]*world.cellSize-(element[0].Sprite.height/2+5));

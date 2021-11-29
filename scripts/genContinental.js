@@ -218,7 +218,7 @@ function genContinental(config, generateCityName, cityNames) {
 				}
 			}
 			//generating cells to fill diagonal cells between river cells
-			if (this.island&&riverSurround>1) {
+			if (this.island&&!this.city&&riverSurround>1) {
 				if (neighbors[1]!=null&&neighbors[3]!=null&&neighbors[4]!=null&&neighbors[6]!=null&&world.iteration==config.detailSteps) {
 					if (neighbors[6].river&&neighbors[3].river&&!neighbors[4].river&&!neighbors[1].river) {this.spriteNr = 0; this.riverFill = true; this.forest = false}
 					else if (neighbors[6].river&&neighbors[4].river&&!neighbors[3].river&&!neighbors[1].river) {this.spriteNr = 1; this.riverFill = true; this.forest = false}
@@ -234,6 +234,7 @@ function genContinental(config, generateCityName, cityNames) {
 			||(this.terrain||this.forest)&&riverSurround>1&&!mountainSurround&&getChance(200,1*config.cities)&&world.iteration>config.detailSteps-10
 			&&!this.isInRange(8, 'city', world)) {
 				this.city=true;
+				this.terrain=false;
 				this.Sprite = new Image();
 				const whichSprite = Math.floor(Math.random()*3)
 				switch (whichSprite) {
