@@ -10,13 +10,13 @@ CellAutoCell.prototype.process = function(neighbors) {
 };
 CellAutoCell.prototype.isInRange = function(range, cellType, world) {
 	let isInRangeVal = false;
-			for (var x=range;x>=-range;x--) 
-				for (var y=-range;y<=range;y++) {
-					let a = x-this.x;
-					let b = y-this.y;
-					if (a^2+b^2<=range^2) if (world.grid[this.y+x]&&world.grid[this.y+x][this.x+y]&&world.grid[this.y+x][this.x+y][cellType]) isInRangeVal = true;
-				}
-			return isInRangeVal;
+		for (var x=range;x>=-range;x--) 
+			for (var y=-range;y<=range;y++) {
+				let a = x-this.x;
+				let b = y-this.y;
+				if (a^2+b^2<=range^2) if (world.grid[this.y+x]&&world.grid[this.y+x][this.x+y]&&world.grid[this.y+x][this.x+y][cellType]) isInRangeVal = true;
+			}
+		return isInRangeVal;
 }
 CellAutoCell.prototype.countSurroundingCellsWithValue = function(neighbors, value) {
 	var surrounding = 0;

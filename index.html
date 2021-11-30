@@ -68,6 +68,13 @@
         genNameButton.addEventListener("click", ()=>{
             generateName();
         })
+
+        const ribbonInput = document.getElementById("ribbon");
+        ribbonInput.addEventListener("change", ()=>{
+            const canvas = document.getElementById("myCanvas");
+	        var ctx = canvas.getContext('2d');
+            draw(worldGlobal, ctx, canvas);
+        })
     });
     
     async function genMap() {
@@ -240,6 +247,11 @@
     <img class="invisible" src="images/wave.png">
     <img class="invisible" src="images/village.png">
     <img class="invisible" src="images/ship.png">
+    <img class="invisible" src="images/mineG.png">
+    <img class="invisible" src="images/mineS.png">
+    <img class="invisible" src="images/mineC.png">
+    <img class="invisible" src="images/lighthouse.png">
+    <img class="invisible" src="images/ribbon.png">
 </body>
 
 </html>

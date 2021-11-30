@@ -88,7 +88,7 @@ function draw(world, ctx, canvas) {
 					wDecorations.push([world.grid[y][x],y,x]);
 					break;
 
-				case world.grid[y][x].landDecoration:
+				case world.grid[y][x].landDecoration||world.grid[y][x].mine||world.grid[y][x].lighthouse:
 					lDecorations.push([world.grid[y][x],y,x]);
 					break;
 

@@ -229,9 +229,9 @@ function genContinental(config, generateCityName, cityNames) {
 
 
 			//-------------------city generation-------------------
-			if ((this.terrain||this.beach)&&waterSurround>2&&waterSurround<5&&getChance(200,1*config.cities)&&world.iteration>config.detailSteps-10
+			if (world.iteration>config.detailSteps-10&&(this.terrain||this.beach)&&waterSurround>2&&waterSurround<5&&getChance(200,1*config.cities)
 			&&!this.isInRange(8, 'city', world)
-			||(this.terrain||this.forest)&&riverSurround>1&&!mountainSurround&&getChance(200,1*config.cities)&&world.iteration>config.detailSteps-10
+			||world.iteration>config.detailSteps-10&&(this.terrain||this.forest)&&riverSurround>1&&!mountainSurround&&getChance(200,1*config.cities)
 			&&!this.isInRange(8, 'city', world)) {
 				this.city=true;
 				this.terrain=false;
@@ -345,7 +345,7 @@ function genContinental(config, generateCityName, cityNames) {
 			}*/
 
 			//-------------------terrain generation-------------------
-			if (!this.desert&&!this.mountain&&!this.cliff&&!this.river&&!this.city&&!this.forest&&!this.landDecoration&&!this.beach&&!this.water) {
+			if (!this.desert&&!this.mountain&&!this.cliff&&!this.river&&!this.city&&!this.forest&&!this.landDecoration&&!this.beach&&!this.water&&!this.mine) {
 				this.terrain = true;
 			}
 			else {
@@ -378,13 +378,38 @@ function genContinental(config, generateCityName, cityNames) {
 			if (this.mountain&&!waterSurround) this.mountain = true;
 			
 			//-----------------------Land Decoration generation--------------
-			if (this.landDecoration||(this.terrain||this.forest)&&config.lDecorations&&waterSurround<1&&getChance(30, 1)&&world.iteration==config.detailSteps) {
+			if (config.lDecorations&&world.iteration==config.detailSteps&&(this.terrain||this.forest)&&waterSurround<1&&getChance(30, 1)) {
 				if (!this.isInRange(8, 'landDecoration', world)&&!this.isInRange(8, 'city', world)&&!this.isInRange(2, 'water', world)) {
 					this.landDecoration = true;
 					this.forest = false;
 					this.Sprite = new Image();
 					this.Sprite.src = getChance(2,1) ? "images/village.png" : "images/castle.png";
 				}
+			}
+			//-------------------------mines------------------------
+			if (config.lDecorations&&world.iteration==config.detailSteps&&(this.terrain||this.forest)&&mountainSurround>2&&getChance(10,1)&&!this.isInRange(8, 'mine', world)) {
+				this.mine = true;
+				this.forest = false;
+				this.Sprite = new Image();
+				const val = Math.floor(Math.random()*3);
+				switch (val) {
+					case 0:
+						this.Sprite.src = "images/mineG.png"
+						break;
+					case 1:
+						this.Sprite.src = "images/mineS.png"
+						break;
+					case 2:
+						this.Sprite.src = "images/mineC.png"
+						break;
+				}
+			}
+			//--------------------------lighthouses------------------
+			if (config.lDecorations&&world.iteration==config.detailSteps&&(this.terrain||this.beach)&&waterSurround>2&&getChance(20,1)&&!this.isInRange(12, 'lighthouse', world)&&!this.isInRange(4, 'city', world)) {
+				this.lighthouse = true;
+				this.forest = false;
+				this.Sprite = new Image();
+				this.Sprite.src = "images/lighthouse.png"
 			}
 			//cliff generation
 			//this.cliff = this.countSurroundingCellsWithValue(neighbors, 'water')>1&&this.countSurroundingCellsWithValue(neighbors, 'beach')>1;
