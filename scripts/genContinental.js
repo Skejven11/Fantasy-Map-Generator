@@ -229,10 +229,10 @@ function genContinental(config, generateCityName, cityNames) {
 
 
 			//-------------------city generation-------------------
-			if (world.iteration>config.detailSteps-10&&(this.terrain||this.beach)&&waterSurround>2&&waterSurround<5&&getChance(200,1*config.cities)
-			&&!this.isInRange(8, 'city', world)
-			||world.iteration>config.detailSteps-10&&(this.terrain||this.forest)&&riverSurround>1&&!mountainSurround&&getChance(200,1*config.cities)
-			&&!this.isInRange(8, 'city', world)) {
+			if (world.iteration>config.detailSteps-10&&(this.terrain||this.beach)&&waterSurround>2&&waterSurround<5&&getChance(200/config.cities,1)
+			&&!this.isInRange(8-config.cities, 'city', world)
+			||world.iteration>config.detailSteps-10&&(this.terrain||this.forest)&&riverSurround>1&&!mountainSurround&&getChance(200/config.cities,1)
+			&&!this.isInRange(8-config.cities, 'city', world)) {
 				this.city=true;
 				this.terrain=false;
 				this.Sprite = new Image();
@@ -279,7 +279,7 @@ function genContinental(config, generateCityName, cityNames) {
 					}
 				}
 			}
-			if (this.terrain&&getChance(40,1*config.forests)&&beachSurround<2
+			if (this.terrain&&getChance(80/config.forests,1)&&beachSurround<2
 				&&forestSurround>0&&world.iteration>3&&waterSurround<1) {
 				this.forest = true;
 				this.Sprite = new Image();
@@ -370,10 +370,9 @@ function genContinental(config, generateCityName, cityNames) {
 			}
 
 			//-------------------mountain generation-------------------
-			if ((world.iteration<4&&getChance(12,1*config.mountains)&&!waterSurround&&!beachSurround&&mountainSurround>=1)) {
+			if ((world.iteration<4&&getChance(12,1)&&!waterSurround&&!beachSurround&&mountainSurround>=1)) {
 				this.mountain = true;
-				if (getChance(3,1)) this.mountainSize = 24;
-				else this.mountainSize = 30;
+				this.mountainSize = getChance(3,1) ? 24 : 30;
 			}
 			if (this.mountain&&!waterSurround) this.mountain = true;
 			
@@ -415,16 +414,15 @@ function genContinental(config, generateCityName, cityNames) {
 			//this.cliff = this.countSurroundingCellsWithValue(neighbors, 'water')>1&&this.countSurroundingCellsWithValue(neighbors, 'beach')>1;
 		}
 
-		//generate proper cells on first world creation
+		//generate proper cells before first world step
 	}, function () {
 		this.island = true;
-		if (config.beaches!=0) this.beach = Math.random() > 0.2-config.beaches*0.2;
+		if (config.beaches!=0) this.beach = Math.random() > 0.6-config.beaches*0.2;
 		if (config.mountains!=0&&Math.random() > 1-config.mountains*0.01) {
 			this.mountain = true;
-			if (getChance(3,1)) this.mountainSize = 24;
-			else this.mountainSize = 30;
+			this.mountainSize = getChance(3,1) ? 24 : 30;
 		}
-		if (config.forests!=0) this.forest = Math.random() > 1-config.forests*0.02;
+		if (config.forests!=1) this.forest = Math.random() > 1-config.forests*0.02;
 	});
 
 	world.initializeFromGrid([

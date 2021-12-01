@@ -6,6 +6,7 @@
 
     <script type="text/javascript" src="scripts/genIslands.js"></script>
     <script type="text/javascript" src="scripts/genContinental.js"></script>
+    <script type="text/javascript" src="scripts/genOnlyLand.js"></script>
     <script type="text/javascript" src="scripts/libraries/cellauto.js"></script>
     <script type="text/javascript" src="scripts/main.js"></script>
 
@@ -99,6 +100,9 @@
             case '2':
                 genIslands(config);
                 break;
+             case '3':
+                genOnlyLand(config, generateCityName, cityNames);
+                break;
         }
     }
 </script>
@@ -128,6 +132,7 @@
                     <select id="genSelection">
                         <option value="1">Continental</option>
                         <option value="">Islands (wip)</option>
+                        <option value="3">Land only</option>
                     </select>
                 </div>
                 <hr></hr>
@@ -169,12 +174,12 @@
                 </div>
                 <div class="user-menu-section">
                     <b>Forests</b>
-                    <input type="range" id="forests" min="0" max="3" value="2">
+                    <input type="range" id="forests" min="1" max="4" value="3">
                 </div>
                 <hr></hr>
                 <div class="user-menu-section">
                     <b>Beaches</b>
-                    <input type="range" id="beaches" min="0" max="3" value="1">
+                    <input type="range" id="beaches" min="0" max="3" value="2">
                 </div>
                 <div class="user-menu-section">
                     <b>Generation Speed</b>

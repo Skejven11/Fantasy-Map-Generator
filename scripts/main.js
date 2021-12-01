@@ -88,7 +88,7 @@ function draw(world, ctx, canvas) {
 					wDecorations.push([world.grid[y][x],y,x]);
 					break;
 
-				case world.grid[y][x].landDecoration||world.grid[y][x].mine||world.grid[y][x].lighthouse:
+				case world.grid[y][x].landDecoration||world.grid[y][x].mine||world.grid[y][x].lighthouse:3
 					lDecorations.push([world.grid[y][x],y,x]);
 					break;
 
@@ -174,13 +174,11 @@ function getConfig() {
 }
 
 function defaultSettings() {
-	document.getElementById("genSelection").value = 1;
-	document.getElementById("cityNameGen").value = 1;
 	document.getElementById("rivers").value = 1;
 	document.getElementById("mountains").value = 1;
 	document.getElementById("cities").value = 2;
-	document.getElementById("forests").value = 2;
-	document.getElementById("beaches").value = 1;
+	document.getElementById("forests").value = 3;
+	document.getElementById("beaches").value = 2;
 	document.getElementById("speed").value = 6;
 	document.getElementById("sprawlingRivers").checked = false;
 	document.getElementById("wDecorations").checked = true;
@@ -224,8 +222,8 @@ function drawRibbon(canvas, ctx) { //draws ribbon and "title" of the map
 	}
 	ctx.fillStyle = "black";
 	ctx.textAlign = "center";
-	if (getConfig().genType==1) landName = "Land of " + landName;
-	else landName = "Isles of " + landName;
+	if (getConfig().genType==2) landName = "Isles of " + landName;
+	else landName = "Land of " + landName;
 	curveText(ctx,landName, Math.PI *0.205)
 }
 
