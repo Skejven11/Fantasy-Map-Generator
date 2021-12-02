@@ -348,18 +348,18 @@ body {
 }
 
 .modal-screen .modal-content {
-  width: 600px;
-  height: 700px;
+  width: 650px;
+  height: 750px;
   background-color: #dfdacb;
   border-radius: 5px;
   position: fixed;
   top: -100%;
   -webkit-transition: all 0.4s;
   transition: all 0.4s;
-  padding: 2rem 2rem 2rem 2rem;
+  padding: 1rem 1.5rem 1.5rem 1.5rem;
 }
 
-.modal-screen .modal-content > b {
+.modal-screen .modal-content .big-text {
   display: inline-block;
   width: 100%;
   text-align: center;
@@ -367,7 +367,7 @@ body {
 }
 
 .modal-screen .modal-content > p {
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .modal-screen .modal-content a {
@@ -388,7 +388,7 @@ body {
           align-items: center;
   display: block;
   text-align: center;
-  margin-top: 13%;
+  margin-top: 20px;
 }
 
 .modal-screen .modal-content .links .fa-github {

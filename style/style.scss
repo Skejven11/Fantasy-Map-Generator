@@ -248,16 +248,16 @@ $menu-color: rgb(223, 218, 203);
       @include flex-center();
 
       .modal-content {
-        width:600px;
-        height:700px;
+        width:650px;
+        height:750px;
         background-color: $menu-color;
         border-radius: 5px;
         position: fixed;
         top:-100%;
         transition: all 0.4s;
-        padding:2rem 2rem 2rem 2rem;
+        padding:1rem 1.5rem 1.5rem 1.5rem;
 
-        > b {
+        .big-text {
             display: inline-block;
             width:100%;
             text-align: center;
@@ -265,7 +265,7 @@ $menu-color: rgb(223, 218, 203);
         }
 
         > p {
-            font-size:1.1rem;
+            font-size:1rem;
         }
 
         a {
@@ -278,7 +278,7 @@ $menu-color: rgb(223, 218, 203);
             @include flex-center();
             display: block;
             text-align: center;
-            margin-top:13%;
+            margin-top:20px;
             .fa-github {
                 font-size: 25px;
                 margin-left:10px;

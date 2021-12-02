@@ -9,6 +9,7 @@
     <script type="text/javascript" src="scripts/genOnlyLand.js"></script>
     <script type="text/javascript" src="scripts/libraries/cellauto.js"></script>
     <script type="text/javascript" src="scripts/main.js"></script>
+    <script type="text/javascript" src="scripts/domFunctions.js"></script>
 
     <link rel="stylesheet" href="style/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Fondamento&display=swap" rel="stylesheet"> 
@@ -19,63 +20,9 @@
 
     document.addEventListener("DOMContentLoaded", () => {
         genMap();
-        const menuButton = document.querySelector(".menu-button");
-        const menu = document.querySelector(".user-menu");
-        menuButton.addEventListener("click", ()=>{
-            menu.classList.toggle("user-menu-active");
-            menuButton.classList.toggle("menu-button-active");
-        });
-
-        const worldShapeInput = document.getElementById("worldShape");
-        const worldShapeSteps = document.getElementById("worldSteps");
-        worldShapeSteps.innerHTML = worldShapeInput.value;
-        worldShapeInput.addEventListener("input", ()=>{
-            worldShapeSteps.innerHTML = worldShapeInput.value;
-        })
-
-        const worldDetailInput = document.getElementById("worldDetail");
-        const worldDetailSteps = document.getElementById("detailSteps");
-        worldDetailSteps.innerHTML = worldDetailInput.value;
-        worldDetailInput.addEventListener("input", ()=>{
-            worldDetailSteps.innerHTML = worldDetailInput.value;
-        })
-
-
-        const infoButton = document.querySelector(".info-btn");
-        const modalScreen = document.querySelector(".modal-screen");
-        const modalContent = document.querySelector(".modal-content");
-        infoButton.addEventListener("click", ()=>{
-            modalScreen.style.visibility = "visible";
-            modalContent.style.top = "15%";
-        });
-        window.onclick = function(event) {
-            if (event.target == modalScreen) {
-            modalScreen.style.visibility = "hidden";
-            modalContent.style.top = "-100%";
-            }
-        } 
-
-        const genButton = document.querySelector(".btn-generate");
-        genButton.addEventListener("click", ()=>{
-            genMap();
-        })
-
-        const saveButton = document.querySelector(".btn-save");
-        saveButton.addEventListener("click", ()=>{
-            downloadCanvas(getConfig().landName);
-        })
-
-        const genNameButton = document.getElementById("btn-gen-name");
-        genNameButton.addEventListener("click", ()=>{
-            generateName();
-        })
-
-        const ribbonInput = document.getElementById("ribbon");
-        ribbonInput.addEventListener("change", ()=>{
-            const canvas = document.getElementById("myCanvas");
-	        var ctx = canvas.getContext('2d');
-            draw(worldGlobal, ctx, canvas);
-        })
+        window.genMap = genMap;
+        window.saveButtonToggle = saveButtonToggle;
+        window.nameButtonToggle = nameButtonToggle;
     });
     
     async function genMap() {
@@ -105,6 +52,13 @@
                 break;
         }
     }
+
+    function saveButtonToggle () {
+        downloadCanvas(getConfig().landName);
+    }
+    function nameButtonToggle () {
+        generateName();
+    }   
 </script>
 </head>
 
@@ -112,15 +66,15 @@
     <div class="main-container">
         <div class="canvas-container">
             <h1>Fantasy Map Generator</h1>
-            <button class="menu-button"></button>
-            <button class="info-btn"><b>i</b></button>
+            <button class="menu-button" onclick="menuButtonToggle()"></button>
+            <button class="info-btn" onclick="modalButtonToggle()"><b>i</b></button>
             <div class="canvas-container-proper-xd" id="canvas-border">
                 <canvas id="myCanvas">Your browser doesn't support HTML5 canvas</canvas>
             </div>
             <div class="loading-gear"></div>
             <div class="button-container">
-                <button class="btn-generate">Generate Map</button>
-                <button class="btn-save">
+                <button class="btn-generate" onclick="genMap()">Generate Map</button>
+                <button class="btn-save" onclick="saveButtonToggle()">
                     <img src="images/save-icon.png">
                 </button>
             </div>
@@ -140,7 +94,7 @@
                     <b>Name of your land:</b>
                     <div>
                         <input type="text" id="landName" maxlength="18" style="text-align: center">
-                        <button id="btn-gen-name" class="btn-gen-name"><img src="images/name-generate-icon.png"></button>
+                        <button id="btn-gen-name" class="btn-gen-name"><img src="images/name-generate-icon.png" onclick="nameButtonToggle()"></button>
                     </div>
                 </div>
                 <div class="user-menu-select">
@@ -189,12 +143,12 @@
                 <div class="user-menu-section">
                     <b>World Steps:</b>
                     <b id="worldSteps">20</b>
-                    <input type="range" id="worldShape" min="2" max="50" value="40">
+                    <input type="range" id="worldShape" min="2" max="50" value="40" oninput="worldShapeToggle()">
                 </div>
                 <div class="user-menu-section">
                     <b>Detail Steps:</b>
                     <b id="detailSteps">30</b>
-                    <input type="range" id="worldDetail" min="10" max="50" value="35">
+                    <input type="range" id="worldDetail" min="10" max="50" value="35" oninput="worldDetailToggle()">
                 </div>
                 <hr></hr>
                 <div class="user-menu-section checkbox">
@@ -211,7 +165,7 @@
                 </div>
                 <div class="user-menu-section checkbox">
                     <label for="ribbon">Draw Ribbon</label>
-                    <input type="checkbox" id="ribbon" value="true" checked>
+                    <input type="checkbox" id="ribbon" value="true" checked oninput="ribbonInputToggle()">
                 </div>
                 <hr></hr>
                 <div class="user-menu-section">
@@ -222,19 +176,28 @@
     </div>
     <div class="modal-screen">
         <div class="modal-content">
-            <b>About</b>
+            <b class="big-text">About</b>
             <p>
                 Fantasy Map Generator is an engineering thesis project created using HTML5, CSS3 (SASS) and JavaScript ES6. It's based on cellular automata model using Sanojian's
                 <a href="http://sanojian.github.io/cellauto/">cellauto.js</a> library. This app uses Markov chain <a href="https://github.com/Edwin-Pratt/js-markov">
                 library</a> for randomising names and <a href="https://www.npmjs.com/package/html-to-image">HTML to Image</a> for map downloading. You can check github page for the generator down below.
             </p>
             <hr>
-            <b>How does it work?</b>
+            <b class="big-text">How does it work?</b>
             <p>
                 All squares (called cells) on the map have different states and properties. Cell can change it's state based on states and properties of all the surrounding 8 neighbors.
                 For example river cell can only appear near a mountain cell, that's why the amount of mountain cells on the map affects the amount of rivers created. With settings
                 menu you can adjust generation of some of the different cells, but results may vary as most of the cells have some sort of randomness involved in the generation. 
-                You can also turn on and off some of the options like "sprawling rivers", which, if turned on, makes river generation much more chaotic and complex.
+            </p>
+            <hr>
+            <b class="big-text">Some generation options explained:</b>
+            <p>- <b>City names generation culture</b> changes how names of the cities are choosen.
+            <br>- <b>Generation Speed</b> affects how quickly the generation animation is played. This may not work perfectly on weaker devices like older phones due to performance issues.
+            <br>- <b>World Steps</b> affects the shape of the world. More steps equals more polished world shape!
+            <br>- <b>Detail Steps</b> affects the generation of every cell type (cities, rivers, mountains etc.). More steps equals more detailed map!
+            <br>- <b>Water Decoration</b> generates some primarly visual cells on water like ships, water monsters or waves.
+            <br>- <b>Land Decoration</b> generates some primarly visual cells on land like castles, lighthouses, mines or farmsteads.
+            <br>- <b>Sprawling Rivers</b> makes river generation much more chaotic anc complex with many branching rivers and deltas.
             </p>
             <hr>
             <div class="links">
