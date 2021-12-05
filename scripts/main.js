@@ -174,20 +174,49 @@ function getConfig() {
 }
 
 function defaultSettings() {
-	document.getElementById("rivers").value = 1;
+	genTypeVal = document.getElementById("genSelection").value;
+	document.getElementById("sprawlingRivers").checked = false;
+	document.getElementById("lDecorations").checked = true;
+	document.getElementById("ribbon").checked = true;
 	document.getElementById("mountains").value = 1;
 	document.getElementById("cities").value = 2;
 	document.getElementById("forests").value = 3;
-	document.getElementById("beaches").value = 2;
 	document.getElementById("speed").value = 6;
-	document.getElementById("sprawlingRivers").checked = false;
-	document.getElementById("wDecorations").checked = true;
-	document.getElementById("lDecorations").checked = true;
-	document.getElementById("ribbon").checked = true;
-	document.getElementById("worldShape").value = 40;
 	document.getElementById("worldDetail").value = 35;
-	document.getElementById("worldSteps").innerHTML = 40;
 	document.getElementById("detailSteps").innerHTML = 35;
+	switch (genTypeVal) {
+		case "1":
+			document.getElementById("rivers").value = 1;
+			document.getElementById("beaches").value = 2;
+			document.getElementById("beaches").disabled = false;
+			document.getElementById("wDecorations").checked = true;
+			document.getElementById("wDecorations").disabled = false;
+			document.getElementById("worldShape").value = 40;
+			document.getElementById("worldSteps").innerHTML = 40;
+			document.getElementById("worldShape").disabled = false;
+			break;
+		case "2":
+			document.getElementById("rivers").value = 2;
+			document.getElementById("beaches").value = 2;
+			document.getElementById("beaches").disabled = false;
+			document.getElementById("wDecorations").checked = true;
+			document.getElementById("wDecorations").disabled = false;
+			document.getElementById("worldShape").value = 16;
+			document.getElementById("worldSteps").innerHTML = 16;
+			document.getElementById("worldShape").disabled = false;
+			break;
+		case "3":
+			document.getElementById("rivers").value = 1;
+			document.getElementById("beaches").value = 0;
+			document.getElementById("beaches").disabled = true;
+			document.getElementById("wDecorations").checked = false;
+			document.getElementById("wDecorations").disabled = true;
+			document.getElementById("worldShape").value = 1;
+			document.getElementById("worldSteps").innerHTML = 1;
+			document.getElementById("worldShape").disabled = true;
+			break;
+
+	}
 }
 
 //small function for probability of cell stuff

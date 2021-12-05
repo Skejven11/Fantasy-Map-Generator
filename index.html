@@ -26,6 +26,7 @@
     });
     
     async function genMap() {
+        defaultSettings();
         let config = getConfig();
         //await doesn't want to work inside switch statement ????????????????
         if (config.cityNames == 1) var cityNames = await (await fetch("./scripts/libraries/cityNamesGerm.json")).json();
@@ -83,7 +84,7 @@
                 <hr></hr>
                 <div class="user-menu-select">
                     <b>Generation type:</b>
-                    <select id="genSelection">
+                    <select id="genSelection" onchange="defaultSettings()">
                         <option value="1">Continental</option>
                         <option value="2">Islands</option>
                         <option value="3">Land only</option>

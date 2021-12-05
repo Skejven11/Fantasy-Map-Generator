@@ -34,9 +34,8 @@ function modalButtonToggle () {
 
 function ribbonInputToggle () {
     const ribbonInput = document.getElementById("ribbon");
-    ribbonInput.addEventListener("change", ()=>{
-        const canvas = document.getElementById("myCanvas");
-        var ctx = canvas.getContext('2d');
-        draw(worldGlobal, ctx, canvas);
-    })
+    const canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext('2d');
+    draw(worldGlobal, ctx, canvas);
+    
 }
