@@ -45,7 +45,7 @@
                 genContinental(config, generateCityName, cityNames);
                 break;
             case '2':
-                genIslands(config);
+                genIslands(config, generateCityName, cityNames);
                 break;
              case '3':
                 genOnlyLand(config, generateCityName, cityNames);
@@ -85,7 +85,7 @@
                     <b>Generation type:</b>
                     <select id="genSelection">
                         <option value="1">Continental</option>
-                        <option value="">Islands (wip)</option>
+                        <option value="2">Islands</option>
                         <option value="3">Land only</option>
                     </select>
                 </div>
