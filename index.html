@@ -19,6 +19,7 @@
     import {downloadCanvas, generateName, generateCityName} from "./scripts/download.js";
 
     document.addEventListener("DOMContentLoaded", () => {
+        defaultSettings();
         genMap();
         window.genMap = genMap;
         window.saveButtonToggle = saveButtonToggle;
@@ -26,7 +27,6 @@
     });
     
     async function genMap() {
-        defaultSettings();
         let config = getConfig();
         //await doesn't want to work inside switch statement ????????????????
         if (config.cityNames == 1) var cityNames = await (await fetch("./scripts/libraries/cityNamesGerm.json")).json();
