@@ -352,7 +352,7 @@ function genContinental(config, generateCityName, cityNames) {
 				this.terrain = false;
 			}
 			//applying proper sprite from the spritesheat
-			if (this.terrain) {
+			if (this.terrain&&waterSurround<2) {
 				if (neighbors[1]!=null&&neighbors[3]!=null&&neighbors[4]!=null&&neighbors[6]!=null&&!this.spriteApply&&world.iteration==3) {
 					this.spriteApply = true;
 					if (neighbors[1].beach&&neighbors[4].beach) this.spriteNr = 3;

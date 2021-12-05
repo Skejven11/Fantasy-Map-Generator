@@ -128,9 +128,7 @@ function genOnlyLand(config, generateCityName, cityNames) {
 
 
 			//-------------------city generation-------------------
-			if (world.iteration>config.detailSteps-10&&(this.terrain)&&getChance(400/config.cities,1)
-			&&!this.isInRange(8, 'city', world)
-			||world.iteration>config.detailSteps-10&&(this.terrain||this.forest)&&riverSurround>1&&!mountainSurround&&getChance(400/config.cities,1)
+			if (world.iteration>config.detailSteps-10&&(this.terrain||this.forest)&&riverSurround>1&&!mountainSurround&&getChance(200/config.cities,1)
 			&&!this.isInRange(8, 'city', world)) {
 				this.city=true;
 				this.terrain=false;

@@ -1,13 +1,12 @@
 import * as htmlToImage from 'https://cdn.skypack.dev/html-to-image';
+import downloadjs from 'https://cdn.skypack.dev/downloadjs';
 import {Markov} from "./libraries/markov.js";
 
 export function downloadCanvas(landName) {
-	htmlToImage.toPng(document.getElementById("canvas-border"))
+	const canvas = document.getElementById("canvas-border");
+		htmlToImage.toPng(canvas)
 		.then(function (dataUrl) {
-			var imageDownloader = document.createElement('a');
-			imageDownloader.download = landName+" map"
-			imageDownloader.href = dataUrl;
-			imageDownloader.click();
+			downloadjs(dataUrl, landName+" map");
 		});
 }
 
