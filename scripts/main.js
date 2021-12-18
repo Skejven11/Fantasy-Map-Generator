@@ -112,6 +112,10 @@ function draw(world, ctx, canvas) {
 					ctx.drawImage(spriteSheat,world.cellSize*world.grid[y][x].spriteMNr,20,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
 					break;
 
+				case world.grid[y][x].deepWater:
+					ctx.drawImage(spriteSheat,100,20,world.cellSize,world.cellSize,x*world.cellSize,y*world.cellSize, world.cellSize, world.cellSize);
+					break;
+
 				default:
 					ctx.fillStyle = world.grid[y][x].getColor();
 					ctx.fillRect(x*world.cellSize,y*world.cellSize,world.cellSize,world.cellSize);
