@@ -1,5 +1,6 @@
 var worldGlobal = null;
-function initializeWorld(world) {
+
+async function initializeWorld(config, generateCityName, cityNames) {
 	const canvas = document.getElementById("myCanvas");
 	var ctx = canvas.getContext('2d');
 	const btnGen = document.querySelector(".btn-generate");
@@ -7,7 +8,6 @@ function initializeWorld(world) {
 	const gear = document.querySelector(".loading-gear");
 	const btnMenu = document.querySelector(".menu-button");
     const menu = document.querySelector(".user-menu");
-	const config = getConfig();
 
 	gear.style.visibility = "visible";
 	gear.style.animation = "1.5s infinite ease-in-out rotate";
@@ -16,9 +16,38 @@ function initializeWorld(world) {
 	btnMenu.disabled=true;
 	btnGen.disabled=true;
 	btnSave.disabled=true;
+
+	switch (config.genType) {
+		case '1':
+			world = genContinentalWorld()
+			break;
+		case '2':
+			world = genIslandWorld()
+			break;
+	}
 	
-	canvas.width = world.width*world.cellSize;
-	canvas.height = world.height*world.cellSize;
+	canvas.width = 800;
+	canvas.height = 800;
+
+	if (config.genType != '3') {
+		for (let i=0;i<=config.worldSteps;i++) {
+			world.step();
+			world.iteration++;
+			draw(world, ctx, canvas)
+			await wait(200/config.generationSpeed)
+		}
+	}
+
+	switch (config.genType) {
+		case '1':
+			world = genContinentalDetail(world, config, generateCityName, cityNames)
+			break;
+		case '2':
+			world = genIslandDetail(world, config, generateCityName, cityNames)
+			break;
+		case '3':
+			world = genOnlyLand(config, generateCityName, cityNames)
+	}
 	
 	for (let i=0;i<=config.detailSteps;i++) {
 		setTimeout(function(){
@@ -88,7 +117,7 @@ function draw(world, ctx, canvas) {
 					wDecorations.push([world.grid[y][x],y,x]);
 					break;
 
-				case world.grid[y][x].landDecoration||world.grid[y][x].mine||world.grid[y][x].lighthouse:3
+				case world.grid[y][x].landDecoration||world.grid[y][x].mine||world.grid[y][x].lighthouse:
 					lDecorations.push([world.grid[y][x],y,x]);
 					break;
 
@@ -222,6 +251,14 @@ function defaultSettings() {
 
 	}
 }
+
+function wait(ms) {
+	return new Promise((resolve, reject) => {
+	  setTimeout(() => {
+		resolve(ms)
+	  }, ms )
+	})
+  }  
 
 //small function for probability of cell stuff
 function getChance(max, isLower) {

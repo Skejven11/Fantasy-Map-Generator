@@ -282,7 +282,7 @@ function genOnlyLand(config, generateCityName, cityNames) {
 		{ name: 'island', gridValue: 1 },
 	], grid);
 
-	initializeWorld(world);
+	return world;
 };
 
 

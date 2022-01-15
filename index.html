@@ -41,17 +41,7 @@
         else if (config.cityNames == 10) var cityNames = await (await fetch("./scripts/libraries/cityNamesMexico.json")).json();
         if (config.landName=="") generateName();
 
-        switch (config.genType) {
-            case '1':
-                genContinental(config, generateCityName, cityNames);
-                break;
-            case '2':
-                genIslands(config, generateCityName, cityNames);
-                break;
-             case '3':
-                genOnlyLand(config, generateCityName, cityNames);
-                break;
-        }
+        initializeWorld(config, generateCityName, cityNames);
     }
 
     function saveButtonToggle () {

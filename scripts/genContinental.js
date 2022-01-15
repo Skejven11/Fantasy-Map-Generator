@@ -1,12 +1,11 @@
-function genContinental(config, generateCityName, cityNames) {
-	var colorPalette = {
-		shallow: 'rgb(52, 235, 229)',
-		mShallow: 'rgb(52, 177, 235)',
-		deepWater: 'rgb(51, 153, 255)',
-		river: 'rgb(79, 120, 255)',
-		red: 'rgb(200,30,30)'
-	}
+var colorPalette = {
+	shallow: 'rgb(52, 235, 229)',
+	mShallow: 'rgb(52, 177, 235)',
+	deepWater: 'rgb(51, 153, 255)',
+	river: 'rgb(79, 120, 255)',
+}
 
+function genContinentalWorld() {
 	//------------------------Basic world shape------------------------
 	var world = new CAWorld({
 		width: 80,
@@ -17,6 +16,10 @@ function genContinental(config, generateCityName, cityNames) {
 	});
 
 	world.registerCellType('wall', {
+		getColor: function() {
+			if (this.open) return 'rgb(50,200,50)';
+			else return colorPalette.deepWater;
+		},
 		process: function (neighbors) {
 			var surrounding = this.countSurroundingCellsWithValue(neighbors, 'wasOpen');
 			this.open = (this.wasOpen && surrounding >= 3) || surrounding >= 5 || (surrounding>=3 && getChance(8, 1));
@@ -68,16 +71,17 @@ function genContinental(config, generateCityName, cityNames) {
 		{ name: 'wall', distribution: 100 }
 	]);
 
-	for (i=0; i<=config.worldSteps; i++) {
-		world.step();
-		world.iteration++;
-	}
+	return world;
+}
+
+
+	//-------------------World details----------------------
+function genContinentalDetail(world, config, generateCityName, cityNames) {
 
 	var grid = world.createGridFromValues([
 		{ cellType: 'wall', hasProperty: 'open', value: 1 }
 	], 0);
 
-	//-------------------World details----------------------
 	world = new CAWorld({
 		width: 80,
 		height: 80,
@@ -430,7 +434,7 @@ function genContinental(config, generateCityName, cityNames) {
 		{ name: 'water', gridValue: 0 }
 	], grid);
 
-	initializeWorld(world);
+	return world;
 };
 
 
