@@ -18,7 +18,7 @@ function genIslandWorld() {
 
 	world.registerCellType('wall', {
 		getColor: function() {
-			if (this.open) return 'rgb(50,200,50)';
+			if (this.open) return 'rgb(34, 142, 51)';
 			else return colorPalette.deepWater;
 		},
 		process: function (neighbors) {
