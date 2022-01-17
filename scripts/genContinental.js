@@ -17,52 +17,51 @@ function genContinentalWorld() {
 
 	world.registerCellType('wall', {
 		getColor: function() {
-			if (this.open) return 'rgb(34, 142, 51)';
+			if (this.island) return 'rgb(34, 142, 51)';
 			else return colorPalette.deepWater;
 		},
 		process: function (neighbors) {
-			var surrounding = this.countSurroundingCellsWithValue(neighbors, 'wasOpen');
-			this.open = (this.wasOpen && surrounding >= 3) || surrounding >= 5 || (surrounding>=3 && getChance(8, 1));
-			if (world.iteration===19&&surrounding<4) this.open = false; 
+			var surrounding = this.countSurroundingCellsWithValue(neighbors, 'wasIsland');
+			this.island = (this.wasIsland && surrounding >= 3) || surrounding >= 5 || (surrounding>=3 && getChance(8, 1));
 			switch (world.continentDirection) {
 				case 0:
-					world.grid[0][0].open = true;
+					world.grid[0][0].island = true;
 					break;
 				case 1:
-					world.grid[0][79].open = true;
+					world.grid[0][79].island = true;
 					break;
 				case 2:
-					world.grid[79][79].open = true;
+					world.grid[79][79].island = true;
 					break;
 				case 3:
-					world.grid[79][0].open = true;
+					world.grid[79][0].island = true;
 					break;
 			}
 		},
 		reset: function () {
-			this.wasOpen = this.open;
+			this.wasIsland = this.island;
 		}
 	}, function () {
 		switch (world.continentDirection) {
 			case 0:
-				if ((this.x<40&&this.y<5)||(this.x<5&&this.y<40)) this.open = true;
-				else if (this.x<60&&this.y<60) this.open = Math.random() > 0.55;
-				else this.open = Math.random() > 0.75;
+				if ((this.x<40&&this.y<5)||(this.x<5&&this.y<40)) this.island = true;
+				else if (this.x<60&&this.y<60) this.island = Math.random() > 0.55;
+				else this.island = Math.random() > 0.75;
 				break;
 			case 1:
-				if ((this.x>40&&this.y<5)||(this.x>75&&this.y<40)) this.open = true;
-				else if (this.x>20&&this.y<60) this.open = Math.random() > 0.55;
-				else this.open = Math.random() > 0.75;
+				if ((this.x>40&&this.y<5)||(this.x>75&&this.y<40)) this.island = true;
+				else if (this.x>20&&this.y<60) this.island = Math.random() > 0.55;
+				else this.island = Math.random() > 0.75;
 				break;
 			case 2:
-				if ((this.x>40&&this.y>75)||(this.x>75&&this.y>40)) this.open = true;
-				else if (this.x>20&&this.y>20) this.open = Math.random() > 0.55;
-				else this.open = Math.random() > 0.75;
+				if ((this.x>40&&this.y>75)||(this.x>75&&this.y>40)) this.island = true;
+				else if (this.x>20&&this.y>20) this.island = Math.random() > 0.55;
+				else this.island = Math.random() > 0.75;
 				break;
 			case 3:
-				if ((this.x<40&&this.y>75)||(this.x<5&&this.y>40)) this.open = true;
-				else if (this.x<60&&this.y>20) this.open = Math.random() > 0.55;
-				else this.open = Math.random() > 0.75;
+				if ((this.x<40&&this.y>75)||(this.x<5&&this.y>40)) this.island = true;
+				else if (this.x<60&&this.y>20) this.island = Math.random() > 0.55;
+				else this.island = Math.random() > 0.75;
 				break;
 		}
 	});
@@ -79,7 +78,7 @@ function genContinentalWorld() {
 function genContinentalDetail(world, config, generateCityName, cityNames) {
 
 	var grid = world.createGridFromValues([
-		{ cellType: 'wall', hasProperty: 'open', value: 1 }
+		{ cellType: 'wall', hasProperty: 'island', value: 1 }
 	], 0);
 
 	world = new CAWorld({
@@ -228,7 +227,7 @@ function genContinentalDetail(world, config, generateCityName, cityNames) {
 					else if (neighbors[6].river&&neighbors[4].river&&!neighbors[3].river&&!neighbors[1].river) {this.spriteNr = 1; this.riverFill = true; this.forest = false}
 					else if (neighbors[1].river&&neighbors[4].river&&!neighbors[3].river&&!neighbors[6].river) {this.spriteNr = 2; this.riverFill = true; this.forest = false}
 					else if (neighbors[1].river&&neighbors[3].river&&!neighbors[4].river&&!neighbors[6].river) {this.spriteNr = 3; this.riverFill = true; this.forest = false}
-				}
+				} 
 			}
 
 

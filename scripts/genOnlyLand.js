@@ -21,7 +21,7 @@ function genOnlyLand(config, generateCityName, cityNames) {
 		reset: function () {
 		}
 	}, function () {
-		this.open = true;
+		this.island = true;
 	});
 
 	world.initialize([
@@ -34,7 +34,7 @@ function genOnlyLand(config, generateCityName, cityNames) {
 	}
 
 	var grid = world.createGridFromValues([
-		{ cellType: 'wall', hasProperty: 'open', value: 1 }
+		{ cellType: 'wall', hasProperty: 'island', value: 1 }
 	], 0);
 
 	//-------------------World details----------------------

@@ -18,19 +18,19 @@ function genIslandWorld() {
 
 	world.registerCellType('wall', {
 		getColor: function() {
-			if (this.open) return 'rgb(34, 142, 51)';
+			if (this.island) return 'rgb(34, 142, 51)';
 			else return colorPalette.deepWater;
 		},
 		process: function (neighbors) {
-			var surrounding = this.countSurroundingCellsWithValue(neighbors, 'wasOpen');
-			this.open = (this.wasOpen && surrounding >= 4) || surrounding >= 5 || (surrounding>=3 && getChance(8, 1));
-			if (world.iteration===15&&surrounding<4) this.open = false; 
+			var surrounding = this.countSurroundingCellsWithValue(neighbors, 'wasIsland');
+			this.island = (this.wasIsland && surrounding >= 4) || surrounding >= 5 || (surrounding>=3 && getChance(8, 1));
+			if (world.iteration===15&&surrounding<4) this.island = false; 
 		},
 		reset: function () {
-			this.wasOpen = this.open;
+			this.wasIsland = this.island;
 		}
 	}, function () {
-		this.open = Math.random() > 0.535;
+		this.island = Math.random() > 0.535;
 	});
 
 	world.initialize([
@@ -43,7 +43,7 @@ function genIslandWorld() {
 function genIslandDetail(world, config, generateCityName, cityNames) {
 
 	var grid = world.createGridFromValues([
-		{ cellType: 'wall', hasProperty: 'open', value: 1 }
+		{ cellType: 'wall', hasProperty: 'island', value: 1 }
 	], 0);
 
 	world = new CAWorld({
