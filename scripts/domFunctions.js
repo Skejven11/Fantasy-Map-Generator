@@ -33,8 +33,13 @@ function modalButtonToggle () {
 }
 
 function ribbonInputToggle () {
-    const ribbonInput = document.getElementById("ribbon");
     const canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext('2d');
     drawRibbon(canvas, ctx);  
+}
+
+function redrawMap() {
+    const canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext('2d');
+    draw(worldGlobal, ctx, canvas)
 }
