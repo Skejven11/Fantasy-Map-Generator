@@ -36,6 +36,5 @@ function ribbonInputToggle () {
     const ribbonInput = document.getElementById("ribbon");
     const canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext('2d');
-    draw(worldGlobal, ctx, canvas);
-    
+    drawRibbon(canvas, ctx);  
 }

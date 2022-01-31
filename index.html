@@ -47,8 +47,9 @@
     function saveButtonToggle () {
         downloadCanvas(getConfig().landName);
     }
-    function nameButtonToggle () {
-        generateName();
+    async function nameButtonToggle () {
+        await generateName();
+        ribbonInputToggle();
     }   
 </script>
 </head>
@@ -84,7 +85,7 @@
                 <div class="user-menu-select">
                     <b>Name of your land:</b>
                     <div>
-                        <input type="text" id="landName" maxlength="18" style="text-align: center">
+                        <input type="text" id="landName" maxlength="18" style="text-align: center" oninput="ribbonInputToggle()">
                         <button id="btn-gen-name" class="btn-gen-name"><img src="images/name-generate-icon.png" onclick="nameButtonToggle()"></button>
                     </div>
                 </div>
